@@ -1,30 +1,10 @@
 import React, { Component } from "react";
 import { Alert, Button, StyleSheet, Text, View } from "react-native";
 import FingerprintScanner from "react-native-fingerprint-scanner";
+//import { FingerprintPopup } from "./Fingerprint"
 //import RNCamera from "react-native-camera";
 
-
-// Class that represents various state information for the app.
-class AppInfo {
-    constructor(){
-        // Current state of the app, represented with a pesudo-enum
-        this.StateEnum = Object.freeze({  })
-        this.State = '';
-
-        // User's username
-        this.username = '';
-        // User's password (obviously not going to be stored in plaintext in an actual app)
-        this.password = '';
-
-        // TEMP: Simulates the first time login / no fignerprint setup persistant state.
-        this.fingerprintSet = false;
-    }
-}
-
-
-
-
-// Main App Class
+// --- Main App Class --- //
 export default class App extends Component {
     // Constructor
     constructor(props){
@@ -59,6 +39,9 @@ export default class App extends Component {
                     <Text style={styles.text}>776 member institutions</Text>
                 </View>
 
+                {/* Fingerprint Scanner */}
+
+
                 {/* Buttons */}
                 <Button onPress={this._onPressButton(1)} title="Press Me 1"/>
                 <Button onPress={this._onPressButton(2)} title="Press Me 2" color="red"/>
@@ -68,6 +51,32 @@ export default class App extends Component {
     }
 }
 
+
+// --- Data Structures and Helper Functions --- //
+// Class that represents various state information for the app.
+class AppInfo {
+    constructor(){
+        // Current state of the app, represented with a pesudo-enum
+        this.StateEnum = Object.freeze({  })
+        this.State = '';
+
+        // User's username
+        this.username = '';
+        // User's password (obviously not going to be stored in plaintext in an actual app)
+        this.password = '';
+
+        // TEMP: Simulates the first time login / no fignerprint setup persistant state.
+        this.fingerprintSet = false;
+    }
+}
+
+
+function fingerprintCallback(){
+
+}
+
+
+// --- Style Sheet --- //
 const styles = StyleSheet.create({
     titleView: {
         backgroundColor: "teal",
