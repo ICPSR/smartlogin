@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Alert, Button, StyleSheet, Text, View } from "react-native";
-import FingerprintScanner from "react-native-fingerprint-scanner";
-//import { FingerprintPopup } from "./Fingerprint"
+import DummyDum from "./Dummy";
+import FingerprintPopup from "./Fingerprint";
 //import RNCamera from "react-native-camera";
 
 // --- Main App Class --- //
@@ -40,7 +40,7 @@ export default class App extends Component {
                 </View>
 
                 {/* Fingerprint Scanner */}
-
+                <FingerprintPopup onPopupDismissed={fingerprintCallback}/>
 
                 {/* Buttons */}
                 <Button onPress={this._onPressButton(1)} title="Press Me 1"/>
@@ -50,6 +50,9 @@ export default class App extends Component {
         );
     }
 }
+
+// <DummyDum></DummyDum>
+// <FingerprintScanner onPopupDismissed=fingerprintCallback/>
 
 
 // --- Data Structures and Helper Functions --- //

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import FingerprintScanner from "react-native-fingerprint-scanner";
 import PropTypes from "prop-types"
-import { AlertIOS } from 'react-native';
+import { AlertIOS, StyleSheet } from 'react-native';
 
 // --- IOS --- //
 class FingerprintPopup extends Component {
@@ -17,7 +17,7 @@ class FingerprintPopup extends Component {
 }
 
 // Props that this component uses.
-FingerprintPopupIOS.propTypes = {
+FingerprintPopup.propTypes = {
     // Callback when the popup gets dismissed
     onPopupDismissed: PropTypes.func.isRequired,
 };
