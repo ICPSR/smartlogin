@@ -9,32 +9,29 @@ import { Alert, Image, Text, TouchableOpacity, View, ViewPropTypes, StyleSheet }
 class FingerprintPopup extends Component{
     constructor(props){
         super(props);
-        this.state = { errorMessage: undefined };
     }
 
     componentDidMount(){
         FingerprintScanner.authenticate({ onAttempt: this.onAuthenticationAttempted })
-            .then(() => { this.props.onPopupDismissed(); Alert.alert("Fingerprint Authentication", "Authenticated sucessfully") })
-            .catch((error) => { this.setState({ errorMessage: error.message }); /*this.description.shake();*/ });
-    }
-
-    componentWillUnmount(){
-        FingerprintScanner.release();
+        .then(() => { Alert.alert("Fingerprint Authentication", "Authenticated sucessfully"); this.props.onPopupDismissed(); })
+        .catch((error) => { Alert.alert("Fingerprint Authentication", "Authentication Failed: " + error.message) });
     }
 
     onAuthenticationAttempted = (error) => {
-        this.setState({ errorMessage: error.message });
-        //this.description.shake();
+        Alert.alert("Fingerprint Authentication", "Attempting Authentication")
     };
 
+    componentWillUnmount(){
+        // TODO: Figure out why this call is null
+        //FingerprintScanner.release();
+    }
+
     render() {
-        const { errorMessage } = this.state;
-        const { style, handlePopupDismissed } = this.props;
+        const { style, onPopupDismissed } = this.props;
 
         return (
             <View style={styles.container}>
                 <View style={[styles.contentContainer, style]}>
-
                     <Image
                         style={styles.logo}
                         source={require('./Assets/finger_print.png')}
@@ -46,7 +43,7 @@ class FingerprintPopup extends Component{
 
                     <TouchableOpacity
                         style={styles.buttonContainer}
-                        onPress={handlePopupDismissed}
+                        onPress={onPopupDismissed}
                         >
                         <Text style={styles.buttonText}>
                             BACK TO MAIN
@@ -68,46 +65,47 @@ FingerprintPopup.propTypes = {
 // --- Style Sheet --- //
 const styles = StyleSheet.create({
     container: {
-      position: 'absolute',
-      top: 0,
-      bottom: 0,
-      left: 0,
-      right: 0,
-      backgroundColor: 'rgba(0, 164, 222, 0.9)',
-      flexDirection: 'column',
-      justifyContent: 'center',
-      alignItems: 'center',
+        position: 'absolute',
+        top: 0,
+        bottom: 0,
+        left: 0,
+        right: 0,
+        backgroundColor: 'rgba(0, 164, 222, 0.9)',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     contentContainer: {
-      flexDirection: 'column',
-      justifyContent: 'center',
-      alignItems: 'center',
-      backgroundColor: '#ffffff',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: 400,
+        height: 400,
+        backgroundColor: '#ffffff',
     },
     logo: {
-      marginVertical: 45,
+        marginVertical: 45,
+        width: 100,
+        height: 100,
+        paddingLeft: 50,
+        paddingRight: 50,
     },
     heading: {
-      textAlign: 'center',
-      color: '#00a4de',
-      fontSize: 21,
+        textAlign: 'center',
+        color: '#00a4de',
+        fontSize: 21,
     },
-    description: (error) => ({
-      textAlign: 'center',
-      color: error ? '#ea3d13' : '#a5a5a5',
-      height: 65,
-      fontSize: 18,
-      marginVertical: 10,
-      marginHorizontal: 20,
-    }),
     buttonContainer: {
-      padding: 20,
+        padding: 20,
+        borderWidth: 2,
+        borderColor: "grey",
+        marginTop: 20,
     },
     buttonText: {
-      color: '#8fbc5a',
-      fontSize: 15,
-      fontWeight: 'bold',
-  },
+        color: '#8fbc5a',
+        fontSize: 15,
+        fontWeight: 'bold',
+    },
 });
 
 // Export class

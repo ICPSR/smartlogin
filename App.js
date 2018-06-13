@@ -9,9 +9,10 @@ export default class App extends Component {
     // Constructor
     constructor(props){
         super(props)
+        this._onFingerprintCallback = this._onFingerprintCallback.bind(this);
 
         // Add global state stuff here.
-
+        this.state = { fingerprintWindowOpen: true };
     }
 
     // Can add functions here for use as callback functions
@@ -21,7 +22,13 @@ export default class App extends Component {
         }
     }
 
+    _onFingerprintCallback(){
+        this.setState(currentState => {  return { fingerprintWindowOpen: false };  });
+    }
+
     render() {
+        const fingerprintWindow = <FingerprintPopup onPopupDismissed={this._onFingerprintCallback}/>;
+
         return (
             // Outermost view, don't have anything outside of this
             <View style={{flex: 1}}>
@@ -40,10 +47,10 @@ export default class App extends Component {
                 </View>
 
                 {/* Fingerprint Scanner */}
-                <FingerprintPopup onPopupDismissed={fingerprintCallback}/>
+                {this.state.fingerprintWindowOpen ? fingerprintWindow : false }
 
                 {/* Buttons */}
-                <Button onPress={this._onPressButton(1)} title="Press Me 1"/>
+                <Button onPress={this._onPressButton(1)} title="Press Me 1" color="green"/>
                 <Button onPress={this._onPressButton(2)} title="Press Me 2" color="red"/>
 
             </View>
@@ -71,11 +78,6 @@ class AppInfo {
         // TEMP: Simulates the first time login / no fignerprint setup persistant state.
         this.fingerprintSet = false;
     }
-}
-
-
-function fingerprintCallback(){
-
 }
 
 
