@@ -26,5 +26,10 @@
     "react-native": "~0.55.2",
     "react-native-camera": "^1.1.4",
     "react-native-fingerprint-scanner": "^2.3.2"
+  },
+  "rnpm": {
+    "assets": [
+      "./Assets/fonts/"
+    ]
   }
 }

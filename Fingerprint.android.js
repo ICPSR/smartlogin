@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import FingerprintScanner from "react-native-fingerprint-scanner";
 import PropTypes from "prop-types"
-import { Alert, Image, Text, TouchableOpacity, View, ViewPropTypes, StyleSheet } from 'react-native';
+import { Alert, Image, Text, TouchableOpacity, View, ViewPropTypes, StyleSheet, Platform } from 'react-native';
 
 //import ShakingText from './ShakingText.component';
 
@@ -12,9 +12,11 @@ class FingerprintPopup extends Component{
     }
 
     componentDidMount(){
+        /*
         FingerprintScanner.authenticate({ onAttempt: this.onAuthenticationAttempted })
         .then(() => { Alert.alert("Fingerprint Authentication", "Authenticated sucessfully"); this.props.onPopupDismissed(); })
-        .catch((error) => { Alert.alert("Fingerprint Authentication", "Authentication Failed: " + error.message) });
+        .catch((error) => { Alert.alert("Fingerprint Authentication", "Authentication Failed: " + Platform.Version + " " + error.message) });
+        */
     }
 
     onAuthenticationAttempted = (error) => {
@@ -32,22 +34,13 @@ class FingerprintPopup extends Component{
         return (
             <View style={styles.container}>
                 <View style={[styles.contentContainer, style]}>
-                    <Image
-                        style={styles.logo}
-                        source={require('./Assets/finger_print.png')}
-                        />
 
-                    <Text style={styles.heading}>
-                        Fingerprint{'\n'}Authentication
-                    </Text>
+                    <Image style={styles.logo} source={require('./Assets/finger_print.png')}/>
 
-                    <TouchableOpacity
-                        style={styles.buttonContainer}
-                        onPress={onPopupDismissed}
-                        >
-                        <Text style={styles.buttonText}>
-                            BACK TO MAIN
-                        </Text>
+                    <Text style={styles.heading}>Fingerprint{'\n'}Authentication</Text>
+
+                    <TouchableOpacity style={styles.buttonContainer} onPress={onPopupDismissed}>
+                        <Text style={styles.buttonText}>BACK TO MAIN</Text>
                     </TouchableOpacity>
 
                 </View>

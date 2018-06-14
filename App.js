@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Alert, Button, StyleSheet, Text, View } from "react-native";
+import { Alert, Button, StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import DummyDum from "./Dummy";
 import FingerprintPopup from "./Fingerprint";
 //import RNCamera from "react-native-camera";
@@ -12,7 +12,7 @@ export default class App extends Component {
         this._onFingerprintCallback = this._onFingerprintCallback.bind(this);
 
         // Add global state stuff here.
-        this.state = { fingerprintWindowOpen: true };
+        this.state = { fingerprintWindowOpen: false };
     }
 
     // Can add functions here for use as callback functions
@@ -27,14 +27,12 @@ export default class App extends Component {
     }
 
     render() {
-        const fingerprintWindow = <FingerprintPopup onPopupDismissed={this._onFingerprintCallback}/>;
-
         return (
             // Outermost view, don't have anything outside of this
-            <View style={{flex: 1}}>
+            <View style={styles.background}>
 
                 {/* Title */}
-                <View style={styles.titleView}>
+                <View style={styles.titleContainer}>
                     <Text style={styles.title}>ICPSR</Text>
                 </View>
 
@@ -46,21 +44,26 @@ export default class App extends Component {
                     <Text style={styles.text}>776 member institutions</Text>
                 </View>
 
-                {/* Fingerprint Scanner */}
-                {this.state.fingerprintWindowOpen ? fingerprintWindow : false }
-
                 {/* Buttons */}
-                <Button onPress={this._onPressButton(1)} title="Press Me 1" color="green"/>
-                <Button onPress={this._onPressButton(2)} title="Press Me 2" color="red"/>
+                <View style={styles.buttonContainer}>
+
+                    <TouchableOpacity onPress={this._onPressButton(1)} style={styles.button} underlayColor="white">
+                        <Text style={styles.text}>I'm a button</Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity onPress={this._onPressButton(2)} style={styles.button} underlayColor="white">
+                        <Text style={styles.text}>I'm a button2</Text>
+                    </TouchableOpacity>
+                </View>
+
+                {/* Fingerprint Scanner */}
+                {this.state.fingerprintWindowOpen ? <FingerprintPopup onPopupDismissed={this._onFingerprintCallback}/> : false }
+
 
             </View>
         );
     }
 }
-
-// <DummyDum></DummyDum>
-// <FingerprintScanner onPopupDismissed=fingerprintCallback/>
-
 
 // --- Data Structures and Helper Functions --- //
 // Class that represents various state information for the app.
@@ -83,7 +86,12 @@ class AppInfo {
 
 // --- Style Sheet --- //
 const styles = StyleSheet.create({
-    titleView: {
+    background: {
+        flex: 1,
+        backgroundColor: "#005050",
+    },
+    titleContainer: {
+        marginTop: 25,
         backgroundColor: "teal",
         alignItems: "center",
         justifyContent: "center",
@@ -93,14 +101,28 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         color: "white",
     },
+    button: {
+        backgroundColor: "teal",
+        width: 250,
+        height: 250,
+        alignItems: "center",
+        justifyContent: "center",
+        borderRadius: 30,
+    },
+    buttonContainer: {
+        marginTop: "60%",
+        flexDirection: "row",
+        justifyContent: "space-around"
+    },
     textContainer: {
-        flex: 1,
+        marginTop: 50,
         backgroundColor: "#005050",
         alignItems: "center",
         justifyContent: "center",
     },
     text: {
         fontSize: 20,
+        padding: 10,
         color: "white",
         fontWeight: 'bold',
     },
