@@ -3,8 +3,6 @@ import FingerprintScanner from "react-native-fingerprint-scanner";
 import PropTypes from "prop-types"
 import { Alert, Image, Text, TouchableOpacity, View, ViewPropTypes, StyleSheet, Platform } from 'react-native';
 
-//import ShakingText from './ShakingText.component';
-
 // --- Android --- //
 class FingerprintPopup extends Component{
     constructor(props){
@@ -12,6 +10,7 @@ class FingerprintPopup extends Component{
     }
 
     componentDidMount(){
+        // TODO: Need to convert project to regular react-native in order to call any library functions here.
         /*
         FingerprintScanner.authenticate({ onAttempt: this.onAuthenticationAttempted })
         .then(() => { Alert.alert("Fingerprint Authentication", "Authenticated sucessfully"); this.props.onPopupDismissed(); })
@@ -24,7 +23,6 @@ class FingerprintPopup extends Component{
     };
 
     componentWillUnmount(){
-        // TODO: Figure out why this call is null
         //FingerprintScanner.release();
     }
 

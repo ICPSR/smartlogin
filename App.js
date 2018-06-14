@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Alert, Button, StyleSheet, Text, TextInput, View, TouchableOpacity } from "react-native";
 import { StackNavigator } from "react-navigation"
-import DummyDum from "./Dummy";
+import Expo from "expo";
 import FingerprintPopup from "./Fingerprint";
 //import RNCamera from "react-native-camera";
 
@@ -9,7 +9,7 @@ import FingerprintPopup from "./Fingerprint";
 /*
 const Screens = StackNavigator({
     Login: { screen: LoginScreen },
-    Main: { screen: MainScreen }
+    Home: { screen: HomeScreen }
 });*/
 
 // --- Main App Class --- //
@@ -28,9 +28,14 @@ export default class App extends Component {
         this.ScreenStateEnum = Object.freeze({ Neutral: {}, CredentialsWindow: {}, FingerprintWindow: {} });
         this.state = { ScreenState: this.ScreenStateEnum.Neutral };
 
+        // The current credentials entered in
         this.SubmittedUsername = "";
         this.SubmittedPassword = "";
     }
+
+    static navigationOptions = {
+        title: "Login"
+    };
 
     // --- Render --- //
     render() {
@@ -43,6 +48,7 @@ export default class App extends Component {
                     <Text style={styles.title}>ICPSR</Text>
                 </View>
 
+
                 {/* Body */}
                 <View style={styles.textContainer}>
                     <Text style={styles.text}>International Leader in Data Stewardship</Text>
@@ -50,6 +56,7 @@ export default class App extends Component {
                     <Text style={styles.text}>Data Stewardship and Social Science Research Projects</Text>
                     <Text style={styles.text}>776 member institutions</Text>
                 </View>
+
 
                 {/* Main Buttons */}
                 {this.state.ScreenState != this.ScreenStateEnum.CredentialsWindow ?
@@ -63,6 +70,7 @@ export default class App extends Component {
                     </View>
                 : false }
 
+
                 {/* Username/Password Windows */}
                 {this.state.ScreenState === this.ScreenStateEnum.CredentialsWindow ?
                     <View style={{marginTop: "20%"}}>
@@ -70,7 +78,7 @@ export default class App extends Component {
                             <TextInput style={styles.textInput} placeholder="Username" onChangeText={this._onUsernameUpdated} onSubmitEditing={this._onCredentialsEntered}/>
                         </View>
                         <View style={styles.textInputContainer}>
-                            <TextInput style={styles.textInput} placeholder="Password" onChangeText={this._onPasswordUpdated} onSubmitEditing={this._onCredentialsEntered}/>
+                            <TextInput style={styles.textInput} placeholder="Password" onChangeText={this._onPasswordUpdated} onSubmitEditing={this._onCredentialsEntered} secureTextEntry={true}/>
                         </View>
 
                         <View style={{alignItems: "center", justifyContent: "center", margin: 30}}>
@@ -83,6 +91,7 @@ export default class App extends Component {
                         </View>
                     </View>
                 : false }
+
 
                 {/* Fingerprint Popup */}
                 {this.state.ScreenState === this.ScreenStateEnum.FingerprintWindow ?
@@ -120,18 +129,27 @@ export default class App extends Component {
     _onUsernameUpdated(text){
         this.SubmittedUsername = text;
     }
-
     _onPasswordUpdated(text){
         this.SubmittedPassword = text;
     }
 
     // Called when the user submits their user/pass
     _onCredentialsEntered(){
+        // TODO: Do network stuff here
         Alert.alert("Username: " + this.SubmittedUsername + "  Password: " + this.SubmittedPassword);
 
+
+        // On success, continue to the home screen.
+        if(true){
+            this._toHomeScreen();
+        }
     }
 
+    // --- Screen Transitions --- //
+    // Transitions to the home app screen.
+    _toHomeScreen(){
 
+    }
 
 }
 
