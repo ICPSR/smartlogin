@@ -37,10 +37,11 @@ class FingerprintPopup extends Component{
 
                     <Image style={styles.logo} source={require('./Assets/finger_print.png')}/>
 
-                    <Text style={styles.heading}>Fingerprint{'\n'}Authentication</Text>
+                    <Text style={styles.heading}>Fingerprint Authentication</Text>
+                    <Text>Scan your fingerprint to continue</Text>
 
                     <TouchableOpacity style={styles.buttonContainer} onPress={onPopupDismissed}>
-                        <Text style={styles.buttonText}>BACK TO MAIN</Text>
+                        <Text style={styles.buttonText}>Cancel</Text>
                     </TouchableOpacity>
 
                 </View>
@@ -86,13 +87,13 @@ const styles = StyleSheet.create({
     heading: {
         textAlign: 'center',
         color: '#00a4de',
-        fontSize: 21,
+        fontSize: 25,
     },
     buttonContainer: {
         padding: 20,
         borderWidth: 2,
         borderColor: "grey",
-        marginTop: 20,
+        marginTop: 40,
     },
     buttonText: {
         color: '#8fbc5a',

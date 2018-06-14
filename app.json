@@ -1,4 +1,5 @@
 {
-  "name": "Smart Login",
-  "displayName": "Smart Login"
+  "expo": {
+    "sdkVersion": "27.0.0"
+  }
 }

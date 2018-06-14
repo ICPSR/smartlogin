@@ -9,7 +9,9 @@ export default class App extends Component {
     // Constructor
     constructor(props){
         super(props)
-        this._onFingerprintCallback = this._onFingerprintCallback.bind(this);
+
+        // Binds the "this" object to the functions
+        this._setFingerprintPopup = this._setFingerprintPopup.bind(this);
 
         // Add global state stuff here.
         this.state = { fingerprintWindowOpen: false };
@@ -22,8 +24,10 @@ export default class App extends Component {
         }
     }
 
-    _onFingerprintCallback(){
-        this.setState(currentState => {  return { fingerprintWindowOpen: false };  });
+    _setFingerprintPopup(isVisible){
+        return () => {
+            this.setState(currentState => { return { fingerprintWindowOpen: isVisible }; });
+        }
     }
 
     render() {
@@ -46,18 +50,17 @@ export default class App extends Component {
 
                 {/* Buttons */}
                 <View style={styles.buttonContainer}>
-
                     <TouchableOpacity onPress={this._onPressButton(1)} style={styles.button} underlayColor="white">
-                        <Text style={styles.text}>I'm a button</Text>
+                        <Text style={styles.text}>Username/Password</Text>
                     </TouchableOpacity>
 
-                    <TouchableOpacity onPress={this._onPressButton(2)} style={styles.button} underlayColor="white">
-                        <Text style={styles.text}>I'm a button2</Text>
+                    <TouchableOpacity onPress={this._setFingerprintPopup(true)} style={styles.button} underlayColor="white">
+                        <Text style={styles.text}>Fingerprint Scan</Text>
                     </TouchableOpacity>
                 </View>
 
                 {/* Fingerprint Scanner */}
-                {this.state.fingerprintWindowOpen ? <FingerprintPopup onPopupDismissed={this._onFingerprintCallback}/> : false }
+                {this.state.fingerprintWindowOpen ? <FingerprintPopup onPopupDismissed={this._setFingerprintPopup(false)}/> : false }
 
 
             </View>
@@ -97,6 +100,7 @@ const styles = StyleSheet.create({
         justifyContent: "center",
     },
     title: {
+        //fontFamily: "BEHATRICE",
         fontSize: 100,
         fontWeight: 'bold',
         color: "white",
