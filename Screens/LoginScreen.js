@@ -122,6 +122,7 @@ export default class LoginScreen extends Component {
                     <Text style={GlobalStyles.boldText}>10,000 studies, comprising of 4.8 million variables</Text>
                     <Text style={GlobalStyles.boldText}>Data Stewardship and Social Science Research Projects</Text>
                     <Text style={GlobalStyles.boldText}>776 member institutions</Text>
+                    //<Text style={GlobalStyles.boldText}>{Expo.Fingerprint.isEnrolledAsync()}</Text>
                 </View>
 
 

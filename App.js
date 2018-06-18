@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { View } from "react-native";
 import { createStackNavigator } from "react-navigation"
 import Expo from "expo";
+import { GlobalStyles } from "./Screens/Styles.js"
 
 // Screens
 import LoginScreen from "./Screens/LoginScreen.js"
@@ -28,6 +29,8 @@ export default class App extends Component {
         let root = null;
         if(this.state.DoneLoading){
             root = <RootStack/>;
+        } else {
+            root = <View style={GlobalStyles.background}></View>
         }
         return root;
     }
