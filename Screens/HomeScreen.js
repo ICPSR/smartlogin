@@ -15,6 +15,18 @@ export default class HomeScreen extends Component{
     constructor(props){
         super(props)
 
+        // Binds the "this" object to the functions
+        this._onBack = this._onBack.bind(this);
+
+    }
+
+    // --- Callbacks --- //
+    _onQRButtonPressed(){
+
+    }
+
+    _onBack(){
+        this.props.navigation.goBack();
     }
 
 
@@ -25,8 +37,28 @@ export default class HomeScreen extends Component{
 
         return (
             <View style={GlobalStyles.background}>
-                <Text style={GlobalStyles.text}>{user}</Text>
-                <Text style={GlobalStyles.text}>{pass}</Text>
+
+                {/* Title */}
+                <View style={GlobalStyles.header}>
+                    <Text style={styles.headerText}>ICPSR</Text>
+                </View>
+
+                <Text style={GlobalStyles.text}>{"Username: " + user}</Text>
+                <Text style={GlobalStyles.text}>{"Password: " + pass}</Text>
+
+                {/* Buttons */}
+                <View style={styles.buttonContainer}>
+                    <TouchableOpacity onPress={this._onQRButtonPressed} style={GlobalStyles.bigButton} activeOpacity={0.6} underlayColor="white">
+                        <Text style={GlobalStyles.boldText}>QR Login</Text>
+                    </TouchableOpacity>
+                </View>
+
+                {/* Back Button */}
+                <View style={{marginTop: "90%", marginLeft: "4%"}}>
+                    <TouchableOpacity onPress={this._onBack} style={styles.logoutButton} activeOpacity={0.6} underlayColor="white">
+                        <Text style={GlobalStyles.text}>Back to Login</Text>
+                    </TouchableOpacity>
+                </View>
 
 
             </View>
@@ -37,6 +69,25 @@ export default class HomeScreen extends Component{
 
 // --- Home Page Styles --- //
 export const styles = StyleSheet.create({
+    headerText: {
+        //fontFamily: "BEHATRICE",
+        fontSize: 30,
+        fontWeight: 'bold',
+        color: "white",
+    },
+    buttonContainer: {
+        marginTop: 30,
+        flexDirection: "row",
+        justifyContent: "space-around"
+    },
+    logoutButton: {
+        backgroundColor: "#605f5e",
+        width: 150,
+        height: 60,
+        alignItems: "center",
+        justifyContent: "center",
+    },
+
 
 
 });

@@ -24,5 +24,22 @@ export const GlobalStyles = StyleSheet.create({
         textDecorationLine: "underline",
     },
 
+    header: {
+        marginTop: 25,
+        backgroundColor: "teal",
+        alignItems: "center",
+        justifyContent: "center",
+    },
+
+    bigButton: {
+        backgroundColor: "teal",
+        width: 250,
+        height: 250,
+        alignItems: "center",
+        justifyContent: "center",
+        borderRadius: 30,
+    },
+
+
 
 });

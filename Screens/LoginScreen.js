@@ -3,6 +3,7 @@ import { Alert, Button, StyleSheet, Text, TextInput, View, TouchableOpacity } fr
 import { createStackNavigator } from "react-navigation"
 import Expo from "expo";
 import { GlobalStyles } from "./Styles.js"
+import { FadeInView } from "./Animations.js"
 
 // --- Login Screen --- //
 export default class LoginScreen extends Component {
@@ -40,7 +41,11 @@ export default class LoginScreen extends Component {
         return () => {
             this.setState(currentState => {
                 if(isVisible) return { ScreenState: this.ScreenStateEnum.CredentialsWindow };
-                return { ScreenState: this.ScreenStateEnum.Neutral };
+                else{
+                    this.SubmittedUsername = "";
+                    this.SubmittedPassword = "";
+                    return { ScreenState: this.ScreenStateEnum.Neutral };
+                }
             });
         }
     }
@@ -73,7 +78,18 @@ export default class LoginScreen extends Component {
 
         // On success, continue to the home screen.
         if(true){
-            this.props.navigation.navigate("Home", { user: this.SubmittedUsername, pass: this.SubmittedPassword });
+            // Reset state back to neutral before nagivating
+            this.setState(currentState => {
+                return { ScreenState: this.ScreenStateEnum.Neutral };
+            });
+            // Navigate
+            this._transitionToHome();
+            // Clear both fields
+            this.SubmittedUsername = "";
+            this.SubmittedPassword = "";
+        } else {
+            // Clear the password field on failure
+            this.SubmittedPassword = "";
         }
     }
 
@@ -92,8 +108,8 @@ export default class LoginScreen extends Component {
             <View style={GlobalStyles.background}>
 
                 {/* Title */}
-                <View style={styles.titleContainer}>
-                    <Text style={styles.title}>ICPSR</Text>
+                <View style={GlobalStyles.header}>
+                    <Text style={styles.headerText}>ICPSR</Text>
                 </View>
 
 
@@ -108,36 +124,40 @@ export default class LoginScreen extends Component {
 
                 {/* Main Buttons */}
                 {this.state.ScreenState != this.ScreenStateEnum.CredentialsWindow ?
-                    <View style={styles.buttonContainer}>
-                        <TouchableOpacity onPress={this._setCredentialsFields(true)} style={styles.bigButton} underlayColor="white">
-                            <Text style={GlobalStyles.boldText}>Username/Password</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity onPress={this._transitionToHome} style={styles.bigButton} underlayColor="white">
-                            <Text style={GlobalStyles.boldText}>Fingerprint Scan</Text>
-                        </TouchableOpacity>
-                    </View>
+                    <FadeInView>
+                        <View style={styles.buttonContainer}>
+                            <TouchableOpacity onPress={this._setCredentialsFields(true)} style={GlobalStyles.bigButton} activeOpacity={0.6} underlayColor="white">
+                                <Text style={GlobalStyles.boldText}>Username/Password</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={this._transitionToHome} style={GlobalStyles.bigButton} activeOpacity={0.6} underlayColor="white">
+                                <Text style={GlobalStyles.boldText}>Fingerprint Scan</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </FadeInView>
                 : false }
 
 
                 {/* Username/Password Windows */}
                 {this.state.ScreenState === this.ScreenStateEnum.CredentialsWindow ?
-                    <View style={{marginTop: "20%"}}>
-                        <View style={styles.textInputContainer}>
-                            <TextInput style={styles.textInput} placeholder="Username" onChangeText={this._onUsernameUpdated} onSubmitEditing={this._onCredentialsEntered}/>
-                        </View>
-                        <View style={styles.textInputContainer}>
-                            <TextInput style={styles.textInput} placeholder="Password" onChangeText={this._onPasswordUpdated} onSubmitEditing={this._onCredentialsEntered} secureTextEntry={true}/>
-                        </View>
+                    <FadeInView>
+                        <View style={{marginTop: "20%"}}>
+                            <View style={styles.textInputContainer}>
+                                <TextInput style={styles.textInput} placeholder="Username" onChangeText={this._onUsernameUpdated} onSubmitEditing={this._onCredentialsEntered}/>
+                            </View>
+                            <View style={styles.textInputContainer}>
+                                <TextInput style={styles.textInput} placeholder="Password" onChangeText={this._onPasswordUpdated} onSubmitEditing={this._onCredentialsEntered} secureTextEntry={true}/>
+                            </View>
 
-                        <View style={{alignItems: "center", justifyContent: "center", margin: 30}}>
-                            <TouchableOpacity onPress={this._onCredentialsEntered} style={styles.button} underlayColor="white">
-                                <Text style={GlobalStyles.boldText}>Submit</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity onPress={this._setCredentialsFields(false)} style={{marginTop: 30}} underlayColor="white">
-                                <Text style={GlobalStyles.underlineText}>Cancel</Text>
-                            </TouchableOpacity>
+                            <View style={{alignItems: "center", justifyContent: "center", margin: 30}}>
+                                <TouchableOpacity onPress={this._onCredentialsEntered} style={styles.button} activeOpacity={0.6} underlayColor="white">
+                                    <Text style={GlobalStyles.boldText}>Submit</Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity onPress={this._setCredentialsFields(false)} style={{marginTop: 30}} activeOpacity={0.6} underlayColor="white">
+                                    <Text style={GlobalStyles.underlineText}>Cancel</Text>
+                                </TouchableOpacity>
+                            </View>
                         </View>
-                    </View>
+                    </FadeInView>
                 : false }
 
 
@@ -154,13 +174,7 @@ export default class LoginScreen extends Component {
 
 // --- Login Page Styles --- //
 export const styles = StyleSheet.create({
-    titleContainer: {
-        marginTop: 25,
-        backgroundColor: "teal",
-        alignItems: "center",
-        justifyContent: "center",
-    },
-    title: {
+    headerText: {
         //fontFamily: "BEHATRICE",
         fontSize: 100,
         fontWeight: 'bold',
@@ -170,14 +184,6 @@ export const styles = StyleSheet.create({
         marginTop: "60%",
         flexDirection: "row",
         justifyContent: "space-around"
-    },
-    bigButton: {
-        backgroundColor: "teal",
-        width: 250,
-        height: 250,
-        alignItems: "center",
-        justifyContent: "center",
-        borderRadius: 30,
     },
     button: {
         backgroundColor: "teal",
