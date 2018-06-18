@@ -1,9 +1,10 @@
 import React, { Component } from "react";
 import { Alert, Button, StyleSheet, Text, TextInput, View, TouchableOpacity } from "react-native";
 import { StackNavigator } from "react-navigation"
+import { Styles } from "./Styles.js"
 
-
-class HomeScreen extends Component{
+// --- Home Screen --- //
+export default class HomeScreen extends Component{
     // --- Constructor --- //
     constructor(props){
         super(props)
@@ -13,8 +14,11 @@ class HomeScreen extends Component{
 
     render(){
         return (
+            <View style={Styles.background}>
 
 
+
+            </View>
         );
     }
 
