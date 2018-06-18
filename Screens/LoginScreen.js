@@ -1,9 +1,13 @@
 import React, { Component } from "react";
 import { Alert, Button, StyleSheet, Text, TextInput, View, TouchableOpacity } from "react-native";
 import { createStackNavigator } from "react-navigation"
-import Expo from "expo";
+import { Font } from "expo";
 import { GlobalStyles } from "./Styles.js"
 import { FadeInView } from "./Animations.js"
+
+// Fonts
+//import ICPSRFont from "./Assets/fonts/BEHATRICE.ttf"
+
 
 // --- Login Screen --- //
 export default class LoginScreen extends Component {
@@ -32,7 +36,6 @@ export default class LoginScreen extends Component {
         this.SubmittedUsername = "";
         this.SubmittedPassword = "";
     }
-
 
 
     // --- State machine related --- //
@@ -175,7 +178,7 @@ export default class LoginScreen extends Component {
 // --- Login Page Styles --- //
 export const styles = StyleSheet.create({
     headerText: {
-        //fontFamily: "BEHATRICE",
+        fontFamily: "icpsr-font",
         fontSize: 100,
         fontWeight: 'bold',
         color: "white",
