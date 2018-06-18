@@ -2,13 +2,14 @@ import React, { Component } from "react";
 import { Alert, Button, StyleSheet, Text, TextInput, View, TouchableOpacity } from "react-native";
 import { createStackNavigator } from "react-navigation"
 import Expo from "expo";
-import { Styles } from "./Styles.js"
+import { GlobalStyles } from "./Styles.js"
 
 // --- Login Screen --- //
 export default class LoginScreen extends Component {
     // --- Navigation Options --- //
     static navigationOptions = {
-        title: "Login"
+        header: null,
+        //title: "Login"
     };
 
     // --- Constructor --- //
@@ -20,6 +21,7 @@ export default class LoginScreen extends Component {
         this._onCredentialsEntered = this._onCredentialsEntered.bind(this);
         this._onUsernameUpdated = this._onUsernameUpdated.bind(this);
         this._onPasswordUpdated = this._onPasswordUpdated.bind(this);
+        this._transitionToHome = this._transitionToHome.bind(this);
 
         // The current state of this screen in the App, represented in a pseudo enum
         this.ScreenStateEnum = Object.freeze({ Neutral: {}, CredentialsWindow: {}, FingerprintWindow: {} });
@@ -71,48 +73,47 @@ export default class LoginScreen extends Component {
 
         // On success, continue to the home screen.
         if(true){
-            this._toHomeScreen();
+            this.props.navigation.navigate("Home", { user: this.SubmittedUsername, pass: this.SubmittedPassword });
         }
     }
 
 
-
-    // --- Screen Transitions --- //
-    // Transitions to the home app screen.
-    _toHomeScreen(){
-
+    // Transitions to the Home State
+    _transitionToHome(){
+        this.props.navigation.navigate("Home", { user: this.SubmittedUsername, pass: this.SubmittedPassword });
     }
+
 
 
     // --- Render --- //
     render() {
         return (
             // Outermost view, don't have anything outside of this
-            <View style={Styles.background}>
+            <View style={GlobalStyles.background}>
 
                 {/* Title */}
-                <View style={Styles.titleContainer}>
-                    <Text style={Styles.title}>ICPSR</Text>
+                <View style={styles.titleContainer}>
+                    <Text style={styles.title}>ICPSR</Text>
                 </View>
 
 
                 {/* Body */}
-                <View style={Styles.textContainer}>
-                    <Text style={Styles.text}>International Leader in Data Stewardship</Text>
-                    <Text style={Styles.text}>10,000 studies, comprising of 4.8 million variables</Text>
-                    <Text style={Styles.text}>Data Stewardship and Social Science Research Projects</Text>
-                    <Text style={Styles.text}>776 member institutions</Text>
+                <View style={styles.textContainer}>
+                    <Text style={GlobalStyles.boldText}>International Leader in Data Stewardship</Text>
+                    <Text style={GlobalStyles.boldText}>10,000 studies, comprising of 4.8 million variables</Text>
+                    <Text style={GlobalStyles.boldText}>Data Stewardship and Social Science Research Projects</Text>
+                    <Text style={GlobalStyles.boldText}>776 member institutions</Text>
                 </View>
 
 
                 {/* Main Buttons */}
                 {this.state.ScreenState != this.ScreenStateEnum.CredentialsWindow ?
-                    <View style={Styles.buttonContainer}>
-                        <TouchableOpacity onPress={this._setCredentialsFields(true)} style={Styles.bigButton} underlayColor="white">
-                            <Text style={Styles.text}>Username/Password</Text>
+                    <View style={styles.buttonContainer}>
+                        <TouchableOpacity onPress={this._setCredentialsFields(true)} style={styles.bigButton} underlayColor="white">
+                            <Text style={GlobalStyles.boldText}>Username/Password</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={this._setFingerprintPopup(true)} style={Styles.bigButton} underlayColor="white">
-                            <Text style={Styles.text}>Fingerprint Scan</Text>
+                        <TouchableOpacity onPress={this._transitionToHome} style={styles.bigButton} underlayColor="white">
+                            <Text style={GlobalStyles.boldText}>Fingerprint Scan</Text>
                         </TouchableOpacity>
                     </View>
                 : false }
@@ -121,19 +122,19 @@ export default class LoginScreen extends Component {
                 {/* Username/Password Windows */}
                 {this.state.ScreenState === this.ScreenStateEnum.CredentialsWindow ?
                     <View style={{marginTop: "20%"}}>
-                        <View style={Styles.textInputContainer}>
-                            <TextInput style={Styles.textInput} placeholder="Username" onChangeText={this._onUsernameUpdated} onSubmitEditing={this._onCredentialsEntered}/>
+                        <View style={styles.textInputContainer}>
+                            <TextInput style={styles.textInput} placeholder="Username" onChangeText={this._onUsernameUpdated} onSubmitEditing={this._onCredentialsEntered}/>
                         </View>
-                        <View style={Styles.textInputContainer}>
-                            <TextInput style={Styles.textInput} placeholder="Password" onChangeText={this._onPasswordUpdated} onSubmitEditing={this._onCredentialsEntered} secureTextEntry={true}/>
+                        <View style={styles.textInputContainer}>
+                            <TextInput style={styles.textInput} placeholder="Password" onChangeText={this._onPasswordUpdated} onSubmitEditing={this._onCredentialsEntered} secureTextEntry={true}/>
                         </View>
 
                         <View style={{alignItems: "center", justifyContent: "center", margin: 30}}>
-                            <TouchableOpacity onPress={this._onCredentialsEntered} style={Styles.button} underlayColor="white">
-                                <Text style={Styles.text}>Submit</Text>
+                            <TouchableOpacity onPress={this._onCredentialsEntered} style={styles.button} underlayColor="white">
+                                <Text style={GlobalStyles.boldText}>Submit</Text>
                             </TouchableOpacity>
                             <TouchableOpacity onPress={this._setCredentialsFields(false)} style={{marginTop: 30}} underlayColor="white">
-                                <Text style={Styles.smallText}>Cancel</Text>
+                                <Text style={GlobalStyles.underlineText}>Cancel</Text>
                             </TouchableOpacity>
                         </View>
                     </View>
@@ -150,3 +151,55 @@ export default class LoginScreen extends Component {
         );
     }
 }
+
+// --- Login Page Styles --- //
+export const styles = StyleSheet.create({
+    titleContainer: {
+        marginTop: 25,
+        backgroundColor: "teal",
+        alignItems: "center",
+        justifyContent: "center",
+    },
+    title: {
+        //fontFamily: "BEHATRICE",
+        fontSize: 100,
+        fontWeight: 'bold',
+        color: "white",
+    },
+    buttonContainer: {
+        marginTop: "60%",
+        flexDirection: "row",
+        justifyContent: "space-around"
+    },
+    bigButton: {
+        backgroundColor: "teal",
+        width: 250,
+        height: 250,
+        alignItems: "center",
+        justifyContent: "center",
+        borderRadius: 30,
+    },
+    button: {
+        backgroundColor: "teal",
+        width: 200,
+        height: 60,
+        alignItems: "center",
+        justifyContent: "center",
+        borderRadius: 30,
+    },
+    textContainer: {
+        marginTop: 50,
+        backgroundColor: "#005050",
+        alignItems: "center",
+        justifyContent: "center",
+    },
+    textInputContainer: {
+        margin: 30,
+    },
+    textInput: {
+        height: 40,
+        padding: 10,
+        fontSize: 20,
+        color: "white",
+    },
+});

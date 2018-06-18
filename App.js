@@ -2,8 +2,8 @@ import React, { Component } from "react";
 import { createStackNavigator } from "react-navigation"
 
 // Screens
-import LoginScreen from "./LoginScreen.js"
-import HomeScreen from "./HomeScreen.js"
+import LoginScreen from "./Screens/LoginScreen.js"
+import HomeScreen from "./Screens/HomeScreen.js"
 
 
 // --- App Export --- //
