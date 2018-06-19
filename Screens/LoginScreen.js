@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Alert, Button, StyleSheet, Text, TextInput, View, TouchableOpacity } from "react-native";
+import { Alert, Button, Platform, StyleSheet, Text, TextInput, View, TouchableOpacity } from "react-native";
 import { createStackNavigator } from "react-navigation"
 import { Font } from "expo";
 import { GlobalStyles } from "./Styles.js"
@@ -36,7 +36,6 @@ export default class LoginScreen extends Component {
         this.SubmittedUsername = "";
         this.SubmittedPassword = "";
     }
-
 
     // --- State machine related --- //
     // Toggles the credentials window part of the state machine
@@ -96,6 +95,26 @@ export default class LoginScreen extends Component {
         }
     }
 
+    // Attempts to authenticate the user's fingerprint.
+    async _attemptFingerprintAuthentication(){
+        let hasHardware = await Expo.Fingerprint.hasHardwareAsync();
+        let isEnrolled = await Expo.Fingerprint.isEnrolledAsync();
+        Alert.alert("hasHardware: " + hasHardware + " - isEnrolled: " + isEnrolled);
+        if(!hasHardware && !isEnrolled){
+            if(Platform.OS == "ios"){
+                let authenticated = await Expo.Fingerprint.authenticateAsync();
+                if(authenticated.success){
+                    _transitionToHome();
+                }
+            } else if(Platform.OS == "android"){
+                let authenticated = await Expo.Fingerprint.authenticateAsync(Alert.alert("Place your finger to scan."));
+                if(authenticated.success){
+                    _transitionToHome();
+                }
+            }
+        }
+    }
+
 
     // Transitions to the Home State
     _transitionToHome(){
@@ -122,7 +141,7 @@ export default class LoginScreen extends Component {
                     <Text style={GlobalStyles.boldText}>10,000 studies, comprising of 4.8 million variables</Text>
                     <Text style={GlobalStyles.boldText}>Data Stewardship and Social Science Research Projects</Text>
                     <Text style={GlobalStyles.boldText}>776 member institutions</Text>
-                    //<Text style={GlobalStyles.boldText}>{Expo.Fingerprint.isEnrolledAsync()}</Text>
+                    {/*<Text style={GlobalStyles.boldText}>{Expo.Fingerprint.hasHardwareAsync()}</Text>*/}
                 </View>
 
 
@@ -133,7 +152,7 @@ export default class LoginScreen extends Component {
                             <TouchableOpacity onPress={this._setCredentialsFields(true)} style={GlobalStyles.bigButton} activeOpacity={0.6} underlayColor="white">
                                 <Text style={GlobalStyles.boldText}>Username/Password</Text>
                             </TouchableOpacity>
-                            <TouchableOpacity onPress={this._transitionToHome} style={GlobalStyles.bigButton} activeOpacity={0.6} underlayColor="white">
+                            <TouchableOpacity onPress={this._attemptFingerprintAuthentication} style={GlobalStyles.bigButton} activeOpacity={0.6} underlayColor="white">
                                 <Text style={GlobalStyles.boldText}>Fingerprint Scan</Text>
                             </TouchableOpacity>
                         </View>
