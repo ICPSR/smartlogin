@@ -76,7 +76,7 @@ export default class LoginScreen extends Component {
 
     // Called when the user submits their user/pass
     _onCredentialsEntered(){
-        // TODO: Do network stuff here
+        // TODO: Networking stuff goes here
 
 
         // On success, continue to the home screen.
@@ -90,8 +90,9 @@ export default class LoginScreen extends Component {
             // Clear both fields
             this.SubmittedUsername = "";
             this.SubmittedPassword = "";
-        } else {
-            // Clear the password field on failure
+        }
+        // Clear the password field on failure
+        else {
             this.SubmittedPassword = "";
         }
     }

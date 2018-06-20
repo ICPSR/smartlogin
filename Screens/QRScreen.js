@@ -41,7 +41,19 @@ export default class QRScreen extends Component{
     }
 
     _onQRRead(code){
+        // TODO: Networking stuff goes here
         this.dropdown.alertWithType("info", "QR Info", "Data: " + code.data);
+
+
+        // On Success, return to the home screen.
+        if(true){
+            this.dropdown.alertWithType("success", "Success!", "Successfully logged in!");
+            this.props.navigation.goBack();
+        }
+        // Try again on failure.
+        else{
+            this.dropdown.alertWithType("error", "Try Again - Bad QR Code", "The QR code read was not from the ICPSR website's login page.");
+        }
     }
 
 
