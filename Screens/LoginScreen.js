@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Alert, Button, Image, Platform, StyleSheet, Text, TextInput, View, TouchableOpacity } from "react-native";
+import { Alert, AsyncStorage, Button, Image, Platform, StyleSheet, Text, TextInput, View, TouchableOpacity } from "react-native";
 import { createStackNavigator } from "react-navigation"
 import Expo from "expo";
 import DropdownAlert from 'react-native-dropdownalert';
@@ -25,16 +25,42 @@ export default class LoginScreen extends Component {
         this._onCredentialsEntered = this._onCredentialsEntered.bind(this);
         this._onUsernameUpdated = this._onUsernameUpdated.bind(this);
         this._onPasswordUpdated = this._onPasswordUpdated.bind(this);
-        this._transitionToHome = this._transitionToHome.bind(this);
         this._attemptFingerprintAuthentication = this._attemptFingerprintAuthentication.bind(this);
 
         // The current state of this screen in the App, represented in a pseudo enum
         this.ScreenStateEnum = Object.freeze({ Neutral: {}, CredentialsWindow: {} });
-        this.state = { ScreenState: this.ScreenStateEnum.Neutral };
+        this.state = { ScreenState: this.ScreenStateEnum.Neutral, LinkedUsername: null, LinkedPassword: null };
 
         // The current credentials entered in
         this.SubmittedUsername = "";
         this.SubmittedPassword = "";
+    }
+
+    // --- On Component Mount --- //
+    async componentWillMount(){
+        // Check if there's an account linked to the app already.
+        try{
+            let linkedUsername = await AsyncStorage.getItem("@LinkedUsername");
+            let linkedPassword = await AsyncStorage.getItem("@LinkedPassword");
+
+            // TODO: Do networking stuff here to verify that this username/password pair matches.
+
+
+            // Set their state
+            this.setState({ LinkedUsername: linkedUsername, LinkedPassword: linkedPassword });
+
+            // Go straight to attempting a fingerprint authentication if there's a linked account already
+            if(linkedUsername !== null && linkedPassword !== null){
+                this._attemptFingerprintAuthentication();
+            }
+            // Take them straight to the credentials window otherwise
+            else {
+                this.setState({ScreenState: this.ScreenStateEnum.CredentialsWindow });
+            }
+        } catch(error){
+            this.dropdown.alertWithType("error", "Error", "Error retriving credentials.");
+        }
+
     }
 
     // --- State machine related --- //
@@ -63,21 +89,29 @@ export default class LoginScreen extends Component {
     }
 
     // Called when the user submits their user/pass
-    _onCredentialsEntered(){
+    async _onCredentialsEntered(){
         // TODO: Networking stuff goes here
 
 
         // On success, continue to the home screen.
         if(true){
-            // Reset state back to neutral before nagivating
-            this.setState(currentState => {
-                return { ScreenState: this.ScreenStateEnum.Neutral };
-            });
-            // Navigate
-            this._transitionToHome();
+            // Set this as the new linked Account
+            await AsyncStorage.setItem("@LinkedUsername", this.SubmittedUsername);
+            await AsyncStorage.setItem("@LinkedPassword", this.SubmittedPassword);
+
+            // Set their state
+            this.setState({ LinkedUsername: this.SubmittedUsername, LinkedPassword: this.SubmittedPassword });
+
             // Clear both fields
             this.SubmittedUsername = "";
             this.SubmittedPassword = "";
+
+            // Reset state back to neutral
+            this.setState(currentState => {
+                return { ScreenState: this.ScreenStateEnum.Neutral };
+            });
+
+            this.dropdown.alertWithType("success", "Success", "New Account linked!");
         }
         // Clear the password field on failure
         else {
@@ -109,7 +143,7 @@ export default class LoginScreen extends Component {
             }
             if(authenticated.success){
                 this.dropdown.alertWithType("success", "Success", "Authentication succeeded.");
-                _transitionToHome();
+                this.props.navigation.navigate("QR");
             } else {
                 //this.dropdown.alertWithType("error", "Failed", "Authentication failed or canceled.");
             }
@@ -119,13 +153,6 @@ export default class LoginScreen extends Component {
             this.dropdown.alertWithType("error", "Not Enrolled", "Please activate biometric scanning on your device to use.");
         }
     }
-
-
-    // Transitions to the Home State
-    _transitionToHome(){
-        this.props.navigation.navigate("Home", { user: this.SubmittedUsername, pass: this.SubmittedPassword });
-    }
-
 
 
     // --- Render --- //
@@ -150,16 +177,22 @@ export default class LoginScreen extends Component {
 
 
                 {/* Main Buttons */}
-                {this.state.ScreenState != this.ScreenStateEnum.CredentialsWindow ?
+                {this.state.ScreenState === this.ScreenStateEnum.Neutral ?
                     <FadeInView>
+                        {this.state.LinkedUsername !== null ?
+                            <View style={styles.usernameContainer}>
+                                <Text style={[GlobalStyles.boldText, { fontSize: 30 }]}>{this.state.LinkedUsername}</Text>
+                            </View>
+                        : false }
+
                         <View style={styles.buttonContainer}>
                             <TouchableOpacity onPress={this._setCredentialsFields(true)} style={GlobalStyles.bigButton} activeOpacity={0.6} underlayColor="white">
                                 <Image source={require("../Assets/key.png")} style={{marginBottom: 20, width: 100, height: 100}}/>
-                                <Text style={GlobalStyles.boldText}>Username/Password</Text>
+                                <Text style={GlobalStyles.boldText}>Link a new Account</Text>
                             </TouchableOpacity>
                             <TouchableOpacity onPress={this._attemptFingerprintAuthentication} style={GlobalStyles.bigButton} activeOpacity={0.6} underlayColor="white">
-                                <Image source={require("../Assets/fingerprint.png")} style={{marginBottom: 20, width: 100, height: 100}}/>
-                                <Text style={GlobalStyles.boldText}>Fingerprint Scan</Text>
+                                <Image source={require("../Assets/qr.png")} style={{marginBottom: 20, width: 100, height: 100}}/>
+                                <Text style={GlobalStyles.boldText}>QR Login</Text>
                             </TouchableOpacity>
                         </View>
                     </FadeInView>
@@ -223,6 +256,11 @@ export const styles = StyleSheet.create({
         backgroundColor: "#005050",
         alignItems: "center",
         justifyContent: "center",
+    },
+    usernameContainer: {
+        position: "absolute",
+        alignSelf: "center",
+        marginTop: "15%",
     },
     textInputContainer: {
         margin: 30,
