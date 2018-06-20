@@ -72,7 +72,9 @@ export default class QRScreen extends Component{
             return(
                 <View style={{ flex: 1 }}>
                     <Camera style={{ flex: 1 }} type={this.state.type} barCodeTypes={[Camera.Constants.BarCodeType.qr]} onBarCodeRead={this._onQRRead}>
-
+                        <TouchableOpacity style={{marginTop: "165%", marginLeft: "6%"}} onPress={this._onBack}>
+                            <Text style={[GlobalStyles.underlineText, {fontSize: 22}]}>Back</Text>
+                        </TouchableOpacity>
                     </Camera>
 
                     {/* Dropdown Alerts */}

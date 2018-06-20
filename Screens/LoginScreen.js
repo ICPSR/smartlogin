@@ -165,9 +165,11 @@ export default class LoginScreen extends Component {
                     <FadeInView>
                         <View style={styles.buttonContainer}>
                             <TouchableOpacity onPress={this._setCredentialsFields(true)} style={GlobalStyles.bigButton} activeOpacity={0.6} underlayColor="white">
+                                <Image source={require("../Assets/key.png")} style={{marginBottom: 20, width: 100, height: 100}}/>
                                 <Text style={GlobalStyles.boldText}>Username/Password</Text>
                             </TouchableOpacity>
                             <TouchableOpacity onPress={this._attemptFingerprintAuthentication} style={GlobalStyles.bigButton} activeOpacity={0.6} underlayColor="white">
+                                <Image source={require("../Assets/fingerprint.png")} style={{marginBottom: 20, width: 100, height: 100}}/>
                                 <Text style={GlobalStyles.boldText}>Fingerprint Scan</Text>
                             </TouchableOpacity>
                         </View>

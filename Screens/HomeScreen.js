@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Alert, Button, StyleSheet, Text, TextInput, View, TouchableOpacity } from "react-native";
+import { Alert, Button, Image, StyleSheet, Text, TextInput, View, TouchableOpacity } from "react-native";
 import { StackNavigator } from "react-navigation"
 import { GlobalStyles } from "./Styles.js"
 
@@ -48,6 +48,7 @@ export default class HomeScreen extends Component{
                 {/* Buttons */}
                 <View style={styles.buttonContainer}>
                     <TouchableOpacity onPress={this._onQRButtonPressed} style={GlobalStyles.bigButton} activeOpacity={0.6} underlayColor="white">
+                        <Image source={require("../Assets/qr.png")} style={{marginBottom: 30, width: 100, height: 100}}/>
                         <Text style={GlobalStyles.boldText}>QR Login</Text>
                     </TouchableOpacity>
                 </View>
