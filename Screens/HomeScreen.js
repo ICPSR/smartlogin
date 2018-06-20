@@ -8,7 +8,6 @@ export default class HomeScreen extends Component{
     // --- Navigation Options --- //
     static navigationOptions = {
         header: null,
-        //title: "Home"
     };
 
     // --- Constructor --- //
@@ -17,19 +16,19 @@ export default class HomeScreen extends Component{
 
         // Binds the "this" object to the functions
         this._onBack = this._onBack.bind(this);
-
+        this._onQRButtonPressed = this._onQRButtonPressed.bind(this);
     }
 
     // --- Callbacks --- //
     _onQRButtonPressed(){
-
+        this.props.navigation.navigate("QR");
     }
 
     _onBack(){
         this.props.navigation.goBack();
     }
 
-
+    // --- Render --- //
     render(){
         // Get Params from the nagivator
         const user = this.props.navigation.getParam("user", "");
@@ -55,7 +54,7 @@ export default class HomeScreen extends Component{
 
                 {/* Back Button */}
                 <View style={{marginTop: "90%", marginLeft: "4%"}}>
-                    <TouchableOpacity onPress={this._onBack} style={styles.logoutButton} activeOpacity={0.6} underlayColor="white">
+                    <TouchableOpacity onPress={this._onBack} style={GlobalStyles.backButton} activeOpacity={0.6} underlayColor="white">
                         <Text style={GlobalStyles.text}>Back to Login</Text>
                     </TouchableOpacity>
                 </View>
@@ -80,14 +79,6 @@ export const styles = StyleSheet.create({
         flexDirection: "row",
         justifyContent: "space-around"
     },
-    logoutButton: {
-        backgroundColor: "#605f5e",
-        width: 150,
-        height: 60,
-        alignItems: "center",
-        justifyContent: "center",
-    },
-
 
 
 });

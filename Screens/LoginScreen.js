@@ -15,7 +15,6 @@ export default class LoginScreen extends Component {
     // --- Navigation Options --- //
     static navigationOptions = {
         header: null,
-        //title: "Login"
     };
 
     // --- Constructor --- //
@@ -78,7 +77,7 @@ export default class LoginScreen extends Component {
     // Called when the user submits their user/pass
     _onCredentialsEntered(){
         // TODO: Do network stuff here
-        Alert.alert("Username: " + this.SubmittedUsername + "  Password: " + this.SubmittedPassword);
+
 
         // On success, continue to the home screen.
         if(true){
@@ -101,7 +100,6 @@ export default class LoginScreen extends Component {
     async _attemptFingerprintAuthentication(){
         let hasHardware = await Expo.Fingerprint.hasHardwareAsync();
         let isEnrolled = await Expo.Fingerprint.isEnrolledAsync();
-        //Alert.alert("hasHardware: " + hasHardware + " - isEnrolled: " + isEnrolled);
         if(hasHardware && isEnrolled){
             let authenticated;
             if(Platform.OS == "ios"){
@@ -110,17 +108,6 @@ export default class LoginScreen extends Component {
                 // TODO: We seem to get stuck in this await statement after we already call cancelAuthenticate, until we get here again.
                 // Can confirm this by putting a message in the else statement of the authenticated.success. Check to see if this is a problem on a real android.
                 authenticated = await Expo.Fingerprint.authenticateAsync(
-                    /*
-                    <View styles={styles.container}>
-                        <View styles={[styles.contentContainer, styles]}>
-                            <Image styles={styles.logo} source={require('../Assets/finger_print.png')}/>
-                            <Text styles={styles.heading}>Fingerprint Authentication</Text>
-                            <Text>Scan your fingerprint to continue</Text>
-                            <TouchableOpacity styles={styles.buttonContainerFingerprint} onPress={Expo.Fingerprint.cancelAuthenticate}>
-                                <Text styles={styles.buttonText}>Cancel</Text>
-                            </TouchableOpacity>
-                        </View>
-                    </View>*/
                     Alert.alert(
                         "Fingerprint Authentication",
                         "Place your finger to scan.",
@@ -170,7 +157,6 @@ export default class LoginScreen extends Component {
                     <Text style={GlobalStyles.boldText}>10,000 studies, comprising of 4.8 million variables</Text>
                     <Text style={GlobalStyles.boldText}>Data Stewardship and Social Science Research Projects</Text>
                     <Text style={GlobalStyles.boldText}>776 member institutions</Text>
-                    {/*<Text style={GlobalStyles.boldText}>{Expo.Fingerprint.hasHardwareAsync()}</Text>*/}
                 </View>
 
 
@@ -263,48 +249,4 @@ export const styles = StyleSheet.create({
         fontSize: 20,
         color: "white",
     },
-
-    container: {
-        position: 'absolute',
-        top: 0,
-        bottom: 0,
-        left: 0,
-        right: 0,
-        backgroundColor: 'rgba(0, 164, 222, 0.9)',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    contentContainer: {
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
-        width: 400,
-        height: 400,
-        backgroundColor: '#ffffff',
-    },
-    logo: {
-        marginVertical: 45,
-        width: 100,
-        height: 100,
-        paddingLeft: 50,
-        paddingRight: 50,
-    },
-    heading: {
-        textAlign: 'center',
-        color: '#00a4de',
-        fontSize: 25,
-    },
-    buttonContainerFingerprint: {
-        padding: 20,
-        borderWidth: 2,
-        borderColor: "grey",
-        marginTop: 40,
-    },
-    buttonText: {
-        color: '#8fbc5a',
-        fontSize: 15,
-        fontWeight: 'bold',
-    },
-
 });

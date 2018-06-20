@@ -40,6 +40,13 @@ export const GlobalStyles = StyleSheet.create({
         justifyContent: "center",
         borderRadius: 30,
     },
+    backButton: {
+        backgroundColor: "#605f5e",
+        width: 150,
+        height: 60,
+        alignItems: "center",
+        justifyContent: "center",
+    },
 
 
 
