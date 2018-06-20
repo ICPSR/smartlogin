@@ -1,7 +1,8 @@
 import React, { Component } from "react";
-import { Alert, Button, Platform, StyleSheet, Text, TextInput, View, TouchableOpacity } from "react-native";
+import { Alert, Button, Image, Platform, StyleSheet, Text, TextInput, View, TouchableOpacity } from "react-native";
 import { createStackNavigator } from "react-navigation"
-import { Font } from "expo";
+import Expo from "expo";
+import DropdownAlert from 'react-native-dropdownalert';
 import { GlobalStyles } from "./Styles.js"
 import { FadeInView } from "./Animations.js"
 
@@ -27,6 +28,7 @@ export default class LoginScreen extends Component {
         this._onUsernameUpdated = this._onUsernameUpdated.bind(this);
         this._onPasswordUpdated = this._onPasswordUpdated.bind(this);
         this._transitionToHome = this._transitionToHome.bind(this);
+        this._attemptFingerprintAuthentication = this._attemptFingerprintAuthentication.bind(this);
 
         // The current state of this screen in the App, represented in a pseudo enum
         this.ScreenStateEnum = Object.freeze({ Neutral: {}, CredentialsWindow: {}, FingerprintWindow: {} });
@@ -99,19 +101,46 @@ export default class LoginScreen extends Component {
     async _attemptFingerprintAuthentication(){
         let hasHardware = await Expo.Fingerprint.hasHardwareAsync();
         let isEnrolled = await Expo.Fingerprint.isEnrolledAsync();
-        Alert.alert("hasHardware: " + hasHardware + " - isEnrolled: " + isEnrolled);
-        if(!hasHardware && !isEnrolled){
+        //Alert.alert("hasHardware: " + hasHardware + " - isEnrolled: " + isEnrolled);
+        if(hasHardware && isEnrolled){
+            let authenticated;
             if(Platform.OS == "ios"){
-                let authenticated = await Expo.Fingerprint.authenticateAsync();
-                if(authenticated.success){
-                    _transitionToHome();
-                }
+                authenticated = await Expo.Fingerprint.authenticateAsync("Scan to login.");
             } else if(Platform.OS == "android"){
-                let authenticated = await Expo.Fingerprint.authenticateAsync(Alert.alert("Place your finger to scan."));
-                if(authenticated.success){
-                    _transitionToHome();
-                }
+                // TODO: We seem to get stuck in this await statement after we already call cancelAuthenticate, until we get here again.
+                // Can confirm this by putting a message in the else statement of the authenticated.success. Check to see if this is a problem on a real android.
+                authenticated = await Expo.Fingerprint.authenticateAsync(
+                    /*
+                    <View styles={styles.container}>
+                        <View styles={[styles.contentContainer, styles]}>
+                            <Image styles={styles.logo} source={require('../Assets/finger_print.png')}/>
+                            <Text styles={styles.heading}>Fingerprint Authentication</Text>
+                            <Text>Scan your fingerprint to continue</Text>
+                            <TouchableOpacity styles={styles.buttonContainerFingerprint} onPress={Expo.Fingerprint.cancelAuthenticate}>
+                                <Text styles={styles.buttonText}>Cancel</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>*/
+                    Alert.alert(
+                        "Fingerprint Authentication",
+                        "Place your finger to scan.",
+                        [
+                            {text: "Cancel", onPress: () => {Expo.Fingerprint.cancelAuthenticate(); this.dropdown.alertWithType("info", "hi", "onCancel"); }},
+                        ],
+                        { onDismiss: () => {Expo.Fingerprint.cancelAuthenticate(); this.dropdown.alertWithType("info", "hi", "onDismiss"); } }
+                    )
+                );
             }
+            if(authenticated.success){
+                this.dropdown.alertWithType("success", "Success", "Authentication succeeded.");
+                _transitionToHome();
+            } else {
+                //this.dropdown.alertWithType("error", "Failed", "Authentication failed or canceled.");
+            }
+        } else if(!hasHardware) {
+            this.dropdown.alertWithType("error", "Incompatible Device", "Current device does not have the hardware to use this functionality.");
+        } else {
+            this.dropdown.alertWithType("error", "Not Enrolled", "Please activate biometric scanning on your device to use.");
         }
     }
 
@@ -190,6 +219,9 @@ export default class LoginScreen extends Component {
                 : false }
 
 
+                {/* Dropdown Alerts */}
+                <DropdownAlert ref={ref => (this.dropdown = ref)} closeInterval={5000}/>
+
             </View>
         );
     }
@@ -231,4 +263,48 @@ export const styles = StyleSheet.create({
         fontSize: 20,
         color: "white",
     },
+
+    container: {
+        position: 'absolute',
+        top: 0,
+        bottom: 0,
+        left: 0,
+        right: 0,
+        backgroundColor: 'rgba(0, 164, 222, 0.9)',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    contentContainer: {
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: 400,
+        height: 400,
+        backgroundColor: '#ffffff',
+    },
+    logo: {
+        marginVertical: 45,
+        width: 100,
+        height: 100,
+        paddingLeft: 50,
+        paddingRight: 50,
+    },
+    heading: {
+        textAlign: 'center',
+        color: '#00a4de',
+        fontSize: 25,
+    },
+    buttonContainerFingerprint: {
+        padding: 20,
+        borderWidth: 2,
+        borderColor: "grey",
+        marginTop: 40,
+    },
+    buttonText: {
+        color: '#8fbc5a',
+        fontSize: 15,
+        fontWeight: 'bold',
+    },
+
 });

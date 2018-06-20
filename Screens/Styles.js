@@ -1,9 +1,11 @@
 import { StyleSheet } from "react-native";
+import Expo, { Constants } from "expo";
 
 // --- Global Styles --- //
 export const GlobalStyles = StyleSheet.create({
     background: {
         flex: 1,
+        paddingTop: Constants.statusBarHeight,
         backgroundColor: "#005050",
     },
     text: {
@@ -25,7 +27,6 @@ export const GlobalStyles = StyleSheet.create({
     },
 
     header: {
-        marginTop: 25,
         backgroundColor: "teal",
         alignItems: "center",
         justifyContent: "center",
