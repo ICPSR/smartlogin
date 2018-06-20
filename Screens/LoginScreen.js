@@ -22,7 +22,6 @@ export default class LoginScreen extends Component {
         super(props)
 
         // Binds the "this" object to the functions
-        this._setFingerprintPopup = this._setFingerprintPopup.bind(this);
         this._onCredentialsEntered = this._onCredentialsEntered.bind(this);
         this._onUsernameUpdated = this._onUsernameUpdated.bind(this);
         this._onPasswordUpdated = this._onPasswordUpdated.bind(this);
@@ -30,7 +29,7 @@ export default class LoginScreen extends Component {
         this._attemptFingerprintAuthentication = this._attemptFingerprintAuthentication.bind(this);
 
         // The current state of this screen in the App, represented in a pseudo enum
-        this.ScreenStateEnum = Object.freeze({ Neutral: {}, CredentialsWindow: {}, FingerprintWindow: {} });
+        this.ScreenStateEnum = Object.freeze({ Neutral: {}, CredentialsWindow: {} });
         this.state = { ScreenState: this.ScreenStateEnum.Neutral };
 
         // The current credentials entered in
@@ -52,17 +51,6 @@ export default class LoginScreen extends Component {
             });
         }
     }
-
-    // Toggles the fingerprint window part of the state machine
-    _setFingerprintPopup(isVisible){
-        return () => {
-            this.setState(currentState => {
-                if(isVisible) return { ScreenState: this.ScreenStateEnum.FingerprintWindow };
-                return { ScreenState: this.ScreenStateEnum.Neutral };
-            });
-        }
-    }
-
 
 
     // --- Callbacks --- //
@@ -200,13 +188,6 @@ export default class LoginScreen extends Component {
                         </View>
                     </FadeInView>
                 : false }
-
-
-                {/* Fingerprint Popup */}
-                {this.state.ScreenState === this.ScreenStateEnum.FingerprintWindow ?
-                    <FingerprintPopup onPopupDismissed={this._setFingerprintPopup(false)}/>
-                : false }
-
 
                 {/* Dropdown Alerts */}
                 <DropdownAlert ref={ref => (this.dropdown = ref)} closeInterval={5000}/>
