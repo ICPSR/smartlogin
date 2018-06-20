@@ -183,7 +183,7 @@ export default class LoginScreen extends Component {
                     <FadeInView>
                         <View style={{marginTop: "20%"}}>
                             <View style={styles.textInputContainer}>
-                                <TextInput style={styles.textInput} placeholder="Username" onChangeText={this._onUsernameUpdated} onSubmitEditing={this._onCredentialsEntered}/>
+                                <TextInput style={styles.textInput} placeholder="Username" onChangeText={this._onUsernameUpdated} onSubmitEditing={this._onCredentialsEntered} autoFocus={true}/>
                             </View>
                             <View style={styles.textInputContainer}>
                                 <TextInput style={styles.textInput} placeholder="Password" onChangeText={this._onPasswordUpdated} onSubmitEditing={this._onCredentialsEntered} secureTextEntry={true}/>
