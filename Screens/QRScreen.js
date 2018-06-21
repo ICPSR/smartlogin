@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Text, StyleSheet, View, TouchableOpacity } from "react-native";
+import { Text, StyleSheet, View, TouchableOpacity, StatusBar } from "react-native";
 import { StackNavigator } from "react-navigation"
 import Expo, { Camera } from "expo";
 import DropdownAlert from 'react-native-dropdownalert';
@@ -47,8 +47,8 @@ export default class QRScreen extends Component{
 
         // On Success, return to the home screen.
         if(true){
-            this.dropdown.alertWithType("success", "Success!", "Successfully logged in!");
-            this.props.navigation.goBack();
+            //this.dropdown.alertWithType("success", "Success!", "Successfully logged in!");
+            //this.props.navigation.goBack();
         }
         // Try again on failure.
         else{
@@ -67,6 +67,7 @@ export default class QRScreen extends Component{
         else if(this.state.HasPermission === false){
             return (
                 <View style={GlobalStyles.background}>
+                    <StatusBar barStyle="light-content"/>
                     <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
                         <Text style={GlobalStyles.boldText}>No camera access. Please allow the app to access the camera.</Text>
                     </View>
@@ -83,9 +84,15 @@ export default class QRScreen extends Component{
         else {
             return(
                 <View style={{ flex: 1 }}>
+                    <StatusBar barStyle="light-content"/>
+
+                    <View style={[GlobalStyles.header, { paddingTop: Expo.Constants.statusBarHeight }]}>
+                        <Text style={GlobalStyles.text}>Please scan QR from the ICPSR login page.</Text>
+                    </View>
+
                     <Camera style={{ flex: 1 }} type={this.state.type} barCodeTypes={[Camera.Constants.BarCodeType.qr]} onBarCodeRead={this._onQRRead}>
-                        <TouchableOpacity style={{marginTop: "165%", marginLeft: "6%"}} onPress={this._onBack}>
-                            <Text style={[GlobalStyles.underlineText, {fontSize: 22}]}>Back</Text>
+                        <TouchableOpacity style={{marginTop: 530, marginLeft: "6%", width: 70}} onPress={this._onBack}>
+                            <Text style={[GlobalStyles.underlineText, {fontSize: 22, borderWidth: 2, borderColor: "black", backgroundColor: "grey"}]}>Back</Text>
                         </TouchableOpacity>
                     </Camera>
 

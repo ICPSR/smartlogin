@@ -34,8 +34,8 @@ export const GlobalStyles = StyleSheet.create({
 
     bigButton: {
         backgroundColor: "teal",
-        width: 250,
-        height: 250,
+        flex: 1,
+        marginHorizontal: "5%",
         alignItems: "center",
         justifyContent: "center",
         borderRadius: 30,

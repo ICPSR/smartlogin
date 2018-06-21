@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Alert, AsyncStorage, Button, Image, Keyboard, Platform, StyleSheet, Text, TextInput, View, TouchableOpacity, TouchableWithoutFeedback } from "react-native";
+import { Alert, AsyncStorage, Button, Image, Keyboard, Platform, StyleSheet, Text, TextInput, View, ScrollView, TouchableOpacity, TouchableWithoutFeedback, StatusBar } from "react-native";
 import { createStackNavigator } from "react-navigation"
 import Expo from "expo";
 import DropdownAlert from 'react-native-dropdownalert';
@@ -37,7 +37,7 @@ export default class LoginScreen extends Component {
     }
 
     // --- On Component Mount --- //
-    async componentWillMount(){
+    async componentDidMount(){
         // Check if there's an account linked to the app already.
         try{
             let linkedUsername = await AsyncStorage.getItem("@LinkedUsername");
@@ -52,9 +52,7 @@ export default class LoginScreen extends Component {
             // Go straight to attempting a fingerprint authentication if there's a linked account already
             if(linkedUsername !== null && linkedPassword !== null){
                 this._attemptFingerprintAuthentication();
-            }
-            // Take them straight to the credentials window otherwise
-            else {
+            } else {
                 this.setState({ScreenState: this.ScreenStateEnum.CredentialsWindow });
             }
         } catch(error){
@@ -124,28 +122,32 @@ export default class LoginScreen extends Component {
         let hasHardware = await Expo.Fingerprint.hasHardwareAsync();
         let isEnrolled = await Expo.Fingerprint.isEnrolledAsync();
         if(hasHardware && isEnrolled){
-            let authenticated;
-            if(Platform.OS == "ios"){
-                authenticated = await Expo.Fingerprint.authenticateAsync("Scan to login.");
-            } else if(Platform.OS == "android"){
-                // TODO: We seem to get stuck in this await statement after we already call cancelAuthenticate, until we get here again.
-                // Can confirm this by putting a message in the else statement of the authenticated.success. Check to see if this is a problem on a real android.
-                authenticated = await Expo.Fingerprint.authenticateAsync(
-                    Alert.alert(
-                        "Fingerprint Authentication",
-                        "Place your finger to scan.",
-                        [
-                            {text: "Cancel", onPress: () => {Expo.Fingerprint.cancelAuthenticate(); this.dropdown.alertWithType("info", "hi", "onCancel"); }},
-                        ],
-                        { onDismiss: () => {Expo.Fingerprint.cancelAuthenticate(); this.dropdown.alertWithType("info", "hi", "onDismiss"); } }
-                    )
-                );
-            }
-            if(authenticated.success){
-                this.dropdown.alertWithType("success", "Success", "Authentication succeeded.");
-                this.props.navigation.navigate("QR");
+            if(this.state.LinkedUsername !== null && this.state.LinkedPassword !== null){
+                let authenticated;
+                if(Platform.OS == "ios"){
+                    authenticated = await Expo.Fingerprint.authenticateAsync("Scan to login.");
+                } else if(Platform.OS == "android"){
+                    // TODO: We seem to get stuck in this await statement after we already call cancelAuthenticate, until we get here again.
+                    // Can confirm this by putting a message in the else statement of the authenticated.success. Check to see if this is a problem on a real android.
+                    authenticated = await Expo.Fingerprint.authenticateAsync(
+                        Alert.alert(
+                            "Fingerprint Authentication",
+                            "Place your finger to scan.",
+                            [
+                                {text: "Cancel", onPress: () => {Expo.Fingerprint.cancelAuthenticate(); this.dropdown.alertWithType("info", "hi", "onCancel"); }},
+                            ],
+                            { onDismiss: () => {Expo.Fingerprint.cancelAuthenticate(); this.dropdown.alertWithType("info", "hi", "onDismiss"); } }
+                        )
+                    );
+                }
+                if(authenticated.success){
+                    this.dropdown.alertWithType("success", "Success", "Authentication succeeded.");
+                    this.props.navigation.navigate("QR");
+                } else {
+                    //this.dropdown.alertWithType("error", "Failed", "Authentication failed or canceled.");
+                }
             } else {
-                //this.dropdown.alertWithType("error", "Failed", "Authentication failed or canceled.");
+                this.dropdown.alertWithType("warn", "No Account Linked", "Please link your account to this phone before attempting a QR Login.");
             }
         } else if(!hasHardware) {
             this.dropdown.alertWithType("error", "Incompatible Device", "Current device does not have the hardware to use biometric scanning.");
@@ -162,20 +164,12 @@ export default class LoginScreen extends Component {
             <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
                 <View style={GlobalStyles.background}>
 
+                    <StatusBar barStyle="light-content"/>
+
                     {/* Title */}
                     <View style={GlobalStyles.header}>
                         <Text style={styles.headerText}>ICPSR</Text>
                     </View>
-
-
-                    {/* Body */}
-                    <View style={styles.textContainer}>
-                        <Text style={GlobalStyles.boldText}>International Leader in Data Stewardship</Text>
-                        <Text style={GlobalStyles.boldText}>10,000 studies, comprising of 4.8 million variables</Text>
-                        <Text style={GlobalStyles.boldText}>Data Stewardship and Social Science Research Projects</Text>
-                        <Text style={GlobalStyles.boldText}>776 member institutions</Text>
-                    </View>
-
 
                     {/* Main Buttons */}
                     {this.state.ScreenState === this.ScreenStateEnum.Neutral ?
@@ -188,11 +182,11 @@ export default class LoginScreen extends Component {
 
                             <View style={styles.buttonContainer}>
                                 <TouchableOpacity onPress={this._setCredentialsFields(true)} style={GlobalStyles.bigButton} activeOpacity={0.6} underlayColor="white">
-                                    <Image source={require("../Assets/key.png")} style={{marginBottom: 20, width: 100, height: 100}}/>
-                                    <Text style={GlobalStyles.boldText}>Link a new Account</Text>
+                                    <Image source={require("../Assets/key.png")} style={{width: 100, height: 100}}/>
+                                    <Text style={GlobalStyles.boldText}>Link Account</Text>
                                 </TouchableOpacity>
                                 <TouchableOpacity onPress={this._attemptFingerprintAuthentication} style={GlobalStyles.bigButton} activeOpacity={0.6} underlayColor="white">
-                                    <Image source={require("../Assets/qr.png")} style={{marginBottom: 20, width: 100, height: 100}}/>
+                                    <Image source={require("../Assets/qr.png")} style={{width: 100, height: 100}}/>
                                     <Text style={GlobalStyles.boldText}>QR Login</Text>
                                 </TouchableOpacity>
                             </View>
@@ -203,12 +197,12 @@ export default class LoginScreen extends Component {
                     {/* Username/Password Windows */}
                     {this.state.ScreenState === this.ScreenStateEnum.CredentialsWindow ?
                         <FadeInView>
-                            <View style={{marginTop: "20%"}}>
+                            <View style={{marginTop: "7%"}}>
                                 <View style={styles.textInputContainer}>
-                                    <TextInput style={styles.textInput} placeholder="Username" onChangeText={this._onUsernameUpdated} onSubmitEditing={this._onCredentialsEntered} autoFocus={true}/>
+                                    <TextInput style={styles.textInput} placeholder="Username" onChangeText={this._onUsernameUpdated} onSubmitEditing={this._onCredentialsEntered} placeholderTextColor={"grey"} autoFocus={true}/>
                                 </View>
                                 <View style={styles.textInputContainer}>
-                                    <TextInput style={styles.textInput} placeholder="Password" onChangeText={this._onPasswordUpdated} onSubmitEditing={this._onCredentialsEntered} secureTextEntry={true}/>
+                                    <TextInput style={styles.textInput} placeholder="Password" onChangeText={this._onPasswordUpdated} onSubmitEditing={this._onCredentialsEntered} placeholderTextColor={"grey"} secureTextEntry={true}/>
                                 </View>
 
                                 <View style={{alignItems: "center", justifyContent: "center", margin: 30}}>
@@ -224,7 +218,7 @@ export default class LoginScreen extends Component {
                     : false }
 
                     {/* Dropdown Alerts */}
-                    <DropdownAlert ref={ref => (this.dropdown = ref)} closeInterval={5000}/>
+                    <DropdownAlert style={{position: "absolute"}} ref={ref => (this.dropdown = ref)} closeInterval={5000}/>
 
                 </View>
             </TouchableWithoutFeedback>
@@ -236,12 +230,13 @@ export default class LoginScreen extends Component {
 export const styles = StyleSheet.create({
     headerText: {
         fontFamily: "icpsr-font",
-        fontSize: 100,
+        fontSize: 70,
         fontWeight: 'bold',
         color: "white",
     },
     buttonContainer: {
-        marginTop: "60%",
+        marginTop: 350,
+        height: 140,
         flexDirection: "row",
         justifyContent: "space-around"
     },
@@ -265,7 +260,11 @@ export const styles = StyleSheet.create({
         marginTop: "15%",
     },
     textInputContainer: {
-        margin: 30,
+        margin: 20,
+        padding: 5,
+        borderWidth: 2,
+        borderColor: "grey",
+        borderRadius: 5,
     },
     textInput: {
         height: 40,
