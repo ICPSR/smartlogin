@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Alert, AsyncStorage, Button, Image, Platform, StyleSheet, Text, TextInput, View, TouchableOpacity } from "react-native";
+import { Alert, AsyncStorage, Button, Image, Keyboard, Platform, StyleSheet, Text, TextInput, View, TouchableOpacity, TouchableWithoutFeedback } from "react-native";
 import { createStackNavigator } from "react-navigation"
 import Expo from "expo";
 import DropdownAlert from 'react-native-dropdownalert';
@@ -148,9 +148,9 @@ export default class LoginScreen extends Component {
                 //this.dropdown.alertWithType("error", "Failed", "Authentication failed or canceled.");
             }
         } else if(!hasHardware) {
-            this.dropdown.alertWithType("error", "Incompatible Device", "Current device does not have the hardware to use this functionality.");
+            this.dropdown.alertWithType("error", "Incompatible Device", "Current device does not have the hardware to use biometric scanning.");
         } else {
-            this.dropdown.alertWithType("error", "Not Enrolled", "Please activate biometric scanning on your device to use.");
+            this.dropdown.alertWithType("warn", "Not Enrolled", "Please activate biometric scanning on your device to use.");
         }
     }
 
@@ -159,73 +159,75 @@ export default class LoginScreen extends Component {
     render() {
         return (
             // Outermost view, don't have anything outside of this
-            <View style={GlobalStyles.background}>
+            <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+                <View style={GlobalStyles.background}>
 
-                {/* Title */}
-                <View style={GlobalStyles.header}>
-                    <Text style={styles.headerText}>ICPSR</Text>
-                </View>
-
-
-                {/* Body */}
-                <View style={styles.textContainer}>
-                    <Text style={GlobalStyles.boldText}>International Leader in Data Stewardship</Text>
-                    <Text style={GlobalStyles.boldText}>10,000 studies, comprising of 4.8 million variables</Text>
-                    <Text style={GlobalStyles.boldText}>Data Stewardship and Social Science Research Projects</Text>
-                    <Text style={GlobalStyles.boldText}>776 member institutions</Text>
-                </View>
+                    {/* Title */}
+                    <View style={GlobalStyles.header}>
+                        <Text style={styles.headerText}>ICPSR</Text>
+                    </View>
 
 
-                {/* Main Buttons */}
-                {this.state.ScreenState === this.ScreenStateEnum.Neutral ?
-                    <FadeInView>
-                        {this.state.LinkedUsername !== null ?
-                            <View style={styles.usernameContainer}>
-                                <Text style={[GlobalStyles.boldText, { fontSize: 30 }]}>{this.state.LinkedUsername}</Text>
-                            </View>
-                        : false }
-
-                        <View style={styles.buttonContainer}>
-                            <TouchableOpacity onPress={this._setCredentialsFields(true)} style={GlobalStyles.bigButton} activeOpacity={0.6} underlayColor="white">
-                                <Image source={require("../Assets/key.png")} style={{marginBottom: 20, width: 100, height: 100}}/>
-                                <Text style={GlobalStyles.boldText}>Link a new Account</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity onPress={this._attemptFingerprintAuthentication} style={GlobalStyles.bigButton} activeOpacity={0.6} underlayColor="white">
-                                <Image source={require("../Assets/qr.png")} style={{marginBottom: 20, width: 100, height: 100}}/>
-                                <Text style={GlobalStyles.boldText}>QR Login</Text>
-                            </TouchableOpacity>
-                        </View>
-                    </FadeInView>
-                : false }
+                    {/* Body */}
+                    <View style={styles.textContainer}>
+                        <Text style={GlobalStyles.boldText}>International Leader in Data Stewardship</Text>
+                        <Text style={GlobalStyles.boldText}>10,000 studies, comprising of 4.8 million variables</Text>
+                        <Text style={GlobalStyles.boldText}>Data Stewardship and Social Science Research Projects</Text>
+                        <Text style={GlobalStyles.boldText}>776 member institutions</Text>
+                    </View>
 
 
-                {/* Username/Password Windows */}
-                {this.state.ScreenState === this.ScreenStateEnum.CredentialsWindow ?
-                    <FadeInView>
-                        <View style={{marginTop: "20%"}}>
-                            <View style={styles.textInputContainer}>
-                                <TextInput style={styles.textInput} placeholder="Username" onChangeText={this._onUsernameUpdated} onSubmitEditing={this._onCredentialsEntered} autoFocus={true}/>
-                            </View>
-                            <View style={styles.textInputContainer}>
-                                <TextInput style={styles.textInput} placeholder="Password" onChangeText={this._onPasswordUpdated} onSubmitEditing={this._onCredentialsEntered} secureTextEntry={true}/>
-                            </View>
+                    {/* Main Buttons */}
+                    {this.state.ScreenState === this.ScreenStateEnum.Neutral ?
+                        <FadeInView>
+                            {this.state.LinkedUsername !== null ?
+                                <View style={styles.usernameContainer}>
+                                    <Text style={[GlobalStyles.boldText, { fontSize: 30 }]}>{this.state.LinkedUsername}</Text>
+                                </View>
+                            : false }
 
-                            <View style={{alignItems: "center", justifyContent: "center", margin: 30}}>
-                                <TouchableOpacity onPress={this._onCredentialsEntered} style={styles.button} activeOpacity={0.6} underlayColor="white">
-                                    <Text style={GlobalStyles.boldText}>Submit</Text>
+                            <View style={styles.buttonContainer}>
+                                <TouchableOpacity onPress={this._setCredentialsFields(true)} style={GlobalStyles.bigButton} activeOpacity={0.6} underlayColor="white">
+                                    <Image source={require("../Assets/key.png")} style={{marginBottom: 20, width: 100, height: 100}}/>
+                                    <Text style={GlobalStyles.boldText}>Link a new Account</Text>
                                 </TouchableOpacity>
-                                <TouchableOpacity onPress={this._setCredentialsFields(false)} style={{marginTop: 30}} activeOpacity={0.6} underlayColor="white">
-                                    <Text style={GlobalStyles.underlineText}>Cancel</Text>
+                                <TouchableOpacity onPress={this._attemptFingerprintAuthentication} style={GlobalStyles.bigButton} activeOpacity={0.6} underlayColor="white">
+                                    <Image source={require("../Assets/qr.png")} style={{marginBottom: 20, width: 100, height: 100}}/>
+                                    <Text style={GlobalStyles.boldText}>QR Login</Text>
                                 </TouchableOpacity>
                             </View>
-                        </View>
-                    </FadeInView>
-                : false }
+                        </FadeInView>
+                    : false }
 
-                {/* Dropdown Alerts */}
-                <DropdownAlert ref={ref => (this.dropdown = ref)} closeInterval={5000}/>
 
-            </View>
+                    {/* Username/Password Windows */}
+                    {this.state.ScreenState === this.ScreenStateEnum.CredentialsWindow ?
+                        <FadeInView>
+                            <View style={{marginTop: "20%"}}>
+                                <View style={styles.textInputContainer}>
+                                    <TextInput style={styles.textInput} placeholder="Username" onChangeText={this._onUsernameUpdated} onSubmitEditing={this._onCredentialsEntered} autoFocus={true}/>
+                                </View>
+                                <View style={styles.textInputContainer}>
+                                    <TextInput style={styles.textInput} placeholder="Password" onChangeText={this._onPasswordUpdated} onSubmitEditing={this._onCredentialsEntered} secureTextEntry={true}/>
+                                </View>
+
+                                <View style={{alignItems: "center", justifyContent: "center", margin: 30}}>
+                                    <TouchableOpacity onPress={this._onCredentialsEntered} style={styles.button} activeOpacity={0.6} underlayColor="white">
+                                        <Text style={GlobalStyles.boldText}>Submit</Text>
+                                    </TouchableOpacity>
+                                    <TouchableOpacity onPress={this._setCredentialsFields(false)} style={{marginTop: 30}} activeOpacity={0.6} underlayColor="white">
+                                        <Text style={GlobalStyles.underlineText}>Cancel</Text>
+                                    </TouchableOpacity>
+                                </View>
+                            </View>
+                        </FadeInView>
+                    : false }
+
+                    {/* Dropdown Alerts */}
+                    <DropdownAlert ref={ref => (this.dropdown = ref)} closeInterval={5000}/>
+
+                </View>
+            </TouchableWithoutFeedback>
         );
     }
 }
