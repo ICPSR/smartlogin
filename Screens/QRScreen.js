@@ -101,7 +101,7 @@ export default class QRScreen extends Component{
             return(
                 <View style={{ flex: 1 }}>
                     <StatusBar barStyle="light-content"/>
-                    
+
                     <View style={[GlobalStyles.header, { paddingTop: Expo.Constants.statusBarHeight }]}>
                         <Text style={GlobalStyles.text}>Please scan QR from the ICPSR login page.</Text>
                     </View>

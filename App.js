@@ -6,7 +6,6 @@ import { GlobalStyles } from "./Screens/Styles.js"
 
 // Screens
 import LoginScreen from "./Screens/LoginScreen.js"
-import HomeScreen from "./Screens/HomeScreen.js"
 import QRScreen from "./Screens/QRScreen.js"
 
 // --- App Export --- //
@@ -41,7 +40,6 @@ export default class App extends Component {
 const RootStack = createStackNavigator(
     {
         Login: LoginScreen,
-        Home: HomeScreen,
         QR: QRScreen,
     },
     {
