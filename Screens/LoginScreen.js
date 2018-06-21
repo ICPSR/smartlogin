@@ -141,7 +141,7 @@ export default class LoginScreen extends Component {
                     );
                 }
                 if(authenticated.success){
-                    this.dropdown.alertWithType("success", "Success", "Authentication succeeded.");
+                    //this.dropdown.alertWithType("success", "Success", "Authentication succeeded.");
                     this.props.navigation.navigate("QR");
                 } else {
                     //this.dropdown.alertWithType("error", "Failed", "Authentication failed or canceled.");

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Text, StyleSheet, View, TouchableOpacity, StatusBar } from "react-native";
+import { Image, Text, StyleSheet, View, TouchableOpacity, StatusBar } from "react-native";
 import { StackNavigator } from "react-navigation"
 import Expo, { Camera } from "expo";
 import DropdownAlert from 'react-native-dropdownalert';
@@ -102,15 +102,23 @@ export default class QRScreen extends Component{
                 <View style={{ flex: 1 }}>
                     <StatusBar barStyle="light-content"/>
 
+                    {/* Header */}
                     <View style={[GlobalStyles.header, { paddingTop: Expo.Constants.statusBarHeight }]}>
                         <Text style={GlobalStyles.text}>Please scan QR from the ICPSR login page.</Text>
                     </View>
 
+                    {/* Camera */}
                     <Camera style={{ flex: 1 }} type={this.state.type} barCodeTypes={[Camera.Constants.BarCodeType.qr]} onBarCodeRead={this.state.qrFunc}>
+                        {/* Back Button */}
                         <TouchableOpacity style={{marginTop: 530, marginLeft: "6%", width: 70}} onPress={this._onBack}>
                             <Text style={[GlobalStyles.underlineText, {fontSize: 22, borderWidth: 2, borderColor: "black", backgroundColor: "grey"}]}>Back</Text>
                         </TouchableOpacity>
                     </Camera>
+
+                    {/* QR Border */}
+                    <View style={{position: "absolute", alignSelf: "center", marginTop: "60%"}}>
+                        <Image source={require("../assets/qr_border.png")} style={{width: 200, height: 200}}/>
+                    </View>
 
                     {/* Dropdown Alerts */}
                     <DropdownAlert ref={ref => (this.dropdown = ref)} closeInterval={5000}/>
