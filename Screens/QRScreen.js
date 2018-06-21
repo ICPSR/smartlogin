@@ -6,6 +6,13 @@ import DropdownAlert from 'react-native-dropdownalert';
 import { GlobalStyles } from "./Styles.js"
 
 
+// Simple delay function for timing
+function delay(time) {
+    return new Promise(function(resolve, reject) {
+      setTimeout(() => resolve(), time);
+    });
+}
+
 // --- QR Screen --- //
 export default class QRScreen extends Component{
     // --- Navigation Options --- //
@@ -17,15 +24,17 @@ export default class QRScreen extends Component{
     constructor(props){
         super(props)
 
+        // Binds the "this" object to the functions
+        this._onBack = this._onBack.bind(this);
+        this._onQRRead = this._onQRRead.bind(this);
+
         // State
         this.state = {
             HasPermission: null,
             type: Expo.Camera.Constants.Type.back,
+            qrFunc: this._onQRRead,
         };
 
-        // Binds the "this" object to the functions
-        this._onBack = this._onBack.bind(this);
-        this._onQRRead = this._onQRRead.bind(this);
 
     }
 
@@ -40,19 +49,26 @@ export default class QRScreen extends Component{
         this.props.navigation.goBack();
     }
 
-    _onQRRead(code){
+    async _onQRRead(code){
+        // Stop QR from reading
+        this.setState({ qrFunc: undefined });
+
         // TODO: Networking stuff goes here
-        this.dropdown.alertWithType("info", "QR Info", "Data: " + code.data);
+        //this.dropdown.alertWithType("info", "QR Info", "Data: " + code.data);
 
 
         // On Success, return to the home screen.
         if(true){
-            //this.dropdown.alertWithType("success", "Success!", "Successfully logged in!");
-            //this.props.navigation.goBack();
+            this.dropdown.alertWithType("success", "Success!", "Successfully logged in!");
+            await delay(4000);
+            this.props.navigation.goBack();
         }
         // Try again on failure.
         else{
             this.dropdown.alertWithType("error", "Try Again - Bad QR Code", "The QR code read was not from the ICPSR website's login page.");
+            await delay(2000);
+            // Stop QR from reading
+            this.setState({ qrFunc: this._onQRRead });
         }
     }
 
@@ -85,12 +101,12 @@ export default class QRScreen extends Component{
             return(
                 <View style={{ flex: 1 }}>
                     <StatusBar barStyle="light-content"/>
-
+                    
                     <View style={[GlobalStyles.header, { paddingTop: Expo.Constants.statusBarHeight }]}>
                         <Text style={GlobalStyles.text}>Please scan QR from the ICPSR login page.</Text>
                     </View>
 
-                    <Camera style={{ flex: 1 }} type={this.state.type} barCodeTypes={[Camera.Constants.BarCodeType.qr]} onBarCodeRead={this._onQRRead}>
+                    <Camera style={{ flex: 1 }} type={this.state.type} barCodeTypes={[Camera.Constants.BarCodeType.qr]} onBarCodeRead={this.state.qrFunc}>
                         <TouchableOpacity style={{marginTop: 530, marginLeft: "6%", width: 70}} onPress={this._onBack}>
                             <Text style={[GlobalStyles.underlineText, {fontSize: 22, borderWidth: 2, borderColor: "black", backgroundColor: "grey"}]}>Back</Text>
                         </TouchableOpacity>
