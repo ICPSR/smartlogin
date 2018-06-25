@@ -19,7 +19,7 @@ export default class App extends Component {
     // Loads fonts on mount
     async componentDidMount(){
         await Expo.Font.loadAsync({
-            'icpsr-font': require('./Assets/fonts/Behatrice-Regular.ttf'),
+            'icpsr-font': require('./assets/fonts/Behatrice-Regular.ttf'),
         });
         this.setState({ DoneLoading: true });
     }

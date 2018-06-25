@@ -182,11 +182,11 @@ export default class LoginScreen extends Component {
 
                             <View style={styles.buttonContainer}>
                                 <TouchableOpacity onPress={this._setCredentialsFields(true)} style={GlobalStyles.bigButton} activeOpacity={0.6} underlayColor="white">
-                                    <Image source={require("../Assets/key.png")} style={{width: 100, height: 100}}/>
+                                    <Image source={require("../assets/key.png")} style={{width: 100, height: 100}}/>
                                     <Text style={GlobalStyles.boldText}>Link Account</Text>
                                 </TouchableOpacity>
                                 <TouchableOpacity onPress={this._attemptFingerprintAuthentication} style={GlobalStyles.bigButton} activeOpacity={0.6} underlayColor="white">
-                                    <Image source={require("../Assets/qr.png")} style={{width: 100, height: 100}}/>
+                                    <Image source={require("../assets/qr.png")} style={{width: 100, height: 100}}/>
                                     <Text style={GlobalStyles.boldText}>QR Login</Text>
                                 </TouchableOpacity>
                             </View>
