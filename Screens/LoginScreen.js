@@ -236,8 +236,8 @@ export const styles = StyleSheet.create({
         color: "white",
     },
     buttonContainer: {
-        marginTop: 350,
-        height: 140,
+        top: "90%",
+        height: 150,
         flexDirection: "row",
         justifyContent: "space-around"
     },

@@ -18,6 +18,7 @@ export default class App extends Component {
 
     // Loads fonts on mount
     async componentDidMount(){
+        Expo.ScreenOrientation.allow(Expo.ScreenOrientation.Orientation.PORTRAIT);
         await Expo.Font.loadAsync({
             'icpsr-font': require('./assets/fonts/Behatrice-Regular.ttf'),
         });
