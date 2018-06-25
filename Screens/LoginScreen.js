@@ -230,7 +230,8 @@ export default class LoginScreen extends Component {
 export const styles = StyleSheet.create({
     headerText: {
         fontFamily: "icpsr-font",
-        fontSize: 70,
+        fontSize: 100,
+        paddingLeft: 10,
         fontWeight: 'bold',
         color: "white",
     },
