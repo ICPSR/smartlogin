@@ -41,8 +41,8 @@ export default class LoginScreen extends Component {
             let linkedUsername = await AsyncStorage.getItem("@LinkedUsername");
             let linkedPassword = await AsyncStorage.getItem("@LinkedPassword");
 
-            // TODO: Do networking stuff here to verify that this username/password pair matches.
-
+            // Check the servers to verify that this username/password pair still matches.
+            //TODO: Do networking stuff here
 
             // Set their state
             this.setState({ LinkedUsername: linkedUsername, LinkedPassword: linkedPassword });
@@ -87,11 +87,17 @@ export default class LoginScreen extends Component {
 
     // Called when the user submits their user/pass
     async _onCredentialsEntered(){
+        // Check the entered information for validity.
+        if(this.SubmittedUsername === "" || this.SubmittedPassword === "") {
+            this.dropdown.alertWithType("warn", "Missing Credentials", "Please enter both a username and password.");
+            this.SubmittedPassword = "";
+        }
+
+        // Check the servers to see if the credentials are valid
         // TODO: Networking stuff goes here
 
-
-        // On success, continue to the home screen.
-        if(true){
+        // On success, go back to the home screen.
+        else{
             // Set this as the new linked Account
             await AsyncStorage.setItem("@LinkedUsername", this.SubmittedUsername);
             await AsyncStorage.setItem("@LinkedPassword", this.SubmittedPassword);
@@ -109,10 +115,6 @@ export default class LoginScreen extends Component {
             });
 
             this.dropdown.alertWithType("success", "Success", "New Account linked!");
-        }
-        // Clear the password field on failure
-        else {
-            this.SubmittedPassword = "";
         }
     }
 
