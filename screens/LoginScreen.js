@@ -24,6 +24,7 @@ export default class LoginScreen extends Component {
         this._onUsernameUpdated = this._onUsernameUpdated.bind(this);
         this._onPasswordUpdated = this._onPasswordUpdated.bind(this);
         this._attemptFingerprintAuthentication = this._attemptFingerprintAuthentication.bind(this);
+        this._startAuthenticationTimeout = this._startAuthenticationTimeout.bind(this);
 
         // The current state of this screen in the App, represented in a pseudo enum
         this.ScreenStateEnum = Object.freeze({ Neutral: {}, CredentialsWindow: {} });
@@ -32,6 +33,12 @@ export default class LoginScreen extends Component {
         // The current credentials entered in
         this.SubmittedUsername = "";
         this.SubmittedPassword = "";
+
+        // Has the user recently authenticated?
+        this.hasRecentlyAuthenticated = false;
+
+        // Amount of time (milliseconds) the user has to enter back into the QR screen without reauthenticating.
+        const REAUTH_TIMER = 60 * 1000;
     }
 
     // --- On Component Mount --- //
@@ -48,7 +55,7 @@ export default class LoginScreen extends Component {
             this.setState({ LinkedUsername: linkedUsername, LinkedPassword: linkedPassword });
 
             // Go straight to attempting a fingerprint authentication if there's a linked account already
-            if(linkedUsername !== null && linkedPassword !== null){
+            if(linkedUsername !== null && linkedPassword !== null && !this.hasRecentlyAuthenticated){
                 await delay(500);
                 this._attemptFingerprintAuthentication();
             } else {
@@ -120,6 +127,11 @@ export default class LoginScreen extends Component {
 
     // Attempts to authenticate the user's fingerprint.
     async _attemptFingerprintAuthentication(){
+        // Allow user to bypass this if they recently authenticated.
+        if(this.hasRecentlyAuthenticated){
+            this.props.navigation.navigate("QR");
+            return;
+        }
         let hasHardware = await Expo.Fingerprint.hasHardwareAsync();
         let isEnrolled = await Expo.Fingerprint.isEnrolledAsync();
         if(hasHardware && isEnrolled){
@@ -143,6 +155,8 @@ export default class LoginScreen extends Component {
                 }
                 if(authenticated.success){
                     //this.dropdown.alertWithType("success", "Success", "Authentication succeeded.");
+                    this.hasRecentlyAuthenticated = true;
+                    this._startAuthenticationTimeout();
                     this.props.navigation.navigate("QR");
                 } else {
                     //this.dropdown.alertWithType("error", "Failed", "Authentication failed or canceled.");
@@ -157,6 +171,15 @@ export default class LoginScreen extends Component {
         }
     }
 
+    // A timer that, after some time, sets hasRecentlyAuthenticated to false.
+    // Note: Should never be 2 instances of this running at the same time.
+    async _startAuthenticationTimeout(){
+        return new Promise(resolve => {
+            setTimeout(() => {
+                this.hasRecentlyAuthenticated = false;
+            }, REAUTH_TIMER);
+        });
+    }
 
     // --- Render --- //
     render() {
