@@ -5,14 +5,8 @@ import { StackNavigator } from "react-navigation"
 import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
 import DropdownAlert from 'react-native-dropdownalert';
 import { GlobalStyles } from "./Styles.js"
+import { delay } from "../Functions.js"
 
-
-// Simple delay function for timing
-function delay(time) {
-    return new Promise(function(resolve, reject) {
-      setTimeout(() => resolve(), time);
-    });
-}
 
 // --- QR Screen --- //
 export default class QRScreen extends Component{

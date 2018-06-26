@@ -6,6 +6,7 @@ import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
 import DropdownAlert from 'react-native-dropdownalert';
 import { GlobalStyles } from "./Styles.js"
 import { FadeInView } from "./Animations.js"
+import { delay } from "../Functions.js"
 
 // --- Login Screen --- //
 export default class LoginScreen extends Component {
@@ -48,12 +49,13 @@ export default class LoginScreen extends Component {
 
             // Go straight to attempting a fingerprint authentication if there's a linked account already
             if(linkedUsername !== null && linkedPassword !== null){
+                await delay(500);
                 this._attemptFingerprintAuthentication();
             } else {
                 this.setState({ScreenState: this.ScreenStateEnum.CredentialsWindow });
             }
         } catch(error){
-            this.dropdown.alertWithType("error", "Error", "Error retriving credentials.");
+            this.dropdown.alertWithType("error", "Error", "Error retriving credentials: " + error);
         }
 
     }
