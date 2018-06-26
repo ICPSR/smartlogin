@@ -2,11 +2,11 @@ import React, { Component } from "react";
 import { View } from "react-native";
 import { createStackNavigator } from "react-navigation"
 import Expo from "expo";
-import { GlobalStyles } from "./Screens/Styles.js"
+import { GlobalStyles } from "./screens/Styles.js"
 
 // Screens
-import LoginScreen from "./Screens/LoginScreen.js"
-import QRScreen from "./Screens/QRScreen.js"
+import LoginScreen from "./screens/LoginScreen.js"
+import QRScreen from "./screens/QRScreen.js"
 
 // --- App Export --- //
 export default class App extends Component {
@@ -18,6 +18,7 @@ export default class App extends Component {
 
     // Loads fonts on mount
     async componentDidMount(){
+        console.log("hi");
         Expo.ScreenOrientation.allow(Expo.ScreenOrientation.Orientation.PORTRAIT);
         await Expo.Font.loadAsync({
             'icpsr-font': require('./assets/fonts/Behatrice-Regular.ttf'),

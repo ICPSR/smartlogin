@@ -6,10 +6,6 @@ import DropdownAlert from 'react-native-dropdownalert';
 import { GlobalStyles } from "./Styles.js"
 import { FadeInView } from "./Animations.js"
 
-// Fonts
-//import ICPSRFont from "./Assets/fonts/BEHATRICE.ttf"
-
-
 // --- Login Screen --- //
 export default class LoginScreen extends Component {
     // --- Navigation Options --- //
