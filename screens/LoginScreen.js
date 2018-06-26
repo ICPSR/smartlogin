@@ -38,7 +38,7 @@ export default class LoginScreen extends Component {
         this.hasRecentlyAuthenticated = false;
 
         // Amount of time (milliseconds) the user has to enter back into the QR screen without reauthenticating.
-        const REAUTH_TIMER = 60 * 1000;
+        this.REAUTH_TIMER = 60 * 1000;
     }
 
     // --- On Component Mount --- //
@@ -177,7 +177,7 @@ export default class LoginScreen extends Component {
         return new Promise(resolve => {
             setTimeout(() => {
                 this.hasRecentlyAuthenticated = false;
-            }, REAUTH_TIMER);
+            }, this.REAUTH_TIMER);
         });
     }
 
