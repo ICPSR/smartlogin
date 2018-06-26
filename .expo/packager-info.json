@@ -1,5 +1,8 @@
 {
   "expoServerPort": 19000,
   "packagerPort": 19001,
-  "packagerPid": 39556
+  "packagerPid": 10656,
+  "expoServerNgrokUrl": "https://3t-dkw.saruto.smart-login.exp.direct",
+  "packagerNgrokUrl": "https://packager.3t-dkw.saruto.smart-login.exp.direct",
+  "ngrokPid": 34324
 }
