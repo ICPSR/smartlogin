@@ -1,5 +1,6 @@
 import { StyleSheet } from "react-native";
 import Expo, { Constants } from "expo";
+import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
 
 // --- Global Styles --- //
 export const GlobalStyles = StyleSheet.create({
@@ -9,19 +10,19 @@ export const GlobalStyles = StyleSheet.create({
         backgroundColor: "#005050",
     },
     text: {
-        fontSize: 18,
-        padding: 10,
+        fontSize: moderateScale(18),
+        padding: moderateScale(10),
         color: "white",
     },
     boldText: {
-        fontSize: 20,
-        padding: 10,
+        fontSize: moderateScale(20),
+        padding: moderateScale(10),
         color: "white",
         fontWeight: 'bold',
     },
     underlineText: {
-        fontSize: 18,
-        padding: 10,
+        fontSize: moderateScale(18),
+        padding: moderateScale(10),
         color: "white",
         textDecorationLine: "underline",
     },
@@ -32,18 +33,10 @@ export const GlobalStyles = StyleSheet.create({
         justifyContent: "center",
     },
 
-    bigButton: {
-        backgroundColor: "teal",
-        flex: 1,
-        marginHorizontal: "5%",
-        alignItems: "center",
-        justifyContent: "center",
-        borderRadius: 30,
-    },
     backButton: {
         backgroundColor: "#605f5e",
-        width: 150,
-        height: 60,
+        width: scale(150),
+        height: verticalScale(60),
         alignItems: "center",
         justifyContent: "center",
     },

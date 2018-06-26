@@ -1,7 +1,7 @@
+import Expo from "expo";
 import React, { Component } from "react";
 import { View } from "react-native";
 import { createStackNavigator } from "react-navigation"
-import Expo from "expo";
 import { GlobalStyles } from "./screens/Styles.js"
 
 // Screens
@@ -21,7 +21,7 @@ export default class App extends Component {
         console.log("hi");
         Expo.ScreenOrientation.allow(Expo.ScreenOrientation.Orientation.PORTRAIT);
         await Expo.Font.loadAsync({
-            'icpsr-font': require('./assets/fonts/Behatrice-Regular.ttf'),
+            'Behatrice-Regular': require('./assets/fonts/Behatrice-Regular.ttf'),
         });
         this.setState({ DoneLoading: true });
     }

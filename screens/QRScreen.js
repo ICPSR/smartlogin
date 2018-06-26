@@ -1,7 +1,8 @@
+import Expo, { Camera } from "expo";
 import React, { Component } from "react";
 import { Image, Text, StyleSheet, View, TouchableOpacity, StatusBar } from "react-native";
 import { StackNavigator } from "react-navigation"
-import Expo, { Camera } from "expo";
+import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
 import DropdownAlert from 'react-native-dropdownalert';
 import { GlobalStyles } from "./Styles.js"
 
@@ -104,20 +105,20 @@ export default class QRScreen extends Component{
 
                     {/* Header */}
                     <View style={[GlobalStyles.header, { paddingTop: Expo.Constants.statusBarHeight }]}>
-                        <Text style={GlobalStyles.text}>Please scan QR from the ICPSR login page.</Text>
+                        <Text style={GlobalStyles.text}>Scan QR from the ICPSR login page.</Text>
                     </View>
 
                     {/* Camera */}
                     <Camera style={{ flex: 1 }} type={this.state.type} barCodeTypes={[Camera.Constants.BarCodeType.qr]} onBarCodeRead={this.state.qrFunc}>
                         {/* Back Button */}
-                        <TouchableOpacity style={{marginTop: 530, marginLeft: "6%", width: 70}} onPress={this._onBack}>
-                            <Text style={[GlobalStyles.underlineText, {fontSize: 22, borderWidth: 2, borderColor: "black", backgroundColor: "grey"}]}>Back</Text>
+                        <TouchableOpacity style={{marginTop: verticalScale(550), marginLeft: "4%", width: scale(70)}} onPress={this._onBack}>
+                            <Text style={[GlobalStyles.underlineText, {fontSize: moderateScale(22), borderWidth: scale(2), borderColor: "black", backgroundColor: "grey"}]}>Back</Text>
                         </TouchableOpacity>
                     </Camera>
 
                     {/* QR Border */}
-                    <View style={{position: "absolute", alignSelf: "center", marginTop: "60%"}}>
-                        <Image source={require("../assets/qr_border.png")} style={{width: 200, height: 200}}/>
+                    <View style={{position: "absolute", alignSelf: "center", marginTop: "65%"}}>
+                        <Image source={require("../assets/qr_border.png")} style={{width: scale(175), height: scale(175)}}/>
                     </View>
 
                     {/* Dropdown Alerts */}

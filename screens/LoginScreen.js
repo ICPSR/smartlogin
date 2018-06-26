@@ -1,7 +1,8 @@
+import Expo from "expo";
 import React, { Component } from "react";
 import { Alert, AsyncStorage, Button, Image, Keyboard, Platform, StyleSheet, Text, TextInput, View, ScrollView, TouchableOpacity, TouchableWithoutFeedback, StatusBar } from "react-native";
 import { createStackNavigator } from "react-navigation"
-import Expo from "expo";
+import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
 import DropdownAlert from 'react-native-dropdownalert';
 import { GlobalStyles } from "./Styles.js"
 import { FadeInView } from "./Animations.js"
@@ -172,17 +173,17 @@ export default class LoginScreen extends Component {
                         <FadeInView>
                             {this.state.LinkedUsername !== null ?
                                 <View style={styles.usernameContainer}>
-                                    <Text style={[GlobalStyles.boldText, { fontSize: 30 }]}>{this.state.LinkedUsername}</Text>
+                                    <Text style={[GlobalStyles.boldText, { fontSize: moderateScale(30, 0.7) }]}>{this.state.LinkedUsername}</Text>
                                 </View>
                             : false }
 
                             <View style={styles.buttonContainer}>
-                                <TouchableOpacity onPress={this._setCredentialsFields(true)} style={GlobalStyles.bigButton} activeOpacity={0.6} underlayColor="white">
-                                    <Image source={require("../assets/key.png")} style={{width: 100, height: 100}}/>
+                                <TouchableOpacity onPress={this._setCredentialsFields(true)} style={styles.bigButton} activeOpacity={0.6} underlayColor="white">
+                                    <Image source={require("../assets/key.png")} style={{width: scale(100), height: verticalScale(100)}}/>
                                     <Text style={GlobalStyles.boldText}>Link Account</Text>
                                 </TouchableOpacity>
-                                <TouchableOpacity onPress={this._attemptFingerprintAuthentication} style={GlobalStyles.bigButton} activeOpacity={0.6} underlayColor="white">
-                                    <Image source={require("../assets/qr.png")} style={{width: 100, height: 100}}/>
+                                <TouchableOpacity onPress={this._attemptFingerprintAuthentication} style={styles.bigButton} activeOpacity={0.6} underlayColor="white">
+                                    <Image source={require("../assets/qr.png")} style={{width: scale(100), height: verticalScale(100)}}/>
                                     <Text style={GlobalStyles.boldText}>QR Login</Text>
                                 </TouchableOpacity>
                             </View>
@@ -201,11 +202,11 @@ export default class LoginScreen extends Component {
                                     <TextInput style={styles.textInput} placeholder="Password" onChangeText={this._onPasswordUpdated} onSubmitEditing={this._onCredentialsEntered} placeholderTextColor={"grey"} secureTextEntry={true}/>
                                 </View>
 
-                                <View style={{alignItems: "center", justifyContent: "center", margin: 30}}>
+                                <View style={{alignItems: "center", justifyContent: "center", margin: scale(30)}}>
                                     <TouchableOpacity onPress={this._onCredentialsEntered} style={styles.button} activeOpacity={0.6} underlayColor="white">
                                         <Text style={GlobalStyles.boldText}>Submit</Text>
                                     </TouchableOpacity>
-                                    <TouchableOpacity onPress={this._setCredentialsFields(false)} style={{marginTop: 30}} activeOpacity={0.6} underlayColor="white">
+                                    <TouchableOpacity onPress={this._setCredentialsFields(false)} style={{marginTop: scale(30)}} activeOpacity={0.6} underlayColor="white">
                                         <Text style={GlobalStyles.underlineText}>Cancel</Text>
                                     </TouchableOpacity>
                                 </View>
@@ -225,28 +226,35 @@ export default class LoginScreen extends Component {
 // --- Login Page Styles --- //
 export const styles = StyleSheet.create({
     headerText: {
-        fontFamily: "icpsr-font",
-        fontSize: 100,
+        fontFamily: "Behatrice-Regular",
+        fontSize: moderateScale(100),
         paddingLeft: 10,
         fontWeight: 'bold',
         color: "white",
     },
     buttonContainer: {
-        top: "90%",
-        height: 150,
+        marginTop: verticalScale(350),
+        height: verticalScale(160),
         flexDirection: "row",
         justifyContent: "space-around"
     },
-    button: {
+    bigButton: {
         backgroundColor: "teal",
-        width: 200,
-        height: 60,
+        width: scale(150),
         alignItems: "center",
         justifyContent: "center",
-        borderRadius: 30,
+        borderRadius: scale(30),
+    },
+    button: {
+        backgroundColor: "teal",
+        width: moderateScale(200),
+        height: moderateScale(60),
+        alignItems: "center",
+        justifyContent: "center",
+        borderRadius: scale(30),
     },
     textContainer: {
-        marginTop: 50,
+        marginTop: scale(50),
         backgroundColor: "#005050",
         alignItems: "center",
         justifyContent: "center",
@@ -257,16 +265,16 @@ export const styles = StyleSheet.create({
         marginTop: "15%",
     },
     textInputContainer: {
-        margin: 20,
-        padding: 5,
-        borderWidth: 2,
+        margin: scale(20),
+        padding: scale(5),
+        borderWidth: scale(2),
         borderColor: "grey",
-        borderRadius: 5,
+        borderRadius: scale(5),
     },
     textInput: {
-        height: 40,
-        padding: 10,
-        fontSize: 20,
+        height: moderateScale(40),
+        padding: moderateScale(10),
+        fontSize: moderateScale(20),
         color: "white",
     },
 });
