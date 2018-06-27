@@ -4,8 +4,8 @@ import { Alert, AsyncStorage, Button, Image, Keyboard, Platform, StyleSheet, Tex
 import { createStackNavigator } from "react-navigation"
 import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
 import DropdownAlert from 'react-native-dropdownalert';
-import { GlobalStyles } from "./Styles.js"
-import { FadeInView } from "./Animations.js"
+import { GlobalStyles } from "../Styles.js"
+import { FadeInView } from "../Animations.js"
 import { delay } from "../Functions.js"
 
 
@@ -13,8 +13,8 @@ import { delay } from "../Functions.js"
 // Amount of time (milliseconds) the user has to enter back into the QR screen without reauthenticating.
 const REAUTH_TIMER = 120 * 1000;
 
-// --- Login Screen --- //
-export default class LoginScreen extends Component {
+// --- Main Screen --- //
+export default class MainScreen extends Component {
     // --- Instance Variables --- //
     // The current credentials entered in
     SubmittedUsername = "";
@@ -30,10 +30,9 @@ export default class LoginScreen extends Component {
     // --- Constructor --- //
     constructor(props){
         super(props)
-
-        // The current state of this screen in the App, represented in a pseudo enum
+        // React state
         this.state = {
-            ScreenState: LoginScreen.ScreenStateEnum.Neutral,
+            ScreenState: MainScreen.ScreenStateEnum.Neutral,
             LinkedUsername: null,
             LinkedPassword: null
         };
@@ -58,7 +57,7 @@ export default class LoginScreen extends Component {
                 await delay(500);
                 this.attemptFingerprintAuthentication();
             } else {
-                this.setState({ScreenState: LoginScreen.ScreenStateEnum.CredentialsWindow });
+                this.setState({ScreenState: MainScreen.ScreenStateEnum.CredentialsWindow });
             }
         } catch(error){
             this.dropdown.alertWithType("error", "Error", "Error retriving credentials: " + error);
@@ -71,12 +70,12 @@ export default class LoginScreen extends Component {
     toMainWindow = () => {
         this.SubmittedUsername = "";
         this.SubmittedPassword = "";
-        this.setState({ ScreenState: LoginScreen.ScreenStateEnum.Neutral });
+        this.setState({ ScreenState: MainScreen.ScreenStateEnum.Neutral });
     }
 
     // Transitions to the credentials window.
     toCredentialsWindow = () => {
-        this.setState({ ScreenState: LoginScreen.ScreenStateEnum.CredentialsWindow });
+        this.setState({ ScreenState: MainScreen.ScreenStateEnum.CredentialsWindow });
     }
 
 
@@ -115,7 +114,7 @@ export default class LoginScreen extends Component {
 
             // Reset state back to neutral
             this.setState(currentState => {
-                return { ScreenState: LoginScreen.ScreenStateEnum.Neutral };
+                return { ScreenState: MainScreen.ScreenStateEnum.Neutral };
             });
 
             this.dropdown.alertWithType("success", "Success", "New Account linked!");
@@ -168,6 +167,8 @@ export default class LoginScreen extends Component {
         }
     }
 
+
+    // --- Other --- //
     // A timer that, after some time, sets HasRecentlyAuthenticated to false.
     // Note: Should never be 2 instances of this running at the same time.
     startAuthenticationTimeout = async () => {
@@ -177,6 +178,7 @@ export default class LoginScreen extends Component {
             }, REAUTH_TIMER);
         });
     }
+
 
     // --- Render --- //
     render() {
@@ -193,7 +195,7 @@ export default class LoginScreen extends Component {
                     </View>
 
                     {/* Main Buttons */}
-                    {this.state.ScreenState === LoginScreen.ScreenStateEnum.Neutral ?
+                    {this.state.ScreenState === MainScreen.ScreenStateEnum.Neutral ?
                         <FadeInView>
                             {this.state.LinkedUsername !== null ?
                                 <View style={styles.usernameContainer}>
@@ -216,7 +218,7 @@ export default class LoginScreen extends Component {
 
 
                     {/* Username/Password Windows */}
-                    {this.state.ScreenState === LoginScreen.ScreenStateEnum.CredentialsWindow ?
+                    {this.state.ScreenState === MainScreen.ScreenStateEnum.CredentialsWindow ?
                         <FadeInView>
                             <View style={{marginTop: "7%"}}>
                                 <View style={styles.textInputContainer}>
@@ -252,7 +254,7 @@ export default class LoginScreen extends Component {
     };
 }
 
-// --- Login Page Styles --- //
+// --- Main Page Styles --- //
 export const styles = StyleSheet.create({
     headerText: {
         fontFamily: "Behatrice-Regular",

@@ -26,21 +26,9 @@ export const GlobalStyles = StyleSheet.create({
         color: "white",
         textDecorationLine: "underline",
     },
-
     header: {
         backgroundColor: "teal",
         alignItems: "center",
         justifyContent: "center",
     },
-
-    backButton: {
-        backgroundColor: "#605f5e",
-        width: scale(150),
-        height: verticalScale(60),
-        alignItems: "center",
-        justifyContent: "center",
-    },
-
-
-
 });

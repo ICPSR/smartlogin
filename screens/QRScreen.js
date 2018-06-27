@@ -4,22 +4,16 @@ import { Image, Text, StyleSheet, View, TouchableOpacity, StatusBar } from "reac
 import { StackNavigator } from "react-navigation"
 import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
 import DropdownAlert from 'react-native-dropdownalert';
-import { GlobalStyles } from "./Styles.js"
+import { GlobalStyles } from "../Styles.js"
 import { delay } from "../Functions.js"
 
 
 // --- QR Screen --- //
 export default class QRScreen extends Component{
-    // --- Navigation Options --- //
-    static navigationOptions = {
-        header: null,
-    };
-
     // --- Constructor --- //
     constructor(props){
         super(props)
-
-        // State
+        // React State
         this.state = {
             HasPermission: null,
             type: Expo.Camera.Constants.Type.back,
@@ -27,24 +21,28 @@ export default class QRScreen extends Component{
         };
     }
 
-    // Waits until we have permission before doing anything.
+
+    // --- On Component Mount --- //
     async componentWillMount(){
+        // Get camera permissions
         const { status } = await Expo.Permissions.askAsync(Expo.Permissions.CAMERA);
         this.setState({ HasPermission: status === "granted" });
     }
 
+
     // --- Callbacks --- //
+    // Goes back to the main screen.
     onBack = () => {
         this.props.navigation.goBack();
     }
 
+    // Called when the camera reads any QR code.
     onQRRead = async (code) => {
         // Stop QR from reading
         this.setState({ qrFunc: undefined });
 
         // TODO: Networking stuff goes here
         //this.dropdown.alertWithType("info", "QR Info", "Data: " + code.data);
-
 
         // On Success, return to the home screen.
         if(true){
@@ -78,7 +76,7 @@ export default class QRScreen extends Component{
                     </View>
                     {/* Back Button */}
                     <View style={{marginBottom: "4%", marginLeft: "4%"}}>
-                        <TouchableOpacity onPress={this.onBack} style={GlobalStyles.backButton} activeOpacity={0.6} underlayColor="white">
+                        <TouchableOpacity onPress={this.onBack} style={styles.backButton} activeOpacity={0.6} underlayColor="white">
                             <Text style={GlobalStyles.text}>Back</Text>
                         </TouchableOpacity>
                     </View>
@@ -114,13 +112,22 @@ export default class QRScreen extends Component{
                 </View>
             );
         }
-
     }
 
+
+    // --- Navigation Options --- //
+    static navigationOptions = {
+        header: null,
+    };
 }
 
 // --- QR Page Styles --- //
 export const styles = StyleSheet.create({
-
-
+    backButton: {
+        backgroundColor: "#605f5e",
+        width: scale(150),
+        height: verticalScale(60),
+        alignItems: "center",
+        justifyContent: "center",
+    },
 });

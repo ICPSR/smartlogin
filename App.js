@@ -2,10 +2,10 @@ import Expo from "expo";
 import React, { Component } from "react";
 import { View } from "react-native";
 import { createStackNavigator } from "react-navigation"
-import { GlobalStyles } from "./screens/Styles.js"
+import { GlobalStyles } from "./Styles.js"
 
 // Screens
-import LoginScreen from "./screens/LoginScreen.js"
+import MainScreen from "./screens/MainScreen.js"
 import QRScreen from "./screens/QRScreen.js"
 
 // --- App Export --- //
@@ -18,7 +18,6 @@ export default class App extends Component {
 
     // Loads fonts on mount
     async componentDidMount(){
-        console.log("hi");
         Expo.ScreenOrientation.allow(Expo.ScreenOrientation.Orientation.PORTRAIT);
         await Expo.Font.loadAsync({
             'Behatrice-Regular': require('./assets/fonts/Behatrice-Regular.ttf'),
@@ -41,10 +40,10 @@ export default class App extends Component {
 // Stack Navigator
 const RootStack = createStackNavigator(
     {
-        Login: LoginScreen,
+        Main: MainScreen,
         QR: QRScreen,
     },
     {
-        initialRouteName: "Login",
+        initialRouteName: "Main",
     }
 );
