@@ -8,38 +8,37 @@ import { GlobalStyles } from "./Styles.js"
 import { FadeInView } from "./Animations.js"
 import { delay } from "../Functions.js"
 
+
+// - Constants - //
+// Amount of time (milliseconds) the user has to enter back into the QR screen without reauthenticating.
+const REAUTH_TIMER = 120 * 1000;
+
 // --- Login Screen --- //
 export default class LoginScreen extends Component {
-    // --- Navigation Options --- //
-    static navigationOptions = {
-        header: null,
-    };
+    // --- Instance Variables --- //
+    // The current credentials entered in
+    SubmittedUsername = "";
+    SubmittedPassword = "";
+
+    // Has the user recently authenticated?
+    HasRecentlyAuthenticated = false;
+
+    // Enum used for handling state
+    static ScreenStateEnum = Object.freeze({ Neutral: {}, CredentialsWindow: {} });
+
 
     // --- Constructor --- //
     constructor(props){
         super(props)
 
-        // Binds the "this" object to the functions
-        this._onCredentialsEntered = this._onCredentialsEntered.bind(this);
-        this._onUsernameUpdated = this._onUsernameUpdated.bind(this);
-        this._onPasswordUpdated = this._onPasswordUpdated.bind(this);
-        this._attemptFingerprintAuthentication = this._attemptFingerprintAuthentication.bind(this);
-        this._startAuthenticationTimeout = this._startAuthenticationTimeout.bind(this);
-
         // The current state of this screen in the App, represented in a pseudo enum
-        this.ScreenStateEnum = Object.freeze({ Neutral: {}, CredentialsWindow: {} });
-        this.state = { ScreenState: this.ScreenStateEnum.Neutral, LinkedUsername: null, LinkedPassword: null };
-
-        // The current credentials entered in
-        this.SubmittedUsername = "";
-        this.SubmittedPassword = "";
-
-        // Has the user recently authenticated?
-        this.hasRecentlyAuthenticated = false;
-
-        // Amount of time (milliseconds) the user has to enter back into the QR screen without reauthenticating.
-        this.REAUTH_TIMER = 60 * 1000;
+        this.state = {
+            ScreenState: LoginScreen.ScreenStateEnum.Neutral,
+            LinkedUsername: null,
+            LinkedPassword: null
+        };
     }
+
 
     // --- On Component Mount --- //
     async componentDidMount(){
@@ -55,45 +54,43 @@ export default class LoginScreen extends Component {
             this.setState({ LinkedUsername: linkedUsername, LinkedPassword: linkedPassword });
 
             // Go straight to attempting a fingerprint authentication if there's a linked account already
-            if(linkedUsername !== null && linkedPassword !== null && !this.hasRecentlyAuthenticated){
+            if(linkedUsername !== null && linkedPassword !== null && !this.HasRecentlyAuthenticated){
                 await delay(500);
-                this._attemptFingerprintAuthentication();
+                this.attemptFingerprintAuthentication();
             } else {
-                this.setState({ScreenState: this.ScreenStateEnum.CredentialsWindow });
+                this.setState({ScreenState: LoginScreen.ScreenStateEnum.CredentialsWindow });
             }
         } catch(error){
             this.dropdown.alertWithType("error", "Error", "Error retriving credentials: " + error);
         }
-
     }
 
+
     // --- State machine related --- //
-    // Toggles the credentials window part of the state machine
-    _setCredentialsFields(isVisible){
-        return () => {
-            this.setState(currentState => {
-                if(isVisible) return { ScreenState: this.ScreenStateEnum.CredentialsWindow };
-                else{
-                    this.SubmittedUsername = "";
-                    this.SubmittedPassword = "";
-                    return { ScreenState: this.ScreenStateEnum.Neutral };
-                }
-            });
-        }
+    // Transitions to the main screen state, clearing the info in the credentials window.
+    toMainWindow = () => {
+        this.SubmittedUsername = "";
+        this.SubmittedPassword = "";
+        this.setState({ ScreenState: LoginScreen.ScreenStateEnum.Neutral });
+    }
+
+    // Transitions to the credentials window.
+    toCredentialsWindow = () => {
+        this.setState({ ScreenState: LoginScreen.ScreenStateEnum.CredentialsWindow });
     }
 
 
     // --- Callbacks --- //
     // Called as the user types their user/pass.
-    _onUsernameUpdated(text){
+    onUsernameUpdated = (text) => {
         this.SubmittedUsername = text;
     }
-    _onPasswordUpdated(text){
+    onPasswordUpdated = (text) => {
         this.SubmittedPassword = text;
     }
 
     // Called when the user submits their user/pass
-    async _onCredentialsEntered(){
+    onCredentialsEntered = async () => {
         // Check the entered information for validity.
         if(this.SubmittedUsername === "" || this.SubmittedPassword === "") {
             this.dropdown.alertWithType("warn", "Missing Credentials", "Please enter both a username and password.");
@@ -118,7 +115,7 @@ export default class LoginScreen extends Component {
 
             // Reset state back to neutral
             this.setState(currentState => {
-                return { ScreenState: this.ScreenStateEnum.Neutral };
+                return { ScreenState: LoginScreen.ScreenStateEnum.Neutral };
             });
 
             this.dropdown.alertWithType("success", "Success", "New Account linked!");
@@ -126,9 +123,9 @@ export default class LoginScreen extends Component {
     }
 
     // Attempts to authenticate the user's fingerprint.
-    async _attemptFingerprintAuthentication(){
+    attemptFingerprintAuthentication = async () => {
         // Allow user to bypass this if they recently authenticated.
-        if(this.hasRecentlyAuthenticated){
+        if(this.HasRecentlyAuthenticated){
             this.props.navigation.navigate("QR");
             return;
         }
@@ -155,8 +152,8 @@ export default class LoginScreen extends Component {
                 }
                 if(authenticated.success){
                     //this.dropdown.alertWithType("success", "Success", "Authentication succeeded.");
-                    this.hasRecentlyAuthenticated = true;
-                    this._startAuthenticationTimeout();
+                    this.HasRecentlyAuthenticated = true;
+                    this.startAuthenticationTimeout();
                     this.props.navigation.navigate("QR");
                 } else {
                     //this.dropdown.alertWithType("error", "Failed", "Authentication failed or canceled.");
@@ -171,13 +168,13 @@ export default class LoginScreen extends Component {
         }
     }
 
-    // A timer that, after some time, sets hasRecentlyAuthenticated to false.
+    // A timer that, after some time, sets HasRecentlyAuthenticated to false.
     // Note: Should never be 2 instances of this running at the same time.
-    async _startAuthenticationTimeout(){
+    startAuthenticationTimeout = async () => {
         return new Promise(resolve => {
             setTimeout(() => {
-                this.hasRecentlyAuthenticated = false;
-            }, this.REAUTH_TIMER);
+                this.HasRecentlyAuthenticated = false;
+            }, REAUTH_TIMER);
         });
     }
 
@@ -196,7 +193,7 @@ export default class LoginScreen extends Component {
                     </View>
 
                     {/* Main Buttons */}
-                    {this.state.ScreenState === this.ScreenStateEnum.Neutral ?
+                    {this.state.ScreenState === LoginScreen.ScreenStateEnum.Neutral ?
                         <FadeInView>
                             {this.state.LinkedUsername !== null ?
                                 <View style={styles.usernameContainer}>
@@ -205,11 +202,11 @@ export default class LoginScreen extends Component {
                             : false }
 
                             <View style={styles.buttonContainer}>
-                                <TouchableOpacity onPress={this._setCredentialsFields(true)} style={styles.bigButton} activeOpacity={0.6} underlayColor="white">
+                                <TouchableOpacity onPress={this.toCredentialsWindow} style={styles.bigButton} activeOpacity={0.6} underlayColor="white">
                                     <Image source={require("../assets/key.png")} style={{width: scale(100), height: verticalScale(100)}}/>
                                     <Text style={GlobalStyles.boldText}>Link Account</Text>
                                 </TouchableOpacity>
-                                <TouchableOpacity onPress={this._attemptFingerprintAuthentication} style={styles.bigButton} activeOpacity={0.6} underlayColor="white">
+                                <TouchableOpacity onPress={this.attemptFingerprintAuthentication} style={styles.bigButton} activeOpacity={0.6} underlayColor="white">
                                     <Image source={require("../assets/qr.png")} style={{width: scale(100), height: verticalScale(100)}}/>
                                     <Text style={GlobalStyles.boldText}>QR Login</Text>
                                 </TouchableOpacity>
@@ -219,21 +216,21 @@ export default class LoginScreen extends Component {
 
 
                     {/* Username/Password Windows */}
-                    {this.state.ScreenState === this.ScreenStateEnum.CredentialsWindow ?
+                    {this.state.ScreenState === LoginScreen.ScreenStateEnum.CredentialsWindow ?
                         <FadeInView>
                             <View style={{marginTop: "7%"}}>
                                 <View style={styles.textInputContainer}>
-                                    <TextInput style={styles.textInput} placeholder="Username" onChangeText={this._onUsernameUpdated} onSubmitEditing={this._onCredentialsEntered} placeholderTextColor={"grey"} autoFocus={true}/>
+                                    <TextInput style={styles.textInput} placeholder="Username" onChangeText={this.onUsernameUpdated} onSubmitEditing={this.onCredentialsEntered} placeholderTextColor={"grey"} autoFocus={true}/>
                                 </View>
                                 <View style={styles.textInputContainer}>
-                                    <TextInput style={styles.textInput} placeholder="Password" onChangeText={this._onPasswordUpdated} onSubmitEditing={this._onCredentialsEntered} placeholderTextColor={"grey"} secureTextEntry={true}/>
+                                    <TextInput style={styles.textInput} placeholder="Password" onChangeText={this.onPasswordUpdated} onSubmitEditing={this.onCredentialsEntered} placeholderTextColor={"grey"} secureTextEntry={true}/>
                                 </View>
 
                                 <View style={{alignItems: "center", justifyContent: "center", margin: scale(30)}}>
-                                    <TouchableOpacity onPress={this._onCredentialsEntered} style={styles.button} activeOpacity={0.6} underlayColor="white">
+                                    <TouchableOpacity onPress={this.onCredentialsEntered} style={styles.button} activeOpacity={0.6} underlayColor="white">
                                         <Text style={GlobalStyles.boldText}>Submit</Text>
                                     </TouchableOpacity>
-                                    <TouchableOpacity onPress={this._setCredentialsFields(false)} style={{marginTop: scale(30)}} activeOpacity={0.6} underlayColor="white">
+                                    <TouchableOpacity onPress={this.toMainWindow} style={{marginTop: scale(30)}} activeOpacity={0.6} underlayColor="white">
                                         <Text style={GlobalStyles.underlineText}>Cancel</Text>
                                     </TouchableOpacity>
                                 </View>
@@ -248,6 +245,11 @@ export default class LoginScreen extends Component {
             </TouchableWithoutFeedback>
         );
     }
+
+    // --- Navigation Options --- //
+    static navigationOptions = {
+        header: null,
+    };
 }
 
 // --- Login Page Styles --- //

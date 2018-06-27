@@ -19,18 +19,12 @@ export default class QRScreen extends Component{
     constructor(props){
         super(props)
 
-        // Binds the "this" object to the functions
-        this._onBack = this._onBack.bind(this);
-        this._onQRRead = this._onQRRead.bind(this);
-
         // State
         this.state = {
             HasPermission: null,
             type: Expo.Camera.Constants.Type.back,
-            qrFunc: this._onQRRead,
+            qrFunc: this.onQRRead,
         };
-
-
     }
 
     // Waits until we have permission before doing anything.
@@ -40,11 +34,11 @@ export default class QRScreen extends Component{
     }
 
     // --- Callbacks --- //
-    _onBack(){
+    onBack = () => {
         this.props.navigation.goBack();
     }
 
-    async _onQRRead(code){
+    onQRRead = async (code) => {
         // Stop QR from reading
         this.setState({ qrFunc: undefined });
 
@@ -63,7 +57,7 @@ export default class QRScreen extends Component{
             this.dropdown.alertWithType("error", "Try Again - Bad QR Code", "The QR code read was not from the ICPSR website's login page.");
             await delay(2000);
             // Stop QR from reading
-            this.setState({ qrFunc: this._onQRRead });
+            this.setState({ qrFunc: this.onQRRead });
         }
     }
 
@@ -84,7 +78,7 @@ export default class QRScreen extends Component{
                     </View>
                     {/* Back Button */}
                     <View style={{marginBottom: "4%", marginLeft: "4%"}}>
-                        <TouchableOpacity onPress={this._onBack} style={GlobalStyles.backButton} activeOpacity={0.6} underlayColor="white">
+                        <TouchableOpacity onPress={this.onBack} style={GlobalStyles.backButton} activeOpacity={0.6} underlayColor="white">
                             <Text style={GlobalStyles.text}>Back</Text>
                         </TouchableOpacity>
                     </View>
@@ -105,7 +99,7 @@ export default class QRScreen extends Component{
                     {/* Camera */}
                     <Camera style={{ flex: 1 }} type={this.state.type} barCodeTypes={[Camera.Constants.BarCodeType.qr]} onBarCodeRead={this.state.qrFunc}>
                         {/* Back Button */}
-                        <TouchableOpacity style={{marginTop: verticalScale(550), marginLeft: "4%", width: scale(70)}} onPress={this._onBack}>
+                        <TouchableOpacity style={{marginTop: verticalScale(550), marginLeft: "4%", width: scale(70)}} onPress={this.onBack}>
                             <Text style={[GlobalStyles.underlineText, {fontSize: moderateScale(22), borderWidth: scale(2), borderColor: "black", backgroundColor: "grey"}]}>Back</Text>
                         </TouchableOpacity>
                     </Camera>
