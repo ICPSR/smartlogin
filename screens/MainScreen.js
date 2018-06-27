@@ -1,6 +1,6 @@
 import Expo from "expo";
 import React, { Component } from "react";
-import { Alert, AsyncStorage, Button, Image, Keyboard, Platform, StyleSheet, Text, TextInput, View, ScrollView, TouchableOpacity, TouchableWithoutFeedback, StatusBar } from "react-native";
+import { Alert, AsyncStorage, Button, Image, Keyboard, Platform, StyleSheet, Text, TextInput, View, TouchableOpacity, TouchableWithoutFeedback, StatusBar } from "react-native";
 import { createStackNavigator } from "react-navigation"
 import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
 import DropdownAlert from 'react-native-dropdownalert';
