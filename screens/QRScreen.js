@@ -41,20 +41,60 @@ export default class QRScreen extends Component{
         // Stop QR from reading
         this.setState({ qrFunc: undefined });
 
-        // TODO: Networking stuff goes here
-        //this.dropdown.alertWithType("info", "QR Info", "Data: " + code.data);
-
-        // On Success, return to the home screen.
+        // TODO: Testing code that circumvents below networking code.
         if(true){
             this.dropdown.alertWithType("success", "Success!", "Successfully logged in!");
-            await delay(4000);
+            await delay(3000);
             this.props.navigation.goBack();
+            return;
         }
-        // Try again on failure.
-        else{
+
+        // Networking
+        const URL_PATTERN = "/pcms/mydata/smartlogin/authorize/";
+        console.log("QR Scanned:");
+        console.log(code.data);
+        console.log("Matches pattern? - " + code.data.includes(URL_PATTERN));
+
+        // Make a POST request to the url if it's valid
+        if(code.data.includes(URL_PATTERN)){
+            try{
+                console.log("Sending user info...");
+
+                let response = await fetch(code.data, {
+                    method: "POST",
+                    headers:{
+                        'Content-Type': 'application/json',
+
+                    },
+                    body: JSON.stringify({
+                        userID: "",
+                        email: ""
+                    }),
+                });
+                if(!response.ok){
+                    throw new Error("Network response was not ok.")
+                }
+
+                console.log("Recieved Response: ");
+                console.log(response.json());
+
+                // TODO: More stuff probably goes here after getting response
+
+
+                // On Success, return to the home screen.
+                this.dropdown.alertWithType("success", "Success!", "Successfully logged in!");
+                await delay(3000);
+                this.props.navigation.goBack();
+            } catch(error) {
+                this.dropdown.alertWithType("error", "Try Again - Network Error", "Something went wrong! Please check your internet connection and try again.");
+                console.error(error);
+                await delay(1500);
+                this.setState({ qrFunc: this.onQRRead });
+            }
+        } else {
+            // Try again on failure.
             this.dropdown.alertWithType("error", "Try Again - Bad QR Code", "The QR code read was not from the ICPSR website's login page.");
-            await delay(2000);
-            // Stop QR from reading
+            await delay(1500);
             this.setState({ qrFunc: this.onQRRead });
         }
     }
