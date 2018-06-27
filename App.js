@@ -27,13 +27,11 @@ export default class App extends Component {
 
     // --- Render --- //
     render(){
-        let root = null;
         if(this.state.DoneLoading){
-            root = <RootStack/>;
+            return <RootStack/>;
         } else {
-            root = <View style={GlobalStyles.background}></View>
+            return <View style={GlobalStyles.background}></View>
         }
-        return root;
     }
 }
 
