@@ -57,7 +57,7 @@ export default class MainScreen extends Component {
                 await delay(500);
                 this.attemptFingerprintAuthentication();
             } else {
-                this.setState({ScreenState: MainScreen.ScreenStateEnum.CredentialsWindow });
+                this.setState({ ScreenState: MainScreen.ScreenStateEnum.CredentialsWindow });
             }
         } catch(error){
             this.dropdown.alertWithType("error", "Error", "Error retriving credentials: " + error);

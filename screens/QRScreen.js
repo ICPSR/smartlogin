@@ -63,11 +63,10 @@ export default class QRScreen extends Component{
                 let response = await fetch(code.data, {
                     method: "POST",
                     headers:{
-                        'Content-Type': 'application/json',
-
+                        "Content-Type": "application/json",
                     },
                     body: JSON.stringify({
-                        userID: "",
+                        sessionID: "",
                         email: ""
                     }),
                 });
