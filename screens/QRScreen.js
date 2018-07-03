@@ -5,7 +5,10 @@ import { StackNavigator } from "react-navigation"
 import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
 import DropdownAlert from 'react-native-dropdownalert';
 import { GlobalStyles } from "../Styles.js"
-import { delay } from "../Functions.js"
+import { delay, BUTTON_ACTIVE_OPACITY } from "../Global.js"
+
+
+// - Constants - //
 
 
 // --- QR Screen --- //
@@ -112,14 +115,13 @@ export default class QRScreen extends Component{
                 <View style={GlobalStyles.background}>
                     <StatusBar barStyle="light-content"/>
                     <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-                        <Text style={GlobalStyles.boldText}>No camera access. Please allow the app to access the camera.</Text>
+                        <Text style={GlobalStyles.boldText}>No Camera Access</Text>
+                        <Text style={[GlobalStyles.text, { fontSize: moderateScale(13) } ]}>Please give the app permissions to use the camera.</Text>
                     </View>
                     {/* Back Button */}
-                    <View style={{marginBottom: "4%", marginLeft: "4%"}}>
-                        <TouchableOpacity onPress={this.onBack} style={styles.backButton} activeOpacity={0.6} underlayColor="white">
-                            <Text style={GlobalStyles.text}>Back</Text>
-                        </TouchableOpacity>
-                    </View>
+                    <TouchableOpacity style={styles.backButton} onPress={this.onBack} activeOpacity={BUTTON_ACTIVE_OPACITY} underlayColor="white">
+                        <Text style={GlobalStyles.text}>Back</Text>
+                    </TouchableOpacity>
                 </View>
             );
         }
@@ -135,12 +137,12 @@ export default class QRScreen extends Component{
                     </View>
 
                     {/* Camera */}
-                    <Camera style={{ flex: 1 }} type={this.state.type} barCodeTypes={[Camera.Constants.BarCodeType.qr]} onBarCodeRead={this.state.qrFunc}>
-                        {/* Back Button */}
-                        <TouchableOpacity style={{marginTop: verticalScale(550), marginLeft: "4%", width: scale(70)}} onPress={this.onBack}>
-                            <Text style={[GlobalStyles.underlineText, {fontSize: moderateScale(22), borderWidth: scale(2), borderColor: "black", backgroundColor: "grey"}]}>Back</Text>
-                        </TouchableOpacity>
-                    </Camera>
+                    <Camera style={{ flex: 1 }} type={this.state.type} barCodeTypes={[Camera.Constants.BarCodeType.qr]} onBarCodeRead={this.state.qrFunc}/>
+
+                    {/* Back Button */}
+                    <TouchableOpacity style={styles.backButton} onPress={this.onBack}>
+                        <Text style={GlobalStyles.text}>Back</Text>
+                    </TouchableOpacity>
 
                     {/* QR Border */}
                     <View style={{position: "absolute", alignSelf: "center", marginTop: "65%"}}>
@@ -163,11 +165,12 @@ export default class QRScreen extends Component{
 
 // --- QR Page Styles --- //
 export const styles = StyleSheet.create({
-    backButton: {
+    backButton:{
+        position: "absolute",
         backgroundColor: "#605f5e",
-        width: scale(150),
-        height: verticalScale(60),
-        alignItems: "center",
-        justifyContent: "center",
-    },
+        marginTop: verticalScale(615),
+        marginLeft: moderateScale(15),
+        borderWidth: scale(2),
+        borderColor: "black",
+    }
 });

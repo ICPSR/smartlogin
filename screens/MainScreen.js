@@ -6,7 +6,7 @@ import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
 import DropdownAlert from 'react-native-dropdownalert';
 import { GlobalStyles } from "../Styles.js"
 import { FadeInView } from "../Animations.js"
-import { delay } from "../Functions.js"
+import { delay, BUTTON_ACTIVE_OPACITY } from "../Global.js"
 
 
 // - Constants - //
@@ -15,10 +15,10 @@ const REAUTH_TIMER = 120 * 1000;
 
 // The moderate scale value passed in for the Link Account/QR Login buttons.
 // Increase this to make the buttons bigger on larger devices.
-const MAIN_BUTTON_SCREEN_SCALE = 0.6;
+const MAIN_BUTTON_SCALE = 0.6;
 
-// Opacity of buttons when they're pressed down.
-const BUTTON_ACTIVE_OPACITY = 0.6;
+// The moderate scale value for the Username/Password/Submit/Cancel buttons.
+const LOGIN_BUTTON_SCALE = 0.2;
 
 
 // --- Main Screen --- //
@@ -206,7 +206,7 @@ export default class MainScreen extends Component {
                     {this.state.ScreenState === MainScreen.ScreenStateEnum.Neutral ?
                         <FadeInView>
                             {this.state.LinkedUsername !== null ?
-                                <View style={styles.usernameContainer}>
+                                <View style={styles.usernameDisplayContainer}>
                                     <Text style={[GlobalStyles.boldText, { fontSize: moderateScale(30, 0.6) }]}>{this.state.LinkedUsername}</Text>
                                 </View>
                             : false }
@@ -214,11 +214,11 @@ export default class MainScreen extends Component {
                             <View style={styles.mainButtonContainer}>
                                 <TouchableOpacity onPress={this.toCredentialsWindow} style={styles.mainButton} activeOpacity={BUTTON_ACTIVE_OPACITY} underlayColor="white">
                                     <Image source={require("../assets/key.png")} style={styles.icon}/>
-                                    <Text style={[GlobalStyles.boldText, { fontSize: moderateScale(20, MAIN_BUTTON_SCREEN_SCALE) }]}>Link Account</Text>
+                                    <Text style={[GlobalStyles.boldText, { fontSize: moderateScale(20, MAIN_BUTTON_SCALE) }]}>Link Account</Text>
                                 </TouchableOpacity>
                                 <TouchableOpacity onPress={this.attemptFingerprintAuthentication} style={styles.mainButton} activeOpacity={BUTTON_ACTIVE_OPACITY} underlayColor="white">
                                     <Image source={require("../assets/qr.png")} style={styles.icon}/>
-                                    <Text style={[GlobalStyles.boldText, { fontSize: moderateScale(20, MAIN_BUTTON_SCREEN_SCALE) }]}>QR Login</Text>
+                                    <Text style={[GlobalStyles.boldText, { fontSize: moderateScale(20, MAIN_BUTTON_SCALE) }]}>QR Login</Text>
                                 </TouchableOpacity>
                             </View>
                         </FadeInView>
@@ -238,10 +238,10 @@ export default class MainScreen extends Component {
 
                                 <View style={{alignItems: "center", justifyContent: "center", margin: scale(30)}}>
                                     <TouchableOpacity onPress={this.onCredentialsEntered} style={styles.submitButton} activeOpacity={BUTTON_ACTIVE_OPACITY} underlayColor="white">
-                                        <Text style={GlobalStyles.boldText}>Submit</Text>
+                                        <Text style={[GlobalStyles.boldText, { fontSize: moderateScale(20, LOGIN_BUTTON_SCALE) }]}>Submit</Text>
                                     </TouchableOpacity>
-                                    <TouchableOpacity onPress={this.toMainWindow} style={{marginTop: scale(30)}} activeOpacity={BUTTON_ACTIVE_OPACITY} underlayColor="white">
-                                        <Text style={GlobalStyles.underlineText}>Cancel</Text>
+                                    <TouchableOpacity onPress={this.toMainWindow} style={{marginTop: moderateScale(30)}} activeOpacity={BUTTON_ACTIVE_OPACITY} underlayColor="white">
+                                        <Text style={[GlobalStyles.underlineText, { fontSize: moderateScale(18, LOGIN_BUTTON_SCALE) }]}>Cancel</Text>
                                     </TouchableOpacity>
                                 </View>
                             </View>
@@ -271,6 +271,11 @@ export const styles = StyleSheet.create({
         fontWeight: 'bold',
         color: "white",
     },
+    usernameDisplayContainer: {
+        position: "absolute",
+        alignSelf: "center",
+        marginTop: "15%",
+    },
     mainButtonContainer: {
         marginTop: moderateScale(350),
         flexDirection: "row",
@@ -278,46 +283,35 @@ export const styles = StyleSheet.create({
     },
     mainButton: {
         backgroundColor: "teal",
-        width: moderateScale(150, MAIN_BUTTON_SCREEN_SCALE),
-        height: moderateScale(150, MAIN_BUTTON_SCREEN_SCALE),
+        width: moderateScale(150, MAIN_BUTTON_SCALE),
+        height: moderateScale(150, MAIN_BUTTON_SCALE),
         alignItems: "center",
         justifyContent: "center",
         borderRadius: moderateScale(30),
     },
     icon: {
-        width: moderateScale(100, MAIN_BUTTON_SCREEN_SCALE),
-        height: moderateScale(100, MAIN_BUTTON_SCREEN_SCALE)
+        width: moderateScale(100, MAIN_BUTTON_SCALE),
+        height: moderateScale(100, MAIN_BUTTON_SCALE)
     },
     submitButton: {
         backgroundColor: "teal",
-        width: moderateScale(200),
-        height: moderateScale(60),
+        width: moderateScale(200, LOGIN_BUTTON_SCALE),
+        height: moderateScale(60, LOGIN_BUTTON_SCALE),
         alignItems: "center",
         justifyContent: "center",
         borderRadius: scale(30),
     },
-    textContainer: {
-        marginTop: scale(50),
-        backgroundColor: "#005050",
-        alignItems: "center",
-        justifyContent: "center",
-    },
-    usernameContainer: {
-        position: "absolute",
-        alignSelf: "center",
-        marginTop: "15%",
-    },
     textInputContainer: {
-        margin: scale(20),
-        padding: scale(5),
-        borderWidth: scale(2),
+        margin: moderateScale(20, LOGIN_BUTTON_SCALE),
+        padding: moderateScale(5, LOGIN_BUTTON_SCALE),
+        borderWidth: moderateScale(2, LOGIN_BUTTON_SCALE),
         borderColor: "grey",
-        borderRadius: scale(5),
+        borderRadius: moderateScale(5, LOGIN_BUTTON_SCALE),
     },
     textInput: {
-        height: moderateScale(40),
-        padding: moderateScale(10),
-        fontSize: moderateScale(20),
+        height: moderateScale(40, LOGIN_BUTTON_SCALE),
+        padding: moderateScale(10, LOGIN_BUTTON_SCALE),
+        fontSize: moderateScale(20, LOGIN_BUTTON_SCALE),
         color: "white",
     },
 });
