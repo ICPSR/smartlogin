@@ -9,6 +9,11 @@ export const GlobalStyles = StyleSheet.create({
         paddingTop: Constants.statusBarHeight,
         backgroundColor: "#005050",
     },
+    header: {
+        backgroundColor: "teal",
+        alignItems: "center",
+        justifyContent: "center",
+    },
     text: {
         fontSize: moderateScale(18),
         padding: moderateScale(10),
@@ -25,10 +30,5 @@ export const GlobalStyles = StyleSheet.create({
         padding: moderateScale(10),
         color: "white",
         textDecorationLine: "underline",
-    },
-    header: {
-        backgroundColor: "teal",
-        alignItems: "center",
-        justifyContent: "center",
     },
 });

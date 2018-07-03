@@ -41,6 +41,13 @@ export default class QRScreen extends Component{
         // Stop QR from reading
         this.setState({ qrFunc: undefined });
 
+        // Networking
+        const URL = "http://192.168.145.106:8080/pcms/mydata/smartlogin/authorize/"
+        console.log("---------------");
+        console.log("QR Scanned:");
+        console.log(code.data);
+        console.log("---------------");
+
         // TODO: Testing code that circumvents below networking code.
         if(true){
             this.dropdown.alertWithType("success", "Success!", "Successfully logged in!");
@@ -49,25 +56,19 @@ export default class QRScreen extends Component{
             return;
         }
 
-        // Networking
-        const URL_PATTERN = "/pcms/mydata/smartlogin/authorize/";
-        console.log("QR Scanned:");
-        console.log(code.data);
-        console.log("Matches pattern? - " + code.data.includes(URL_PATTERN));
-
         // Make a POST request to the url if it's valid
-        if(code.data.includes(URL_PATTERN)){
+        if(true){
             try{
                 console.log("Sending user info...");
 
-                let response = await fetch(code.data, {
+                let response = await fetch(URL + code.data, {
                     method: "POST",
                     headers:{
                         "Content-Type": "application/json",
                     },
                     body: JSON.stringify({
-                        sessionID: "",
-                        email: ""
+                        sessionID: code.data,
+                        userID: ""
                     }),
                 });
                 if(!response.ok){

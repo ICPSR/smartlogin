@@ -13,6 +13,14 @@ import { delay } from "../Functions.js"
 // Amount of time (milliseconds) the user has to enter back into the QR screen without reauthenticating.
 const REAUTH_TIMER = 120 * 1000;
 
+// The moderate scale value passed in for the Link Account/QR Login buttons.
+// Increase this to make the buttons bigger on larger devices.
+const MAIN_BUTTON_SCREEN_SCALE = 0.6;
+
+// Opacity of buttons when they're pressed down.
+const BUTTON_ACTIVE_OPACITY = 0.6;
+
+
 // --- Main Screen --- //
 export default class MainScreen extends Component {
     // --- Instance Variables --- //
@@ -190,8 +198,8 @@ export default class MainScreen extends Component {
                     <StatusBar barStyle="light-content"/>
 
                     {/* Title */}
-                    <View style={GlobalStyles.header}>
-                        <Text style={styles.headerText}>ICPSR</Text>
+                    <View style={[GlobalStyles.header, { height: verticalScale(100) }]}>
+                        <Text style={styles.headerText} adjustsFontSizeToFit={true}>ICPSR</Text>
                     </View>
 
                     {/* Main Buttons */}
@@ -199,18 +207,18 @@ export default class MainScreen extends Component {
                         <FadeInView>
                             {this.state.LinkedUsername !== null ?
                                 <View style={styles.usernameContainer}>
-                                    <Text style={[GlobalStyles.boldText, { fontSize: moderateScale(30, 0.7) }]}>{this.state.LinkedUsername}</Text>
+                                    <Text style={[GlobalStyles.boldText, { fontSize: moderateScale(30, 0.6) }]}>{this.state.LinkedUsername}</Text>
                                 </View>
                             : false }
 
-                            <View style={styles.buttonContainer}>
-                                <TouchableOpacity onPress={this.toCredentialsWindow} style={styles.bigButton} activeOpacity={0.6} underlayColor="white">
-                                    <Image source={require("../assets/key.png")} style={{width: scale(100), height: verticalScale(100)}}/>
-                                    <Text style={GlobalStyles.boldText}>Link Account</Text>
+                            <View style={styles.mainButtonContainer}>
+                                <TouchableOpacity onPress={this.toCredentialsWindow} style={styles.mainButton} activeOpacity={BUTTON_ACTIVE_OPACITY} underlayColor="white">
+                                    <Image source={require("../assets/key.png")} style={styles.icon}/>
+                                    <Text style={[GlobalStyles.boldText, { fontSize: moderateScale(20, MAIN_BUTTON_SCREEN_SCALE) }]}>Link Account</Text>
                                 </TouchableOpacity>
-                                <TouchableOpacity onPress={this.attemptFingerprintAuthentication} style={styles.bigButton} activeOpacity={0.6} underlayColor="white">
-                                    <Image source={require("../assets/qr.png")} style={{width: scale(100), height: verticalScale(100)}}/>
-                                    <Text style={GlobalStyles.boldText}>QR Login</Text>
+                                <TouchableOpacity onPress={this.attemptFingerprintAuthentication} style={styles.mainButton} activeOpacity={BUTTON_ACTIVE_OPACITY} underlayColor="white">
+                                    <Image source={require("../assets/qr.png")} style={styles.icon}/>
+                                    <Text style={[GlobalStyles.boldText, { fontSize: moderateScale(20, MAIN_BUTTON_SCREEN_SCALE) }]}>QR Login</Text>
                                 </TouchableOpacity>
                             </View>
                         </FadeInView>
@@ -229,10 +237,10 @@ export default class MainScreen extends Component {
                                 </View>
 
                                 <View style={{alignItems: "center", justifyContent: "center", margin: scale(30)}}>
-                                    <TouchableOpacity onPress={this.onCredentialsEntered} style={styles.button} activeOpacity={0.6} underlayColor="white">
+                                    <TouchableOpacity onPress={this.onCredentialsEntered} style={styles.submitButton} activeOpacity={BUTTON_ACTIVE_OPACITY} underlayColor="white">
                                         <Text style={GlobalStyles.boldText}>Submit</Text>
                                     </TouchableOpacity>
-                                    <TouchableOpacity onPress={this.toMainWindow} style={{marginTop: scale(30)}} activeOpacity={0.6} underlayColor="white">
+                                    <TouchableOpacity onPress={this.toMainWindow} style={{marginTop: scale(30)}} activeOpacity={BUTTON_ACTIVE_OPACITY} underlayColor="white">
                                         <Text style={GlobalStyles.underlineText}>Cancel</Text>
                                     </TouchableOpacity>
                                 </View>
@@ -263,20 +271,24 @@ export const styles = StyleSheet.create({
         fontWeight: 'bold',
         color: "white",
     },
-    buttonContainer: {
-        marginTop: verticalScale(350),
-        height: verticalScale(160),
+    mainButtonContainer: {
+        marginTop: moderateScale(350),
         flexDirection: "row",
         justifyContent: "space-around"
     },
-    bigButton: {
+    mainButton: {
         backgroundColor: "teal",
-        width: scale(150),
+        width: moderateScale(150, MAIN_BUTTON_SCREEN_SCALE),
+        height: moderateScale(150, MAIN_BUTTON_SCREEN_SCALE),
         alignItems: "center",
         justifyContent: "center",
-        borderRadius: scale(30),
+        borderRadius: moderateScale(30),
     },
-    button: {
+    icon: {
+        width: moderateScale(100, MAIN_BUTTON_SCREEN_SCALE),
+        height: moderateScale(100, MAIN_BUTTON_SCREEN_SCALE)
+    },
+    submitButton: {
         backgroundColor: "teal",
         width: moderateScale(200),
         height: moderateScale(60),
