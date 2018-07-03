@@ -96,6 +96,7 @@ export default class MainScreen extends Component {
         this.SubmittedPassword = text;
     }
 
+    // TODO: All this stuff relating to the Linked Username/Password will probably need to be rewritten in the future when implementing actually logging in.
     // Called when the user submits their user/pass
     onCredentialsEntered = async () => {
         // Check the entered information for validity.
@@ -133,7 +134,7 @@ export default class MainScreen extends Component {
     attemptFingerprintAuthentication = async () => {
         // Allow user to bypass this if they recently authenticated.
         if(this.HasRecentlyAuthenticated){
-            this.props.navigation.navigate("QR");
+            this.goToQRScreen();
             return;
         }
         let hasHardware = await Expo.Fingerprint.hasHardwareAsync();
@@ -161,7 +162,7 @@ export default class MainScreen extends Component {
                     //this.dropdown.alertWithType("success", "Success", "Authentication succeeded.");
                     this.HasRecentlyAuthenticated = true;
                     this.startAuthenticationTimeout();
-                    this.props.navigation.navigate("QR");
+                    this.goToQRScreen();
                 } else {
                     //this.dropdown.alertWithType("error", "Failed", "Authentication failed or canceled.");
                 }
@@ -185,6 +186,12 @@ export default class MainScreen extends Component {
                 this.HasRecentlyAuthenticated = false;
             }, REAUTH_TIMER);
         });
+    }
+
+    // Navigates us to the QR screen.
+    goToQRScreen = () => {
+        // TODO: Need to send an actual UserID here.
+        this.props.navigation.navigate("QR", { userID: this.state.LinkedUsername });
     }
 
 

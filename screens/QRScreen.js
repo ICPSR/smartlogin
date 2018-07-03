@@ -13,6 +13,10 @@ import { delay, BUTTON_ACTIVE_OPACITY } from "../Global.js"
 
 // --- QR Screen --- //
 export default class QRScreen extends Component{
+    // --- Instance Variables --- //
+    // The userID passed in by the MainScreen
+    userID = "NO-ID";
+
     // --- Constructor --- //
     constructor(props){
         super(props)
@@ -26,7 +30,10 @@ export default class QRScreen extends Component{
 
 
     // --- On Component Mount --- //
-    async componentWillMount(){
+    async componentDidMount(){
+        // Get nagivation params
+        userID = this.props.navigation.getParam("userID", "NO-ID");
+
         // Get camera permissions
         const { status } = await Expo.Permissions.askAsync(Expo.Permissions.CAMERA);
         this.setState({ HasPermission: status === "granted" });
@@ -71,7 +78,7 @@ export default class QRScreen extends Component{
                     },
                     body: JSON.stringify({
                         sessionID: code.data,
-                        userID: ""
+                        userID: userID
                     }),
                 });
                 if(!response.ok){
