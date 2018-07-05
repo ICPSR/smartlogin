@@ -7,10 +7,6 @@ import DropdownAlert from 'react-native-dropdownalert';
 import { GlobalStyles } from "../Styles.js"
 import * as Global from "../Global.js"
 
-
-// - Constants - //
-
-
 // --- QR Screen --- //
 export default class QRScreen extends Component{
     // --- Instance Variables --- //
@@ -152,7 +148,7 @@ export default class QRScreen extends Component{
                     </View>
 
                     {/* Dropdown Alerts */}
-                    <DropdownAlert ref={ref => (this.dropdown = ref)} closeInterval={5000}/>
+                    <DropdownAlert ref={ref => (this.dropdown = ref)}/>
                 </View>
             );
         }

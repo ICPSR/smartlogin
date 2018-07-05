@@ -3,6 +3,7 @@
 // Opacity of buttons when they're pressed down.
 export const BUTTON_ACTIVE_OPACITY = 0.6;
 
+
 // Simple delay function for timing
 export function delay(time) {
     return new Promise(function(resolve, reject) {
@@ -26,6 +27,7 @@ export async function fetchWithTimeout(URL, init){
         // Aborts the fetch when the timer finishes.
         new Promise((resolve, reject) => {
             timer = setTimeout(() => {
+                // TODO: When react native updates their fetch api, uncomment this.
                 //abortController.abort();
                 reject(new Error("Request timed out"));
             }, TIMEOUT);

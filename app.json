@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "SmartLogin",
+    "name": "ICPSR Smart Login",
     "description": "This project is really great.",
-    "slug": "SmartLogin",
+    "slug": "icpsr-smart-login",
     "privacy": "public",
     "sdkVersion": "28.0.0",
     "platforms": ["ios", "android"],
@@ -12,7 +12,7 @@
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#005050"
     },
     "updates": {
       "fallbackToCacheTimeout": 0

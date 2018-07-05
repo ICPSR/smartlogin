@@ -172,7 +172,7 @@ export default class MainScreen extends Component {
         } else if(!hasHardware) {
             this.dropdown.alertWithType("error", "Incompatible Device", "Current device does not have the hardware to use biometric scanning.");
         } else {
-            this.dropdown.alertWithType("warn", "Not Enrolled", "Please activate biometric scanning on your device to use.");
+            this.dropdown.alertWithType("warn", "Not Enrolled", "Please activate biometric scanning on your device to continue.");
         }
     }
 
@@ -256,8 +256,7 @@ export default class MainScreen extends Component {
                     : false }
 
                     {/* Dropdown Alerts */}
-                    <DropdownAlert style={{position: "absolute"}} ref={ref => (this.dropdown = ref)} closeInterval={5000}/>
-
+                    <DropdownAlert ref={ref => (this.dropdown = ref)}/>
                 </View>
             </TouchableWithoutFeedback>
         );
