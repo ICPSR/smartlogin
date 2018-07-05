@@ -3,6 +3,8 @@
 // Opacity of buttons when they're pressed down.
 export const BUTTON_ACTIVE_OPACITY = 0.6;
 
+// The colors used for several ui elements.
+export const COLOR_OFFWHITE = "#d0d7d8";
 
 // Simple delay function for timing
 export function delay(time) {

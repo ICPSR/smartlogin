@@ -17,7 +17,7 @@ const REAUTH_TIMER = 120 * 1000;
 // Increase this to make the buttons bigger on larger devices.
 const MAIN_BUTTON_SCALE = 0.6;
 
-// The moderate scale value for the Username/Password/Submit/Cancel buttons.
+// The moderate scale value for the Email/Password/Submit/Cancel buttons.
 const LOGIN_BUTTON_SCALE = 0.2;
 
 
@@ -25,7 +25,7 @@ const LOGIN_BUTTON_SCALE = 0.2;
 export default class MainScreen extends Component {
     // --- Instance Variables --- //
     // The current credentials entered in
-    SubmittedUsername = "";
+    SubmittedEmail = "";
     SubmittedPassword = "";
 
     // Has the user recently authenticated?
@@ -41,7 +41,7 @@ export default class MainScreen extends Component {
         // React state
         this.state = {
             ScreenState: MainScreen.ScreenStateEnum.Neutral,
-            LinkedUsername: null,
+            LinkedEmail: null,
             LinkedPassword: null
         };
     }
@@ -51,17 +51,17 @@ export default class MainScreen extends Component {
     async componentDidMount(){
         // Check if there's an account linked to the app already.
         try{
-            let linkedUsername = await AsyncStorage.getItem("@LinkedUsername");
+            let linkedEmail = await AsyncStorage.getItem("@LinkedEmail");
             let linkedPassword = await AsyncStorage.getItem("@LinkedPassword");
 
-            // Check the servers to verify that this username/password pair still matches.
+            // Check the servers to verify that this email/password pair still matches.
             //TODO: Do networking stuff here
 
             // Set their state
-            this.setState({ LinkedUsername: linkedUsername, LinkedPassword: linkedPassword });
+            this.setState({ LinkedEmail: linkedEmail, LinkedPassword: linkedPassword });
 
             // Go straight to attempting a fingerprint authentication if there's a linked account already
-            if(linkedUsername !== null && linkedPassword !== null && !this.HasRecentlyAuthenticated){
+            if(linkedEmail !== null && linkedPassword !== null && !this.HasRecentlyAuthenticated){
                 await Global.delay(500);
                 this.attemptFingerprintAuthentication();
             } else {
@@ -76,7 +76,7 @@ export default class MainScreen extends Component {
     // --- State machine related --- //
     // Transitions to the main screen state, clearing the info in the credentials window.
     toMainWindow = () => {
-        this.SubmittedUsername = "";
+        this.SubmittedEmail = "";
         this.SubmittedPassword = "";
         this.setState({ ScreenState: MainScreen.ScreenStateEnum.Neutral });
     }
@@ -89,19 +89,19 @@ export default class MainScreen extends Component {
 
     // --- Callbacks --- //
     // Called as the user types their user/pass.
-    onUsernameUpdated = (text) => {
-        this.SubmittedUsername = text;
+    onEmailUpdated = (text) => {
+        this.SubmittedEmail = text;
     }
     onPasswordUpdated = (text) => {
         this.SubmittedPassword = text;
     }
 
-    // TODO: All this stuff relating to the Linked Username/Password will probably need to be rewritten in the future when implementing actually logging in.
+    // TODO: All this stuff relating to the Linked Email/Password will probably need to be rewritten in the future when implementing actually logging in.
     // Called when the user submits their user/pass
     onCredentialsEntered = async () => {
         // Check the entered information for validity.
-        if(this.SubmittedUsername === "" || this.SubmittedPassword === "") {
-            this.dropdown.alertWithType("warn", "Missing Credentials", "Please enter both a username and password.");
+        if(this.SubmittedEmail === "" || this.SubmittedPassword === "") {
+            this.dropdown.alertWithType("warn", "Missing Credentials", "Please enter both an email and password.");
             this.SubmittedPassword = "";
         }
 
@@ -111,14 +111,14 @@ export default class MainScreen extends Component {
         // On success, go back to the home screen.
         else{
             // Set this as the new linked Account
-            await AsyncStorage.setItem("@LinkedUsername", this.SubmittedUsername);
+            await AsyncStorage.setItem("@LinkedEmail", this.SubmittedEmail);
             await AsyncStorage.setItem("@LinkedPassword", this.SubmittedPassword);
 
             // Set their state
-            this.setState({ LinkedUsername: this.SubmittedUsername, LinkedPassword: this.SubmittedPassword });
+            this.setState({ LinkedEmail: this.SubmittedEmail, LinkedPassword: this.SubmittedPassword });
 
             // Clear both fields
-            this.SubmittedUsername = "";
+            this.SubmittedEmail = "";
             this.SubmittedPassword = "";
 
             // Reset state back to neutral
@@ -140,7 +140,7 @@ export default class MainScreen extends Component {
         let hasHardware = await Expo.Fingerprint.hasHardwareAsync();
         let isEnrolled = await Expo.Fingerprint.isEnrolledAsync();
         if(hasHardware && isEnrolled){
-            if(this.state.LinkedUsername !== null && this.state.LinkedPassword !== null){
+            if(this.state.LinkedEmail !== null && this.state.LinkedPassword !== null){
                 let authenticated;
                 if(Platform.OS == "ios"){
                     authenticated = await Expo.Fingerprint.authenticateAsync("Scan to login.");
@@ -191,14 +191,13 @@ export default class MainScreen extends Component {
     // Navigates us to the QR screen.
     goToQRScreen = () => {
         // TODO: Need to send an actual UserID here.
-        this.props.navigation.navigate("QR", { userID: this.state.LinkedUsername });
+        this.props.navigation.navigate("QR", { userID: this.state.LinkedEmail });
     }
 
 
     // --- Render --- //
     render() {
         return (
-            // Outermost view, don't have anything outside of this
             <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
                 <View style={GlobalStyles.background}>
 
@@ -212,9 +211,9 @@ export default class MainScreen extends Component {
                     {/* Main Buttons */}
                     {this.state.ScreenState === MainScreen.ScreenStateEnum.Neutral ?
                         <FadeInView>
-                            {this.state.LinkedUsername !== null ?
-                                <View style={styles.usernameDisplayContainer}>
-                                    <Text style={[GlobalStyles.boldText, { fontSize: moderateScale(30, 0.6) }]}>{this.state.LinkedUsername}</Text>
+                            {this.state.LinkedEmail !== null ?
+                                <View style={styles.emailDisplayContainer}>
+                                    <Text style={[GlobalStyles.text, { fontSize: moderateScale(18, 0.6) }]}>{this.state.LinkedEmail}</Text>
                                 </View>
                             : false }
 
@@ -232,15 +231,15 @@ export default class MainScreen extends Component {
                     : false }
 
 
-                    {/* Username/Password Windows */}
+                    {/* Email/Password Windows */}
                     {this.state.ScreenState === MainScreen.ScreenStateEnum.CredentialsWindow ?
                         <FadeInView>
                             <View style={{marginTop: "7%"}}>
                                 <View style={styles.textInputContainer}>
-                                    <TextInput style={styles.textInput} placeholder="Username" onChangeText={this.onUsernameUpdated} onSubmitEditing={this.onCredentialsEntered} placeholderTextColor={"grey"} autoFocus={true}/>
+                                    <TextInput style={[styles.textInput, { color: "white" }]} placeholder="Email" onChangeText={this.onEmailUpdated} onSubmitEditing={this.onCredentialsEntered} placeholderTextColor={Global.COLOR_OFFWHITE} keyboardType={"email-address"} autoFocus={true}/>
                                 </View>
                                 <View style={styles.textInputContainer}>
-                                    <TextInput style={styles.textInput} placeholder="Password" onChangeText={this.onPasswordUpdated} onSubmitEditing={this.onCredentialsEntered} placeholderTextColor={"grey"} secureTextEntry={true}/>
+                                    <TextInput style={[styles.textInput, { color: "#999999" }]} placeholder="Password" onChangeText={this.onPasswordUpdated} onSubmitEditing={this.onCredentialsEntered} placeholderTextColor={Global.COLOR_OFFWHITE} secureTextEntry={true}/>
                                 </View>
 
                                 <View style={{alignItems: "center", justifyContent: "center", margin: scale(30)}}>
@@ -277,7 +276,7 @@ export const styles = StyleSheet.create({
         fontWeight: 'bold',
         color: "white",
     },
-    usernameDisplayContainer: {
+    emailDisplayContainer: {
         position: "absolute",
         alignSelf: "center",
         marginTop: "15%",
@@ -311,13 +310,12 @@ export const styles = StyleSheet.create({
         margin: moderateScale(20, LOGIN_BUTTON_SCALE),
         padding: moderateScale(5, LOGIN_BUTTON_SCALE),
         borderWidth: moderateScale(2, LOGIN_BUTTON_SCALE),
-        borderColor: "grey",
+        borderColor: Global.COLOR_OFFWHITE,
         borderRadius: moderateScale(5, LOGIN_BUTTON_SCALE),
     },
     textInput: {
         height: moderateScale(40, LOGIN_BUTTON_SCALE),
         padding: moderateScale(10, LOGIN_BUTTON_SCALE),
         fontSize: moderateScale(20, LOGIN_BUTTON_SCALE),
-        color: "white",
     },
 });
