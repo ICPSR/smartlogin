@@ -5,7 +5,7 @@ import { StackNavigator } from "react-navigation"
 import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
 import DropdownAlert from 'react-native-dropdownalert';
 import { GlobalStyles } from "../Styles.js"
-import { delay, BUTTON_ACTIVE_OPACITY } from "../Global.js"
+import * as Global from "../Global.js"
 
 
 // - Constants - //
@@ -58,53 +58,55 @@ export default class QRScreen extends Component{
         console.log(code.data);
         console.log("---------------");
 
+        /*
         // TODO: Testing code that circumvents below networking code.
         if(true){
             this.dropdown.alertWithType("success", "Success!", "Successfully logged in!");
-            await delay(3000);
+            await Global.delay(3000);
             this.props.navigation.goBack();
             return;
         }
+        */
 
         // Make a POST request to the url if it's valid
         if(true){
             try{
-                console.log("Sending user info...");
+                console.log("Sending user info to: " + URL + code.data);
 
-                let response = await fetch(URL + code.data, {
+                let response = await Global.fetchWithTimeout(URL + userID+"/"+code.data, {
                     method: "POST",
                     headers:{
                         "Content-Type": "application/json",
                     },
                     body: JSON.stringify({
                         sessionID: code.data,
-                        userID: userID
+                        userId: userID
                     }),
                 });
-                if(!response.ok){
-                    throw new Error("Network response was not ok.")
-                }
 
-                console.log("Recieved Response: ");
-                console.log(response.json());
+                console.log("Response Recieved:");
+                console.log(response);
+                if(!response.ok){
+                    throw new Error("Network error: Status - " + response.status);
+                }
 
                 // TODO: More stuff probably goes here after getting response
 
 
                 // On Success, return to the home screen.
                 this.dropdown.alertWithType("success", "Success!", "Successfully logged in!");
-                await delay(3000);
+                await Global.delay(3000);
                 this.props.navigation.goBack();
             } catch(error) {
                 this.dropdown.alertWithType("error", "Try Again - Network Error", "Something went wrong! Please check your internet connection and try again.");
                 console.error(error);
-                await delay(1500);
+                await Global.delay(1500);
                 this.setState({ qrFunc: this.onQRRead });
             }
         } else {
             // Try again on failure.
             this.dropdown.alertWithType("error", "Try Again - Bad QR Code", "The QR code read was not from the ICPSR website's login page.");
-            await delay(1500);
+            await Global.delay(1500);
             this.setState({ qrFunc: this.onQRRead });
         }
     }
@@ -126,7 +128,7 @@ export default class QRScreen extends Component{
                         <Text style={[GlobalStyles.text, { fontSize: moderateScale(13) } ]}>Please give the app permissions to use the camera.</Text>
                     </View>
                     {/* Back Button */}
-                    <TouchableOpacity style={styles.backButton} onPress={this.onBack} activeOpacity={BUTTON_ACTIVE_OPACITY} underlayColor="white">
+                    <TouchableOpacity style={styles.backButton} onPress={this.onBack} activeOpacity={Global.BUTTON_ACTIVE_OPACITY} underlayColor="white">
                         <Text style={GlobalStyles.text}>Back</Text>
                     </TouchableOpacity>
                 </View>

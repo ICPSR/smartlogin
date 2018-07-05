@@ -6,7 +6,7 @@ import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
 import DropdownAlert from 'react-native-dropdownalert';
 import { GlobalStyles } from "../Styles.js"
 import { FadeInView } from "../Animations.js"
-import { delay, BUTTON_ACTIVE_OPACITY } from "../Global.js"
+import * as Global from "../Global.js"
 
 
 // - Constants - //
@@ -62,7 +62,7 @@ export default class MainScreen extends Component {
 
             // Go straight to attempting a fingerprint authentication if there's a linked account already
             if(linkedUsername !== null && linkedPassword !== null && !this.HasRecentlyAuthenticated){
-                await delay(500);
+                await Global.delay(500);
                 this.attemptFingerprintAuthentication();
             } else {
                 this.setState({ ScreenState: MainScreen.ScreenStateEnum.CredentialsWindow });
@@ -219,11 +219,11 @@ export default class MainScreen extends Component {
                             : false }
 
                             <View style={styles.mainButtonContainer}>
-                                <TouchableOpacity onPress={this.toCredentialsWindow} style={styles.mainButton} activeOpacity={BUTTON_ACTIVE_OPACITY} underlayColor="white">
+                                <TouchableOpacity onPress={this.toCredentialsWindow} style={styles.mainButton} activeOpacity={Global.BUTTON_ACTIVE_OPACITY} underlayColor="white">
                                     <Image source={require("../assets/key.png")} style={styles.icon}/>
                                     <Text style={[GlobalStyles.boldText, { fontSize: moderateScale(20, MAIN_BUTTON_SCALE) }]}>Link Account</Text>
                                 </TouchableOpacity>
-                                <TouchableOpacity onPress={this.attemptFingerprintAuthentication} style={styles.mainButton} activeOpacity={BUTTON_ACTIVE_OPACITY} underlayColor="white">
+                                <TouchableOpacity onPress={this.attemptFingerprintAuthentication} style={styles.mainButton} activeOpacity={Global.BUTTON_ACTIVE_OPACITY} underlayColor="white">
                                     <Image source={require("../assets/qr.png")} style={styles.icon}/>
                                     <Text style={[GlobalStyles.boldText, { fontSize: moderateScale(20, MAIN_BUTTON_SCALE) }]}>QR Login</Text>
                                 </TouchableOpacity>
@@ -244,10 +244,10 @@ export default class MainScreen extends Component {
                                 </View>
 
                                 <View style={{alignItems: "center", justifyContent: "center", margin: scale(30)}}>
-                                    <TouchableOpacity onPress={this.onCredentialsEntered} style={styles.submitButton} activeOpacity={BUTTON_ACTIVE_OPACITY} underlayColor="white">
+                                    <TouchableOpacity onPress={this.onCredentialsEntered} style={styles.submitButton} activeOpacity={Global.BUTTON_ACTIVE_OPACITY} underlayColor="white">
                                         <Text style={[GlobalStyles.boldText, { fontSize: moderateScale(20, LOGIN_BUTTON_SCALE) }]}>Submit</Text>
                                     </TouchableOpacity>
-                                    <TouchableOpacity onPress={this.toMainWindow} style={{marginTop: moderateScale(30)}} activeOpacity={BUTTON_ACTIVE_OPACITY} underlayColor="white">
+                                    <TouchableOpacity onPress={this.toMainWindow} style={{marginTop: moderateScale(30)}} activeOpacity={Global.BUTTON_ACTIVE_OPACITY} underlayColor="white">
                                         <Text style={[GlobalStyles.underlineText, { fontSize: moderateScale(18, LOGIN_BUTTON_SCALE) }]}>Cancel</Text>
                                     </TouchableOpacity>
                                 </View>
