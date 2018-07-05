@@ -17,6 +17,9 @@ export default class QRScreen extends Component{
     // The userID passed in by the MainScreen
     userID = "NO-ID";
 
+    // Are we in the middle of processing a QR scan?
+    isProcessingQR = false;
+
     // --- Constructor --- //
     constructor(props){
         super(props)
@@ -24,7 +27,6 @@ export default class QRScreen extends Component{
         this.state = {
             HasPermission: null,
             type: Expo.Camera.Constants.Type.back,
-            qrFunc: this.onQRRead,
         };
     }
 
@@ -48,8 +50,11 @@ export default class QRScreen extends Component{
 
     // Called when the camera reads any QR code.
     onQRRead = async (code) => {
-        // Stop QR from reading
-        this.setState({ qrFunc: undefined });
+        // Does nothing if we're already reading a code.
+        if(this.isProcessingQR) {
+            return;
+        }
+        this.isProcessingQR = true;
 
         // Networking
         const URL = "http://192.168.145.106:8080/pcms/mydata/smartlogin/authorize/"
@@ -58,22 +63,12 @@ export default class QRScreen extends Component{
         console.log(code.data);
         console.log("---------------");
 
-        /*
-        // TODO: Testing code that circumvents below networking code.
-        if(true){
-            this.dropdown.alertWithType("success", "Success!", "Successfully logged in!");
-            await Global.delay(3000);
-            this.props.navigation.goBack();
-            return;
-        }
-        */
-
         // Make a POST request to the url if it's valid
         if(true){
             try{
-                console.log("Sending user info to: " + URL + code.data);
+                console.log("Sending user info to: " + URL + userID + "/" + code.data);
 
-                let response = await Global.fetchWithTimeout(URL + userID+"/"+code.data, {
+                let response = await Global.fetchWithTimeout(URL + userID + "/" + code.data, {
                     method: "POST",
                     headers:{
                         "Content-Type": "application/json",
@@ -86,28 +81,26 @@ export default class QRScreen extends Component{
 
                 console.log("Response Recieved:");
                 console.log(response);
-                if(!response.ok){
-                    throw new Error("Network error: Status - " + response.status);
-                }
-
-                // TODO: More stuff probably goes here after getting response
-
 
                 // On Success, return to the home screen.
-                this.dropdown.alertWithType("success", "Success!", "Successfully logged in!");
-                await Global.delay(3000);
-                this.props.navigation.goBack();
+                if(response.ok){
+                    this.dropdown.alertWithType("success", "Success!", "Successfully logged in!");
+                    await Global.delay(3000);
+                    this.props.navigation.goBack();
+                } else {
+                    throw new Error("Network error: Status - " + response.status);
+                }
             } catch(error) {
                 this.dropdown.alertWithType("error", "Try Again - Network Error", "Something went wrong! Please check your internet connection and try again.");
-                console.error(error);
-                await Global.delay(1500);
-                this.setState({ qrFunc: this.onQRRead });
+                console.log("Network Error Message: " + error);
+                await Global.delay(2000);
+                this.isProcessingQR = false;
             }
         } else {
             // Try again on failure.
             this.dropdown.alertWithType("error", "Try Again - Bad QR Code", "The QR code read was not from the ICPSR website's login page.");
-            await Global.delay(1500);
-            this.setState({ qrFunc: this.onQRRead });
+            await Global.delay(2000);
+            this.isProcessingQR = false;
         }
     }
 
@@ -146,7 +139,7 @@ export default class QRScreen extends Component{
                     </View>
 
                     {/* Camera */}
-                    <Camera style={{ flex: 1 }} type={this.state.type} barCodeTypes={[Camera.Constants.BarCodeType.qr]} onBarCodeRead={this.state.qrFunc}/>
+                    <Camera style={{ flex: 1 }} type={this.state.type} barCodeTypes={[Camera.Constants.BarCodeType.qr]} onBarCodeRead={this.onQRRead}/>
 
                     {/* Back Button */}
                     <TouchableOpacity style={styles.backButton} onPress={this.onBack}>
