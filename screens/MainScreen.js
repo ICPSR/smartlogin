@@ -277,12 +277,12 @@ export const styles = StyleSheet.create({
         color: "white",
     },
     emailDisplayContainer: {
-        position: "absolute",
+        position: "absolute", 
         alignSelf: "center",
         marginTop: "15%",
     },
     mainButtonContainer: {
-        marginTop: moderateScale(350),
+        marginTop: moderateScale(350, 0.4),
         flexDirection: "row",
         justifyContent: "space-around"
     },
