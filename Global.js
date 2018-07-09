@@ -61,8 +61,8 @@ export class TouchableRounded extends Component {
             );
         } else {
             return (
-                <View style={{ borderRadius: radius }}>
-                    <Touchable {...this.props} background={Touchable.Ripple("#fff", true)}>
+                <View style={{ borderRadius: radius, overflow: 'hidden' }}>
+                    <Touchable {...this.props} foreground={Touchable.Ripple("#fff", true)}>
                         {this.props.children}
                     </Touchable>
                 </View>
