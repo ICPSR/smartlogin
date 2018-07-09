@@ -1,9 +1,10 @@
 import Expo from "expo";
 import React, { Component } from "react";
-import { Alert, AsyncStorage, Button, Image, Keyboard, Platform, StyleSheet, Text, TextInput, View, TouchableOpacity, TouchableWithoutFeedback, StatusBar } from "react-native";
+import { Alert, AsyncStorage, Button, Image, Keyboard, Platform, StyleSheet, Text, TextInput, View, TouchableWithoutFeedback, StatusBar } from "react-native";
 import { createStackNavigator } from "react-navigation"
 import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
 import DropdownAlert from 'react-native-dropdownalert';
+import Touchable from 'react-native-platform-touchable';
 import { GlobalStyles } from "../Styles.js"
 import { FadeInView } from "../Animations.js"
 import * as Global from "../Global.js"
@@ -197,6 +198,7 @@ export default class MainScreen extends Component {
 
     // --- Render --- //
     render() {
+        let TouchableRounded = Global.TouchableRounded;
         return (
             <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
                 <View style={GlobalStyles.background}>
@@ -208,7 +210,7 @@ export default class MainScreen extends Component {
                         <Text style={styles.headerText} adjustsFontSizeToFit={true}>ICPSR</Text>
                     </View>
 
-                    {/* Main Buttons */}
+                    {/* Email Display + Main Buttons */}
                     {this.state.ScreenState === MainScreen.ScreenStateEnum.Neutral ?
                         <FadeInView>
                             {this.state.LinkedEmail !== null ?
@@ -218,14 +220,18 @@ export default class MainScreen extends Component {
                             : false }
 
                             <View style={styles.mainButtonContainer}>
-                                <TouchableOpacity onPress={this.toCredentialsWindow} style={styles.mainButton} activeOpacity={Global.BUTTON_ACTIVE_OPACITY} underlayColor="white">
-                                    <Image source={require("../assets/key.png")} style={styles.icon}/>
-                                    <Text style={[GlobalStyles.boldText, { fontSize: moderateScale(20, MAIN_BUTTON_SCALE) }]}>Link Account</Text>
-                                </TouchableOpacity>
-                                <TouchableOpacity onPress={this.attemptFingerprintAuthentication} style={styles.mainButton} activeOpacity={Global.BUTTON_ACTIVE_OPACITY} underlayColor="white">
-                                    <Image source={require("../assets/qr.png")} style={styles.icon}/>
-                                    <Text style={[GlobalStyles.boldText, { fontSize: moderateScale(20, MAIN_BUTTON_SCALE) }]}>QR Login</Text>
-                                </TouchableOpacity>
+                                <TouchableRounded onPress={this.toCredentialsWindow} style={styles.mainButton} activeOpacity={Global.BUTTON_ACTIVE_OPACITY} underlayColor="white">
+                                    <View style={{ alignItems: "center", justifyContent: "center" }}>
+                                        <Image source={require("../assets/key.png")} style={styles.icon}/>
+                                        <Text style={[GlobalStyles.boldText, { fontSize: moderateScale(20, MAIN_BUTTON_SCALE) }]}>Link Account</Text>
+                                    </View>
+                                </TouchableRounded>
+                                <TouchableRounded onPress={this.attemptFingerprintAuthentication} style={styles.mainButton} activeOpacity={Global.BUTTON_ACTIVE_OPACITY} underlayColor="white">
+                                    <View style={{ alignItems: "center", justifyContent: "center" }}>
+                                        <Image source={require("../assets/qr.png")} style={styles.icon}/>
+                                        <Text style={[GlobalStyles.boldText, { fontSize: moderateScale(20, MAIN_BUTTON_SCALE) }]}>QR Login</Text>
+                                    </View>
+                                </TouchableRounded>
                             </View>
                         </FadeInView>
                     : false }
@@ -243,12 +249,12 @@ export default class MainScreen extends Component {
                                 </View>
 
                                 <View style={{alignItems: "center", justifyContent: "center", margin: scale(30)}}>
-                                    <TouchableOpacity onPress={this.onCredentialsEntered} style={styles.submitButton} activeOpacity={Global.BUTTON_ACTIVE_OPACITY} underlayColor="white">
+                                    <TouchableRounded onPress={this.onCredentialsEntered} style={styles.submitButton} activeOpacity={Global.BUTTON_ACTIVE_OPACITY} underlayColor="white">
                                         <Text style={[GlobalStyles.boldText, { fontSize: moderateScale(20, LOGIN_BUTTON_SCALE) }]}>Submit</Text>
-                                    </TouchableOpacity>
-                                    <TouchableOpacity onPress={this.toMainWindow} style={{marginTop: moderateScale(30)}} activeOpacity={Global.BUTTON_ACTIVE_OPACITY} underlayColor="white">
+                                    </TouchableRounded>
+                                    <Touchable onPress={this.toMainWindow} style={{marginTop: moderateScale(30)}} activeOpacity={Global.BUTTON_ACTIVE_OPACITY} underlayColor="white">
                                         <Text style={[GlobalStyles.underlineText, { fontSize: moderateScale(18, LOGIN_BUTTON_SCALE) }]}>Cancel</Text>
-                                    </TouchableOpacity>
+                                    </Touchable>
                                 </View>
                             </View>
                         </FadeInView>
@@ -277,7 +283,7 @@ export const styles = StyleSheet.create({
         color: "white",
     },
     emailDisplayContainer: {
-        position: "absolute", 
+        position: "absolute",
         alignSelf: "center",
         marginTop: "15%",
     },
@@ -290,8 +296,6 @@ export const styles = StyleSheet.create({
         backgroundColor: "teal",
         width: moderateScale(150, MAIN_BUTTON_SCALE),
         height: moderateScale(150, MAIN_BUTTON_SCALE),
-        alignItems: "center",
-        justifyContent: "center",
         borderRadius: moderateScale(30),
     },
     icon: {

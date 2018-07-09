@@ -1,4 +1,8 @@
-// Contains a set of useful functions and constants used by the project
+import React, { Component } from "react";
+import { Platform, StyleSheet, View } from "react-native";
+import Touchable from 'react-native-platform-touchable';
+
+// Contains a set of useful components, functions, and constants used by the project
 
 // Opacity of buttons when they're pressed down.
 export const BUTTON_ACTIVE_OPACITY = 0.6;
@@ -41,4 +45,29 @@ export async function fetchWithTimeout(URL, init){
 
     // On a successful response, return the promised object.
     return result;
+}
+
+// A rounded button component that automatically chooses between TouchableOpacity for iOS and TouchableNativeFeedback for Android
+// Wrapper around Touchable used to clean up the weird boilerplate due to TouchableNativeFeedback not being able to handle rounded buttons
+// Requires there to be only a single child.
+export class TouchableRounded extends Component {
+    render() {
+        let radius = StyleSheet.flatten(this.props.style).borderRadius;
+        if(Platform.OS === "ios"){
+            return (
+                <Touchable {...this.props}>
+                    {this.props.children}
+                </Touchable>
+            );
+        } else {
+            return (
+                <View style={{ borderRadius: radius }}>
+                    <Touchable {...this.props} background={Touchable.Ripple("#fff", true)}>
+                        {this.props.children}
+                    </Touchable>
+                </View>
+            );
+        }
+    }
+
 }
