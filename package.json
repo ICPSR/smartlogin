@@ -8,6 +8,7 @@
     "react-native-dropdownalert": "^3.4.0",
     "react-native-platform-touchable": "^1.1.1",
     "react-native-size-matters": "^0.1.1",
-    "react-navigation": "^2.5.3"
+    "react-navigation": "^2.5.3",
+    "validator": "^10.4.0"
   }
 }

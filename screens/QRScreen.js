@@ -5,8 +5,13 @@ import { StackNavigator } from "react-navigation"
 import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
 import DropdownAlert from 'react-native-dropdownalert';
 import Touchable from 'react-native-platform-touchable';
+import isUUID from "validator/lib/isUUID";
 import { GlobalStyles } from "../Styles.js"
 import * as Global from "../Global.js"
+
+// - Constants - //
+// UUID version used by ICPSR website
+const UUID_VERSION = 4;
 
 // --- QR Screen --- //
 export default class QRScreen extends Component{
@@ -61,7 +66,7 @@ export default class QRScreen extends Component{
         console.log("---------------");
 
         // Make a POST request to the url if it's valid
-        if(true){
+        if(isUUID(code.data, UUID_VERSION)){
             try{
                 console.log("Sending user info to: " + URL + userID + "/" + code.data);
 

@@ -153,19 +153,16 @@ export default class MainScreen extends Component {
                             "Fingerprint Authentication",
                             "Place your finger to scan.",
                             [
-                                {text: "Cancel", onPress: () => {Expo.Fingerprint.cancelAuthenticate(); this.dropdown.alertWithType("info", "hi", "onCancel"); }},
+                                { text: "Cancel", onPress: () => {Expo.Fingerprint.cancelAuthenticate(); this.dropdown.alertWithType("info", "hi", "onCancel"); }},
                             ],
                             { onDismiss: () => {Expo.Fingerprint.cancelAuthenticate(); this.dropdown.alertWithType("info", "hi", "onDismiss"); } }
                         )
                     );
                 }
                 if(authenticated.success){
-                    //this.dropdown.alertWithType("success", "Success", "Authentication succeeded.");
                     this.HasRecentlyAuthenticated = true;
                     this.startAuthenticationTimeout();
                     this.goToQRScreen();
-                } else {
-                    //this.dropdown.alertWithType("error", "Failed", "Authentication failed or canceled.");
                 }
             } else {
                 this.dropdown.alertWithType("warn", "No Account Linked", "Please link your account to this phone before attempting a QR Login.");
@@ -181,6 +178,8 @@ export default class MainScreen extends Component {
     // --- Other --- //
     // A timer that, after some time, sets HasRecentlyAuthenticated to false.
     // Note: Should never be 2 instances of this running at the same time.
+    // Note: Causes a warning for Android, as timers don't fire while in the background.
+    //       Does not seem to affect correctness in this case however.
     startAuthenticationTimeout = async () => {
         return new Promise(resolve => {
             setTimeout(() => {
