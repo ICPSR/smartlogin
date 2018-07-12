@@ -1,4 +1,4 @@
-import Expo from "expo";
+import Expo, { AppLoading } from "expo";
 import React, { Component } from "react";
 import { Dimensions, Platform, View } from "react-native";
 import { createStackNavigator } from "react-navigation"
@@ -16,7 +16,7 @@ export default class App extends Component {
         this.state = { DoneLoading: false, };
     }
 
-    // Loads fonts on mount
+    // Print out information.
     async componentDidMount(){
         console.log("---------------- Device Information ----------------");
         console.log("Device Name: " + Expo.Constants.deviceName);
@@ -27,12 +27,8 @@ export default class App extends Component {
         console.log("Year Class: " + Expo.Constants.deviceYearClass);
         console.log("---------------- Device Information End ----------------");
 
-        // Load assets
+        // Lock the screen to portrait mode
         Expo.ScreenOrientation.allow(Expo.ScreenOrientation.Orientation.PORTRAIT);
-        await Expo.Font.loadAsync({
-            'Behatrice-Regular': require('./assets/fonts/Behatrice-Regular.ttf'),
-        });
-        this.setState({ DoneLoading: true });
     }
 
     // --- Render --- //
@@ -40,8 +36,27 @@ export default class App extends Component {
         if(this.state.DoneLoading){
             return <RootStack/>;
         } else {
-            return <View style={GlobalStyles.background}></View>
+            return <AppLoading startAsync={this.loadResources} onFinish={() => this.setState({ DoneLoading: true })} onError={console.warn}/>
         }
+    }
+
+    // Loads resources
+    async loadResources(){
+        // Load fonts
+        const fontPromise = Expo.Font.loadAsync({
+            'Behatrice-Regular': require('./assets/fonts/Behatrice-Regular.ttf'),
+        });
+
+        // Load images
+        const images = [
+            require("./assets/key.png"),
+            require("./assets/qr.png"),
+            require("./assets/qr_border.png")
+        ];
+        const imagePromise = images.map((image) => Expo.Asset.fromModule(image).downloadAsync());
+
+        // Return promises
+        return Promise.all([ fontPromise, imagePromise ]);
     }
 }
 

@@ -25,7 +25,7 @@ const LOGIN_BUTTON_SCALE = 0.2;
 // --- Main Screen --- //
 export default class MainScreen extends Component {
     // --- Instance Variables --- //
-    // The current credentials entered in
+    // The current credentials entered
     SubmittedEmail = "";
     SubmittedPassword = "";
 

@@ -3,7 +3,6 @@ import { Animated, View, Easing } from 'react-native';
 
 // Based off example code, from: https://facebook.github.io/react-native/docs/animations.html
 export class FadeInView extends Component {
-
     constructor(props){
         super(props);
         this.state = {
