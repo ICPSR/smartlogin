@@ -1,8 +1,8 @@
 import Expo, { AppLoading } from "expo";
 import React, { Component } from "react";
 import { Dimensions, Platform, View } from "react-native";
-import { createStackNavigator } from "react-navigation"
-import { GlobalStyles } from "./Styles.js"
+import { createStackNavigator } from "react-navigation";
+import { GlobalStyles } from "./Styles.js";
 
 // Screens
 import MainScreen from "./screens/MainScreen.js"
@@ -25,6 +25,7 @@ export default class App extends Component {
         let {height, width} = Dimensions.get("window");
         console.log("Dimensions: " + height + " x " + width);
         console.log("Year Class: " + Expo.Constants.deviceYearClass);
+        console.log("Device ID: " + Expo.Constants.deviceId);
         console.log("---------------- Device Information End ----------------");
 
         // Lock the screen to portrait mode
@@ -36,7 +37,7 @@ export default class App extends Component {
         if(this.state.DoneLoading){
             return <RootStack/>;
         } else {
-            return <AppLoading startAsync={this.loadResources} onFinish={() => this.setState({ DoneLoading: true })} onError={console.warn}/>
+            return <AppLoading startAsync={this.loadResources} onFinish={() => this.setState({ DoneLoading: true })} onError={console.warn}/>;
         }
     }
 

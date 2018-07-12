@@ -1,13 +1,13 @@
 import Expo, { Camera } from "expo";
 import React, { Component } from "react";
 import { Image, Text, StyleSheet, View, TouchableOpacity, StatusBar } from "react-native";
-import { StackNavigator } from "react-navigation"
+import { StackNavigator } from "react-navigation";
 import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
 import DropdownAlert from 'react-native-dropdownalert';
 import Touchable from 'react-native-platform-touchable';
 import isUUID from "validator/lib/isUUID";
-import { GlobalStyles } from "../Styles.js"
-import * as Global from "../Global.js"
+import { GlobalStyles } from "../Styles.js";
+import * as Global from "../Global.js";
 
 // - Constants - //
 // UUID version used by ICPSR website

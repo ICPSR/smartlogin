@@ -1,14 +1,15 @@
 import Expo from "expo";
 import React, { Component } from "react";
 import { Alert, AsyncStorage, Button, Image, Keyboard, Platform, StyleSheet, Text, TextInput, View, TouchableWithoutFeedback, StatusBar } from "react-native";
-import { createStackNavigator } from "react-navigation"
+import { createStackNavigator } from "react-navigation";
 import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
 import DropdownAlert from 'react-native-dropdownalert';
 import Touchable from 'react-native-platform-touchable';
-import { GlobalStyles } from "../Styles.js"
-import { FadeInView } from "../Animations.js"
-import * as Global from "../Global.js"
+import { GlobalStyles } from "../Styles.js";
+import { FadeInView } from "../Animations.js";
+import * as Global from "../Global.js";
 
+import Key from "../assets/key.svg"
 
 // - Constants - //
 // Amount of time (milliseconds) the user has to enter back into the QR screen without reauthenticating.
