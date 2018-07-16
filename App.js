@@ -5,8 +5,10 @@ import { createStackNavigator } from "react-navigation";
 import { GlobalStyles } from "./Styles.js";
 
 // Screens
-import MainScreen from "./screens/MainScreen.js"
-import QRScreen from "./screens/QRScreen.js"
+import IntroScreen from "./screens/IntroScreen.js";
+import MainScreen from "./screens/MainScreen.js";
+import QRScreen from "./screens/QRScreen.js";
+import OTPScreen from "./screens/OTPScreen.js";
 
 // --- App Export --- //
 export default class App extends Component {
@@ -64,10 +66,12 @@ export default class App extends Component {
 // Stack Navigator
 const RootStack = createStackNavigator(
     {
+        Intro: IntroScreen,
         Main: MainScreen,
         QR: QRScreen,
+        OTP: OTPScreen,
     },
     {
-        initialRouteName: "Main",
+        initialRouteName: "Intro",
     }
 );

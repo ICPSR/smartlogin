@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Animated, View, Easing } from 'react-native';
+import * as Global from "./Global.js";
 
 // Based off example code, from: https://facebook.github.io/react-native/docs/animations.html
 export class FadeInView extends Component {
@@ -10,8 +11,12 @@ export class FadeInView extends Component {
         }
     }
 
-    componentDidMount() {
-        Animated.timing(this.state.fadeAnim, { toValue: 1, duration: 500, }).start();
+    async componentDidMount() {
+        let dur = this.props.duration !== null ? parseInt(this.props.duration) : 500;
+        if(this.props.delay !== null){
+            await Global.delay(parseInt(this.props.delay));
+        }
+        Animated.timing(this.state.fadeAnim, { toValue: 1, duration: dur, }).start();
     }
 
     render() {

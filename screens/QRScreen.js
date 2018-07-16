@@ -16,8 +16,15 @@ const UUID_VERSION = 4;
 // --- QR Screen --- //
 export default class QRScreen extends Component{
     // --- Instance Variables --- //
-    // The userID passed in by the MainScreen
-    userID = "NO-ID";
+    // The text on the header.
+    title = "";
+
+    // The screen to navigate to after reading the QR screen.
+    // Calls navigation.goBack() if this is the empty string.
+    screenToGoTo = "";
+
+    // The URL pattern used.
+    URL = "";
 
     // Are we in the middle of processing a QR scan?
     isProcessingQR = false;
@@ -36,7 +43,9 @@ export default class QRScreen extends Component{
     // --- On Component Mount --- //
     async componentDidMount(){
         // Get nagivation params
-        userID = this.props.navigation.getParam("userID", "NO-ID");
+        title = this.props.navigation.getParam("title", "TITLE MISSING");
+        screenToGoTo = this.props.navigation.getParam("screenToGoTo", "SCREEN MISSING");
+        URL = this.props.navigation.getParam("URL", "URL MISSING");
 
         // Get camera permissions
         const { status } = await Expo.Permissions.askAsync(Expo.Permissions.CAMERA);
@@ -45,6 +54,15 @@ export default class QRScreen extends Component{
 
 
     // --- Callbacks --- //
+    // Continues to the next screen, or goes back.
+    onContinue = () => {
+        if(screenToGoTo !== ""){
+            this.props.navigation.navigate(screenToGoTo);
+        } else {
+            onBack();
+        }
+    }
+
     // Goes back to the main screen.
     onBack = () => {
         this.props.navigation.goBack();
@@ -59,7 +77,6 @@ export default class QRScreen extends Component{
         this.isProcessingQR = true;
 
         // Networking
-        const URL = "http://192.168.145.106:8080/pcms/mydata/smartlogin/authorize/"
         console.log("---------------");
         console.log("QR Scanned:");
         console.log(code.data);
@@ -84,11 +101,11 @@ export default class QRScreen extends Component{
                 console.log("Response Recieved:");
                 console.log(response);
 
-                // On Success, return to the home screen.
+                // On Success
                 if(response.ok){
                     this.dropdown.alertWithType("success", "Success!", "Successfully logged in!");
                     await Global.delay(3000);
-                    this.props.navigation.goBack();
+                    onContinue();
                 } else {
                     throw new Error("Network error: Status - " + response.status);
                 }
@@ -137,7 +154,7 @@ export default class QRScreen extends Component{
 
                     {/* Header */}
                     <View style={[GlobalStyles.header, { paddingTop: Expo.Constants.statusBarHeight }]}>
-                        <Text style={GlobalStyles.text}>Scan QR from the ICPSR login page.</Text>
+                        <Text style={GlobalStyles.text}>{title}</Text>
                     </View>
 
                     {/* Camera */}
