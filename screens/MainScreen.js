@@ -9,8 +9,6 @@ import { GlobalStyles } from "../Styles.js";
 import { FadeInView } from "../Animations.js";
 import * as Global from "../Global.js";
 
-import Key from "../assets/key.svg"
-
 // - Constants - //
 // Amount of time (milliseconds) the user has to enter back into the QR screen without reauthenticating.
 const REAUTH_TIMER = 120 * 1000;
