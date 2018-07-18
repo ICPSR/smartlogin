@@ -173,7 +173,7 @@ export default class QRScreen extends Component{
                     <Camera style={{ flex: 1 }} type={this.state.type} barCodeTypes={[Camera.Constants.BarCodeType.qr]} onBarCodeRead={this.onQRRead}/>
 
                     {/* Back Button */}
-                    <Touchable style={styles.backButton} onPress={this.onBack}>
+                    <Touchable style={styles.backButton} onPress={this.onBack} activeOpacity={Global.BUTTON_ACTIVE_OPACITY} underlayColor="white">
                         <Text style={Global.Styles.text}>Back</Text>
                     </Touchable>
 

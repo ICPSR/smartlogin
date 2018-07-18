@@ -2,7 +2,9 @@ import Expo from "expo";
 import React, { Component } from "react";
 import { View, StyleSheet, StatusBar, Text } from "react-native";
 import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
+import { StackNavigator } from "react-navigation";
 import DropdownAlert from 'react-native-dropdownalert';
+import Touchable from 'react-native-platform-touchable';
 import { FadeInView } from "../Animations.js";
 import * as Global from "../Global.js";
 
@@ -17,8 +19,9 @@ export default class IntroScreen extends Component {
     // --- Constructor --- //
     constructor(props){
         super(props);
+        let state = this.props.navigation.getParam("state", "First");
         this.state = {
-            currentState: IntroScreen.StateEnum.First
+            currentState: IntroScreen.StateEnum[state]
         }
     }
 
@@ -31,9 +34,14 @@ export default class IntroScreen extends Component {
         }
     }
 
+    onBack = () => {
+        this.props.navigation.goBack();
+    }
+
     // --- Render --- //
     render() {
         let Button = Global.Button;
+        let backButton = this.props.navigation.getParam("backButton", "false");
 
         return(
             <View style={Global.Styles.background}>
@@ -58,13 +66,19 @@ export default class IntroScreen extends Component {
                 {this.state.currentState === IntroScreen.StateEnum.Second ?
                     <FadeInView duration="1000">
                         <View style={{ alignItems: "center", justifyContent: "center", marginTop: moderateScale(70) }}>
-                            <Text style={Global.Styles.text}>To add this device to your account, login to your ICPSR account on your computer and click</Text>
+                            <Text style={Global.Styles.text}>To add this device to an account, login to your ICPSR account on your computer and click</Text>
                             <Text style={Global.Styles.underlineText}>Register a Device for SmartLogin</Text>
-                            <Text style={[Global.Styles.text, {marginTop: moderateScale(170)}]}>A QR code should be displayed.</Text>
+                            <Text style={[Global.Styles.text, {marginTop: moderateScale(165)}]}>A QR code should be displayed.</Text>
                             <Text style={Global.Styles.text}>Please scan this code</Text>
 
                             <Button onPress={this.onNext} style={{marginTop: moderateScale(50)}} text="QR Scan"/>
                         </View>
+
+                        {backButton === "true" ?
+                            <Touchable onPress={this.onBack} style={{ position: "absolute", marginTop: verticalScale(600), marginLeft: moderateScale(15) }} activeOpacity={Global.BUTTON_ACTIVE_OPACITY} underlayColor="white">
+                                <Text style={Global.Styles.underlineText}>Back</Text>
+                            </Touchable>
+                        : false }
                     </FadeInView>
                 : false }
 

@@ -28,7 +28,7 @@ export default class MainScreen extends Component {
     attemptFingerprintAuthentication = async () => {
         // Allow user to bypass this if they recently authenticated.
         if(this.HasRecentlyAuthenticated){
-            this.goToQRScreen();
+            this.goToQRScreen_Login();
             return;
         }
         let hasHardware = await Expo.Fingerprint.hasHardwareAsync();
@@ -78,11 +78,12 @@ export default class MainScreen extends Component {
     }
 
     // Navigates to the QR screen.
+    goToQRScreen_Activation = () => {
+        this.props.navigation.navigate("Intro", { state: "Second", backButton: "true" });
+        //this.props.navigation.navigate("QR", { title: "Scan QR from the activation page", success: "Successfully read.", screenToGoTo: "OTP", URL: "" });
+    }
     goToQRScreen_Login = () => {
         this.props.navigation.navigate("QR", { title: "Scan QR from the ICPSR login page.", success: "Successfully logged in!", screenToGoTo: "", URL: "http://192.168.145.106:8080/pcms/mydata/smartlogin/authorize/" });
-    }
-    goToQRScreen_Activation = () => {
-        this.props.navigation.navigate("QR", { title: "Scan QR from the activation page", success: "Successfully read.", screenToGoTo: "OTP", URL: "" });
     }
 
 
