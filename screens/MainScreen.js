@@ -1,9 +1,8 @@
 import Expo from "expo";
 import React, { Component } from "react";
-import { Alert, AsyncStorage, Button, Image, Keyboard, Platform, StyleSheet, Text, TextInput, View, TouchableWithoutFeedback, StatusBar } from "react-native";
+import { Alert, Image, Platform, StyleSheet, Text, TextInput, View, StatusBar } from "react-native";
 import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
 import DropdownAlert from 'react-native-dropdownalert';
-import { GlobalStyles } from "../Styles.js";
 import { FadeInView } from "../Animations.js";
 import * as Global from "../Global.js";
 
@@ -80,10 +79,10 @@ export default class MainScreen extends Component {
 
     // Navigates to the QR screen.
     goToQRScreen_Login = () => {
-        this.props.navigation.navigate("QR", { title: "Scan QR from the ICPSR login page.", screenToGoTo: "", URL: "http://192.168.145.106:8080/pcms/mydata/smartlogin/authorize/" });
+        this.props.navigation.navigate("QR", { title: "Scan QR from the ICPSR login page.", success: "Successfully logged in!", screenToGoTo: "", URL: "http://192.168.145.106:8080/pcms/mydata/smartlogin/authorize/" });
     }
     goToQRScreen_Activation = () => {
-        this.props.navigation.navigate("QR", { title: "Scan QR from the activation page", screenToGoTo: "OTP", URL: "" });
+        this.props.navigation.navigate("QR", { title: "Scan QR from the activation page", success: "Successfully read.", screenToGoTo: "OTP", URL: "" });
     }
 
 
@@ -91,11 +90,11 @@ export default class MainScreen extends Component {
     render() {
         let TouchableRounded = Global.TouchableRounded;
         return (
-            <View style={GlobalStyles.background}>
+            <View style={Global.Styles.background}>
                 <StatusBar barStyle="light-content"/>
 
                 {/* Title */}
-                <View style={[GlobalStyles.header, { height: verticalScale(100) }]}>
+                <View style={[Global.Styles.header, { height: verticalScale(100) }]}>
                     <Text style={styles.headerText} adjustsFontSizeToFit={true}>ICPSR</Text>
                 </View>
 
@@ -105,13 +104,13 @@ export default class MainScreen extends Component {
                         <TouchableRounded onPress={this.goToQRScreen_Activation} style={styles.mainButton} activeOpacity={Global.BUTTON_ACTIVE_OPACITY} underlayColor="white">
                             <View style={{ alignItems: "center", justifyContent: "center" }}>
                                 <Image source={require("../assets/key.png")} style={styles.icon}/>
-                                <Text style={[GlobalStyles.boldText, { fontSize: moderateScale(20, MAIN_BUTTON_SCALE) }]}>Link Account</Text>
+                                <Text style={[Global.Styles.boldText, { fontSize: moderateScale(20, MAIN_BUTTON_SCALE) }]}>Link Account</Text>
                             </View>
                         </TouchableRounded>
                         <TouchableRounded onPress={this.attemptFingerprintAuthentication} style={styles.mainButton} activeOpacity={Global.BUTTON_ACTIVE_OPACITY} underlayColor="white">
                             <View style={{ alignItems: "center", justifyContent: "center" }}>
                                 <Image source={require("../assets/qr.png")} style={styles.icon}/>
-                                <Text style={[GlobalStyles.boldText, { fontSize: moderateScale(20, MAIN_BUTTON_SCALE) }]}>QR Login</Text>
+                                <Text style={[Global.Styles.boldText, { fontSize: moderateScale(20, MAIN_BUTTON_SCALE) }]}>QR Login</Text>
                             </View>
                         </TouchableRounded>
                     </View>

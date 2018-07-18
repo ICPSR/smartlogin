@@ -2,7 +2,6 @@ import Expo, { AppLoading } from "expo";
 import React, { Component } from "react";
 import { Dimensions, Platform, View } from "react-native";
 import { createStackNavigator } from "react-navigation";
-import { GlobalStyles } from "./Styles.js";
 
 // Screens
 import IntroScreen from "./screens/IntroScreen.js";

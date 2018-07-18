@@ -6,12 +6,14 @@ import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
 import DropdownAlert from 'react-native-dropdownalert';
 import Touchable from 'react-native-platform-touchable';
 import isUUID from "validator/lib/isUUID";
-import { GlobalStyles } from "../Styles.js";
 import * as Global from "../Global.js";
 
 // - Constants - //
 // UUID version used by ICPSR website
 const UUID_VERSION = 4;
+
+// Shortcut -> makes any qr read valid and continues, makes no POST request.
+const DEBUG_SHORTCUT_QR_READ = true;
 
 // --- QR Screen --- //
 export default class QRScreen extends Component{
@@ -44,6 +46,7 @@ export default class QRScreen extends Component{
     async componentDidMount(){
         // Get nagivation params
         title = this.props.navigation.getParam("title", "TITLE MISSING");
+        success = this.props.navigation.getParam("success", "SUCCESS MESSAGE MISSING");
         screenToGoTo = this.props.navigation.getParam("screenToGoTo", "SCREEN MISSING");
         URL = this.props.navigation.getParam("URL", "URL MISSING");
 
@@ -59,7 +62,7 @@ export default class QRScreen extends Component{
         if(screenToGoTo !== ""){
             this.props.navigation.navigate(screenToGoTo);
         } else {
-            onBack();
+            this.onBack();
         }
     }
 
@@ -82,6 +85,14 @@ export default class QRScreen extends Component{
         console.log(code.data);
         console.log("---------------");
 
+        if(DEBUG_SHORTCUT_QR_READ){
+            this.dropdown.alertWithType("success", "Success!", success);
+            await Global.delay(3000);
+            this.onContinue();
+            this.isProcessingQR = false;
+            return;
+        }
+
         // Make a POST request to the url if it's valid
         if(isUUID(code.data, UUID_VERSION)){
             try{
@@ -103,9 +114,10 @@ export default class QRScreen extends Component{
 
                 // On Success
                 if(response.ok){
-                    this.dropdown.alertWithType("success", "Success!", "Successfully logged in!");
+                    this.dropdown.alertWithType("success", "Success!", success);
                     await Global.delay(3000);
-                    onContinue();
+                    this.onContinue();
+                    this.isProcessingQR = false;
                 } else {
                     throw new Error("Network error: Status - " + response.status);
                 }
@@ -128,20 +140,20 @@ export default class QRScreen extends Component{
     render(){
         // Show nothing until the user has given us a response
         if(this.state.HasPermission === null){
-            return <View style={GlobalStyles.background}/>;
+            return <View style={Global.Styles.background}/>;
         }
         // If the user has not given permission, show a prompt and a back button.
         else if(this.state.HasPermission === false){
             return (
-                <View style={GlobalStyles.background}>
+                <View style={Global.Styles.background}>
                     <StatusBar barStyle="light-content"/>
                     <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-                        <Text style={GlobalStyles.boldText}>No Camera Access</Text>
-                        <Text style={[GlobalStyles.text, { fontSize: moderateScale(13) } ]}>Please give the app permissions to use the camera.</Text>
+                        <Text style={Global.Styles.boldText}>No Camera Access</Text>
+                        <Text style={[Global.Styles.text, { fontSize: moderateScale(13) } ]}>Please give the app permissions to use the camera.</Text>
                     </View>
                     {/* Back Button */}
                     <Touchable style={styles.backButton} onPress={this.onBack} activeOpacity={Global.BUTTON_ACTIVE_OPACITY} underlayColor="white">
-                        <Text style={GlobalStyles.text}>Back</Text>
+                        <Text style={Global.Styles.text}>Back</Text>
                     </Touchable>
                 </View>
             );
@@ -153,8 +165,8 @@ export default class QRScreen extends Component{
                     <StatusBar barStyle="light-content"/>
 
                     {/* Header */}
-                    <View style={[GlobalStyles.header, { paddingTop: Expo.Constants.statusBarHeight }]}>
-                        <Text style={GlobalStyles.text}>{title}</Text>
+                    <View style={[Global.Styles.header, { paddingTop: Expo.Constants.statusBarHeight }]}>
+                        <Text style={Global.Styles.text}>{title}</Text>
                     </View>
 
                     {/* Camera */}
@@ -162,7 +174,7 @@ export default class QRScreen extends Component{
 
                     {/* Back Button */}
                     <Touchable style={styles.backButton} onPress={this.onBack}>
-                        <Text style={GlobalStyles.text}>Back</Text>
+                        <Text style={Global.Styles.text}>Back</Text>
                     </Touchable>
 
                     {/* QR Border */}

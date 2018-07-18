@@ -3,7 +3,6 @@ import React, { Component } from "react";
 import { View, StyleSheet, StatusBar, Text } from "react-native";
 import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
 import DropdownAlert from 'react-native-dropdownalert';
-import { GlobalStyles } from "../Styles.js";
 import { FadeInView } from "../Animations.js";
 import * as Global from "../Global.js";
 
@@ -28,31 +27,29 @@ export default class IntroScreen extends Component {
         if(this.state.currentState === IntroScreen.StateEnum.First){
             this.setState({currentState: IntroScreen.StateEnum.Second});
         } else if(this.state.currentState === IntroScreen.StateEnum.Second){
-            this.props.navigation.navigate("QR", { title: "Scan QR from the activation page", screenToGoTo: "OTP", URL: "" });
+            this.props.navigation.navigate("QR", { title: "Scan QR from the activation page", success: "Successfully read.", screenToGoTo: "OTP", URL: "" });
         }
     }
 
     // --- Render --- //
     render() {
-        let TouchableRounded = Global.TouchableRounded;
+        let Button = Global.Button;
 
         return(
-            <View style={GlobalStyles.background}>
+            <View style={Global.Styles.background}>
                 <StatusBar barStyle="light-content"/>
                 {/* First State */}
                 {this.state.currentState === IntroScreen.StateEnum.First ?
                     <FadeInView duration="1500">
                         <View style={{ alignItems: "center", justifyContent: "center", marginTop: moderateScale(100) }}>
-                            <Text style={GlobalStyles.boldText}>Welcome</Text>
-                            <Text style={GlobalStyles.boldText}>to</Text>
+                            <Text style={Global.Styles.boldText}>Welcome</Text>
+                            <Text style={Global.Styles.boldText}>to</Text>
                             <FadeInView duration="1500" delay="1500">
-                                <Text style={[GlobalStyles.boldText, {fontSize: moderateScale(25)}]}>ICPSR SmartLogin</Text>
+                                <Text style={[Global.Styles.boldText, {fontSize: moderateScale(25)}]}>ICPSR SmartLogin</Text>
                             </FadeInView>
 
                             <FadeInView duration="1000" delay="3000">
-                                <TouchableRounded onPress={this.onNext} style={[styles.continueButton, {marginTop: moderateScale(200)}]} activeOpacity={Global.BUTTON_ACTIVE_OPACITY} underlayColor="white">
-                                    <Text style={[GlobalStyles.boldText, {fontSize: moderateScale(20, CONTINUE_BUTTON_SCALE)}]}>Continue</Text>
-                                </TouchableRounded>
+                                <Button onPress={this.onNext} style={{marginTop: moderateScale(200)}} text="Continue"/>
                             </FadeInView>
                         </View>
                     </FadeInView>
@@ -61,14 +58,12 @@ export default class IntroScreen extends Component {
                 {this.state.currentState === IntroScreen.StateEnum.Second ?
                     <FadeInView duration="1000">
                         <View style={{ alignItems: "center", justifyContent: "center", marginTop: moderateScale(70) }}>
-                            <Text style={GlobalStyles.text}>To add this device to your account, login to your ICPSR account on your computer and click</Text>
-                            <Text style={GlobalStyles.underlineText}>Register a Device for SmartLogin</Text>
-                            <Text style={[GlobalStyles.text, {marginTop: moderateScale(170)}]}>A QR code should be displayed.</Text>
-                            <Text style={GlobalStyles.text}>Please scan this code</Text>
+                            <Text style={Global.Styles.text}>To add this device to your account, login to your ICPSR account on your computer and click</Text>
+                            <Text style={Global.Styles.underlineText}>Register a Device for SmartLogin</Text>
+                            <Text style={[Global.Styles.text, {marginTop: moderateScale(170)}]}>A QR code should be displayed.</Text>
+                            <Text style={Global.Styles.text}>Please scan this code</Text>
 
-                            <TouchableRounded onPress={this.onNext} style={[styles.continueButton, {marginTop: moderateScale(50)}]} activeOpacity={Global.BUTTON_ACTIVE_OPACITY} underlayColor="white">
-                                <Text style={[GlobalStyles.boldText, {fontSize: moderateScale(20, CONTINUE_BUTTON_SCALE)}]}>QR Scan</Text>
-                            </TouchableRounded>
+                            <Button onPress={this.onNext} style={{marginTop: moderateScale(50)}} text="QR Scan"/>
                         </View>
                     </FadeInView>
                 : false }
