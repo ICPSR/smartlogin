@@ -29,7 +29,7 @@ export default class OTPScreen extends Component {
         // TODO: Need to know how to generate this code.
 
 
-        // TODO: Make a fetch request right here, and have the server respond when the user enters the code???
+        // TODO: Make a GET fetch request right here, and have the server respond when the user enters the code???
 
     }
 

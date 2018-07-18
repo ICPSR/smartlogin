@@ -1,6 +1,6 @@
 import Expo from "expo";
 import React, { Component } from "react";
-import { Alert, Image, Platform, StyleSheet, Text, TextInput, View, StatusBar } from "react-native";
+import { Alert, Image, Platform, ScrollView, StyleSheet, Text, TextInput, View, StatusBar } from "react-native";
 import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
 import DropdownAlert from 'react-native-dropdownalert';
 import { FadeInView } from "../Animations.js";
@@ -91,34 +91,35 @@ export default class MainScreen extends Component {
     render() {
         let TouchableRounded = Global.TouchableRounded;
         return (
-            <View style={Global.Styles.background}>
-                <StatusBar barStyle="light-content"/>
-
+            <View style={{flex: 1}}>
                 {/* Title */}
                 <View style={[Global.Styles.header, { height: verticalScale(100) }]}>
                     <Text style={styles.headerText} adjustsFontSizeToFit={true}>ICPSR</Text>
                 </View>
 
-                {/* Email Display + Main Buttons */}
-                <FadeInView>
-                    <View style={styles.mainButtonContainer}>
-                        <TouchableRounded onPress={this.goToQRScreen_Activation} style={styles.mainButton} activeOpacity={Global.BUTTON_ACTIVE_OPACITY} underlayColor="white">
-                            <View style={{ alignItems: "center", justifyContent: "center" }}>
-                                <Image source={require("../assets/key.png")} style={styles.icon}/>
-                                <Text style={[Global.Styles.boldText, { fontSize: moderateScale(20, MAIN_BUTTON_SCALE) }]}>Link Account</Text>
-                            </View>
-                        </TouchableRounded>
-                        <TouchableRounded onPress={this.attemptFingerprintAuthentication} style={styles.mainButton} activeOpacity={Global.BUTTON_ACTIVE_OPACITY} underlayColor="white">
-                            <View style={{ alignItems: "center", justifyContent: "center" }}>
-                                <Image source={require("../assets/qr.png")} style={styles.icon}/>
-                                <Text style={[Global.Styles.boldText, { fontSize: moderateScale(20, MAIN_BUTTON_SCALE) }]}>QR Login</Text>
-                            </View>
-                        </TouchableRounded>
-                    </View>
-                </FadeInView>
+                <ScrollView style={Global.Styles.background}>
+                    <StatusBar barStyle="light-content"/>
+                    {/* Email Display + Main Buttons */}
+                    <FadeInView>
+                        <View style={styles.mainButtonContainer}>
+                            <TouchableRounded onPress={this.goToQRScreen_Activation} style={styles.mainButton} activeOpacity={Global.BUTTON_ACTIVE_OPACITY} underlayColor="white">
+                                <View style={{ alignItems: "center", justifyContent: "center" }}>
+                                    <Image source={require("../assets/key.png")} style={styles.icon}/>
+                                    <Text style={[Global.Styles.boldText, { fontSize: moderateScale(20, MAIN_BUTTON_SCALE) }]}>Link Account</Text>
+                                </View>
+                            </TouchableRounded>
+                            <TouchableRounded onPress={this.attemptFingerprintAuthentication} style={styles.mainButton} activeOpacity={Global.BUTTON_ACTIVE_OPACITY} underlayColor="white">
+                                <View style={{ alignItems: "center", justifyContent: "center" }}>
+                                    <Image source={require("../assets/qr.png")} style={styles.icon}/>
+                                    <Text style={[Global.Styles.boldText, { fontSize: moderateScale(20, MAIN_BUTTON_SCALE) }]}>QR Login</Text>
+                                </View>
+                            </TouchableRounded>
+                        </View>
+                    </FadeInView>
 
-                {/* Dropdown Alerts */}
-                <DropdownAlert ref={ref => (this.dropdown = ref)}/>
+                    {/* Dropdown Alerts */}
+                    <DropdownAlert ref={ref => (this.dropdown = ref)}/>
+                </ScrollView>
             </View>
         );
     }
