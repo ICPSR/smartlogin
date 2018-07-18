@@ -8,9 +8,6 @@ import Touchable from 'react-native-platform-touchable';
 import { FadeInView } from "../Animations.js";
 import * as Global from "../Global.js";
 
-
-const CONTINUE_BUTTON_SCALE = 0.2;
-
 // --- Intro Screen --- //
 export default class IntroScreen extends Component {
     // Enum used for handling state
@@ -65,7 +62,7 @@ export default class IntroScreen extends Component {
                 {/* Second State */}
                 {this.state.currentState === IntroScreen.StateEnum.Second ?
                     <FadeInView duration="1000">
-                        <View style={{ alignItems: "center", justifyContent: "center", marginTop: moderateScale(70) }}>
+                        <View style={{ alignItems: "center", justifyContent: "center", marginTop: moderateScale(50) }}>
                             <Text style={Global.Styles.text}>To add this device to an account, login to your ICPSR account on your computer and click</Text>
                             <Text style={Global.Styles.underlineText}>Register a Device for SmartLogin</Text>
                             <Text style={[Global.Styles.text, {marginTop: moderateScale(165)}]}>A QR code should be displayed.</Text>
@@ -74,7 +71,7 @@ export default class IntroScreen extends Component {
                             <Button onPress={this.onNext} style={{marginTop: moderateScale(50)}} text="QR Scan"/>
                         </View>
 
-                        {backButton === "true" ?
+                        {backButton ?
                             <Touchable onPress={this.onBack} style={{ position: "absolute", marginTop: verticalScale(600), marginLeft: moderateScale(15) }} activeOpacity={Global.BUTTON_ACTIVE_OPACITY} underlayColor="white">
                                 <Text style={Global.Styles.underlineText}>Back</Text>
                             </Touchable>
@@ -95,12 +92,5 @@ export default class IntroScreen extends Component {
 
 // --- Intro Page Styles --- //
 export const styles = StyleSheet.create({
-    continueButton: {
-        backgroundColor: "teal",
-        width: moderateScale(200, CONTINUE_BUTTON_SCALE),
-        height: moderateScale(60, CONTINUE_BUTTON_SCALE),
-        alignItems: "center",
-        justifyContent: "center",
-        borderRadius: scale(30),
-    },
+
 });
