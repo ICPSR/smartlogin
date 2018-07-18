@@ -1,6 +1,6 @@
 import Expo, { AppLoading } from "expo";
 import React, { Component } from "react";
-import { Dimensions, Platform, View } from "react-native";
+import { AsyncStorage, Dimensions, Platform, View } from "react-native";
 import { createStackNavigator } from "react-navigation";
 
 // Screens
@@ -8,6 +8,7 @@ import IntroScreen from "./screens/IntroScreen.js";
 import MainScreen from "./screens/MainScreen.js";
 import QRScreen from "./screens/QRScreen.js";
 import OTPScreen from "./screens/OTPScreen.js";
+
 
 // --- App Export --- //
 export default class App extends Component {
@@ -43,7 +44,7 @@ export default class App extends Component {
     }
 
     // Loads resources
-    async loadResources(){
+    loadResources = async () => {
         // Load fonts
         const fontPromise = Expo.Font.loadAsync({
             'Behatrice-Regular': require('./assets/fonts/Behatrice-Regular.ttf'),
@@ -57,20 +58,28 @@ export default class App extends Component {
         ];
         const imagePromise = images.map((image) => Expo.Asset.fromModule(image).downloadAsync());
 
+        // Configure the RootStack based on the state of the app.
+        const stackPromise = new Promise(async (resolve, reject) => {
+            const screens = {
+                Intro: IntroScreen,
+                Main: MainScreen,
+                QR: QRScreen,
+                OTP: OTPScreen,
+            }
+            try {
+                const isLinked = await AsyncStorage.getItem("@AccountLinked");
+                if(isLinked === null){
+                    RootStack = createStackNavigator(screens, { initialRouteName: "Intro" });
+                } else {
+                    RootStack = createStackNavigator(screens, { initialRouteName: "Main" });
+                }
+                resolve();
+            } catch(error) {
+                reject("Error getting data: " + error);
+            }
+        });
+
         // Return promises
-        return Promise.all([ fontPromise, imagePromise ]);
+        return Promise.all([ fontPromise, imagePromise, stackPromise ]);
     }
 }
-
-// Stack Navigator
-const RootStack = createStackNavigator(
-    {
-        Intro: IntroScreen,
-        Main: MainScreen,
-        QR: QRScreen,
-        OTP: OTPScreen,
-    },
-    {
-        initialRouteName: "Intro",
-    }
-);
