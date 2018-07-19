@@ -92,13 +92,13 @@ export default class MainScreen extends Component {
         return (
             <View style={{flex: 1}}>
                 {/* Title */}
-                <View style={[Global.Styles.header, { height: verticalScale(100) }]}>
+                <View style={Global.Styles.header}>
                     <Text style={styles.headerText} adjustsFontSizeToFit={true}>ICPSR</Text>
                 </View>
 
                 <ScrollView style={Global.Styles.background}>
                     <StatusBar barStyle="light-content"/>
-                    {/* Email Display + Main Buttons */}
+                    {/* Main Buttons */}
                     <FadeInView>
                         <View style={styles.mainButtonContainer}>
                             <TouchableRounded onPress={this.goToQRScreen_Activation} style={styles.mainButton} activeOpacity={Global.BUTTON_ACTIVE_OPACITY} underlayColor="white">
@@ -133,18 +133,18 @@ export default class MainScreen extends Component {
 export const styles = StyleSheet.create({
     headerText: {
         fontFamily: "Behatrice-Regular",
-        fontSize: moderateScale(100),
+        fontSize: moderateScale(80),
         paddingLeft: 10,
         fontWeight: 'bold',
-        color: "white",
+        color: Global.TextColor,
     },
     mainButtonContainer: {
-        marginTop: moderateScale(350, 0.4),
+        marginTop: moderateScale(370, 0.4),
         flexDirection: "row",
         justifyContent: "space-around"
     },
     mainButton: {
-        backgroundColor: "teal",
+        backgroundColor: Global.ForegroundColor,
         width: moderateScale(150, MAIN_BUTTON_SCALE),
         height: moderateScale(150, MAIN_BUTTON_SCALE),
         borderRadius: moderateScale(30),

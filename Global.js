@@ -10,9 +10,8 @@ import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
 // Opacity of buttons when they're pressed down.
 export const BUTTON_ACTIVE_OPACITY = 0.6;
 
-// The colors used for several ui elements.
-export const COLOR_OFFWHITE = "#d0d7d8";
-
+// Turns on and off certain components used for debugging only.
+export const DEBUG_COMPONENTS = false;
 
 // Components //
 // A rounded button component that automatically chooses between TouchableOpacity for iOS and TouchableNativeFeedback for Android
@@ -93,36 +92,44 @@ export async function fetchWithTimeout(URL, init){
 
 
 // Styles //
+export const BackgroundColor = "#005050";   // Midnight Green / Eagle Green
+export const ForegroundColor = "#008080";   // Teal
+export const TextColor = "#ffffff";         // White
+export const HighlightColor_1 = "#00a9a5";  // Persian Green
+export const HighlightColor_2 = "#8fbfe0";  // Dark Sky Blue
+export const HighlightColor_3 = "#20bf55";  // Clover Green
+export const HighlightColor_4 = "#50514f";  // Dark Liver (Dark Highlight)
+
 export const Styles = StyleSheet.create({
     background: {
         flex: 1,
-        paddingTop: Constants.statusBarHeight,
-        backgroundColor: "#005050",
+        backgroundColor: BackgroundColor,
     },
     header: {
-        backgroundColor: "teal",
+        backgroundColor: ForegroundColor,
         alignItems: "center",
         justifyContent: "center",
+        paddingTop: Constants.statusBarHeight,
     },
     text: {
         fontSize: moderateScale(18),
         padding: moderateScale(10),
-        color: "white",
+        color: TextColor,
     },
     boldText: {
         fontSize: moderateScale(20),
         padding: moderateScale(10),
-        color: "white",
+        color: TextColor,
         fontWeight: 'bold',
     },
     underlineText: {
         fontSize: moderateScale(18),
         padding: moderateScale(10),
-        color: "white",
+        color: TextColor,
         textDecorationLine: "underline",
     },
     button: {
-        backgroundColor: "teal",
+        backgroundColor: ForegroundColor,
         minWidth: moderateScale(200, 0.2),
         height: moderateScale(60, 0.2),
         alignItems: "center",

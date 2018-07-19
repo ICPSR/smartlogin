@@ -12,9 +12,6 @@ import * as Global from "../Global.js";
 // UUID version used by ICPSR website
 const UUID_VERSION = 4;
 
-// Shortcut -> makes any qr read valid and continues, makes no POST request.
-const DEBUG_SHORTCUT_QR_READ = true;
-
 // --- QR Screen --- //
 export default class QRScreen extends Component{
     // --- Instance Variables --- //
@@ -84,14 +81,6 @@ export default class QRScreen extends Component{
         console.log("QR Scanned:");
         console.log(code.data);
         console.log("---------------");
-
-        if(DEBUG_SHORTCUT_QR_READ){
-            this.dropdown.alertWithType("success", "Success!", success);
-            await Global.delay(3000);
-            this.onContinue();
-            this.isProcessingQR = false;
-            return;
-        }
 
         // Make a POST request to the url if it's valid
         if(isUUID(code.data, UUID_VERSION)){
@@ -165,7 +154,7 @@ export default class QRScreen extends Component{
                     <StatusBar barStyle="light-content"/>
 
                     {/* Header */}
-                    <View style={[Global.Styles.header, { paddingTop: Expo.Constants.statusBarHeight }]}>
+                    <View style={Global.Styles.header}>
                         <Text style={Global.Styles.text}>{title}</Text>
                     </View>
 
@@ -183,9 +172,11 @@ export default class QRScreen extends Component{
                     </Touchable>
 
                     {/* DEBUG ONLY: Skip */}
-                    <Touchable style={[styles.backButton, { marginLeft: scale(210) }]} onPress={this.onContinue} activeOpacity={Global.BUTTON_ACTIVE_OPACITY} underlayColor="white" foreground={Touchable.Ripple("#fff", true)}>
-                        <Text style={Global.Styles.text}>DEBUG: Skip</Text>
-                    </Touchable>
+                    { Global.DEBUG_COMPONENTS ?
+                        <Touchable style={[styles.backButton, { marginLeft: scale(210) }]} onPress={this.onContinue} activeOpacity={Global.BUTTON_ACTIVE_OPACITY} underlayColor="white" foreground={Touchable.Ripple("#fff", true)}>
+                            <Text style={Global.Styles.text}>DEBUG: Skip</Text>
+                        </Touchable>
+                    : null }
 
                     {/* Dropdown Alerts */}
                     <DropdownAlert ref={ref => (this.dropdown = ref)}/>
@@ -205,7 +196,7 @@ export default class QRScreen extends Component{
 export const styles = StyleSheet.create({
     backButton:{
         position: "absolute",
-        backgroundColor: "#605f5e",
+        backgroundColor: Global.HighlightColor_4,
         marginTop: verticalScale(615),
         marginLeft: moderateScale(15),
         borderWidth: scale(2),

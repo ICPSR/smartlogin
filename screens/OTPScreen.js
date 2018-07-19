@@ -63,20 +63,22 @@ export default class OTPScreen extends Component {
             <View style={Global.Styles.background}>
                 <StatusBar barStyle="light-content"/>
                 {/* Verifying */}
-                {this.state.currentState === OTPScreen.StateEnum.Verifying ?
+                { this.state.currentState === OTPScreen.StateEnum.Verifying ?
                     <View style={{ alignItems: "center", justifyContent: "center", marginTop: moderateScale(100) }}>
                         <Text style={Global.Styles.boldText}>One Last Step...</Text>
 
                         <Text style={Global.Styles.text}>{"To verify it's really you, please enter the code below into the ICPSR website:"}</Text>
                         <Text style={[Global.Styles.text, {fontSize: moderateScale(25), marginTop: moderateScale(100)}]}>{this.OTP}</Text>
 
-                        <View style={{marginTop: moderateScale(50)}}>
-                            <Button onPress={this.onVerified} text="DEBUG: Skip"/>
-                        </View>
+                        { Global.DEBUG_COMPONENTS ?
+                            <View style={{marginTop: moderateScale(50)}}>
+                                <Button onPress={this.onVerified} text="DEBUG: Skip"/>
+                            </View>
+                        : null }
                     </View>
-                : false }
+                : null }
                 {/* Verified */}
-                {this.state.currentState === OTPScreen.StateEnum.Verified ?
+                { this.state.currentState === OTPScreen.StateEnum.Verified ?
                     <View style={{ alignItems: "center", justifyContent: "center", marginTop: moderateScale(100) }}>
                         <FadeInView duration="1000">
                             <Text style={Global.Styles.boldText}>All Done!</Text>
@@ -86,14 +88,18 @@ export default class OTPScreen extends Component {
                                 Your device is now linked with your ICPSR account!
                             </Text>
                             <Text style={[Global.Styles.text, {marginTop: moderateScale(10)}]}>
-                                To login using SmartLogin, simply select QR Scan on the main app screen and scan the code on the MyData login page.
+                                {"To login using SmartLogin, simply select "}
+                                <Text style={[Global.Styles.boldText, {fontSize: moderateScale(18), color: Global.HighlightColor_1}]}>
+                                    QR Login
+                                </Text>
+                                {" on the main app screen and scan the code on the MyData login page."}
                             </Text>
                         </FadeInView>
                         <FadeInView duration="500" delay="2000" style={{marginTop: moderateScale(50)}}>
                             <Button onPress={this.onDone} text="Finished"/>
                         </FadeInView>
                     </View>
-                : false }
+                : null }
 
             </View>
         );
@@ -110,7 +116,7 @@ export default class OTPScreen extends Component {
 // --- OTP Page Styles --- //
 export const styles = StyleSheet.create({
     continueButton: {
-        backgroundColor: "teal",
+        backgroundColor: Global.ForegroundColor,
         width: moderateScale(200, .2),
         height: moderateScale(60, .2),
         alignItems: "center",
