@@ -1,9 +1,10 @@
 import Expo from "expo";
 import React, { Component } from "react";
-import { AsyncStorage, View, StyleSheet, StatusBar, Text } from "react-native";
+import { Alert, AsyncStorage, View, StyleSheet, StatusBar, Text } from "react-native";
 import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
 import DropdownAlert from 'react-native-dropdownalert';
 import { StackActions, NavigationActions } from 'react-navigation';
+import Touchable from 'react-native-platform-touchable';
 import { FadeInView } from "../Animations.js";
 import * as Global from "../Global.js";
 
@@ -54,6 +55,16 @@ export default class OTPScreen extends Component {
         this.props.navigation.dispatch(reset);
     }
 
+    // Called if the user presses the cancel button here.
+    onCancel = () => {
+        Alert.alert("Cancel Registration", "Are you sure you want to cancel the Smart Login activation process?",
+        [
+            {text: "Yes", onPress: () => { this.props.navigation.popToTop(); }},
+            {text: "Nevermind", onPress: () => {  }, style: "cancel"},
+        ]
+        );
+    }
+
 
     // --- Render --- //
     render() {
@@ -69,6 +80,10 @@ export default class OTPScreen extends Component {
 
                         <Text style={Global.Styles.text}>{"To verify it's really you, please enter the code below into the ICPSR website:"}</Text>
                         <Text style={[Global.Styles.text, {fontSize: moderateScale(25), marginTop: moderateScale(100)}]}>{this.OTP}</Text>
+
+                        <Touchable onPress={this.onCancel} style={{ marginTop: moderateScale(100) }} activeOpacity={Global.BUTTON_ACTIVE_OPACITY} underlayColor="white">
+                            <Text style={Global.Styles.underlineText}>Cancel</Text>
+                        </Touchable>
 
                         { Global.DEBUG_COMPONENTS ?
                             <View style={{marginTop: moderateScale(50)}}>
