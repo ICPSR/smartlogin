@@ -12,12 +12,12 @@ const REAUTH_TIMER = 120 * 1000;
 
 // The moderate scale value passed in for the Link Account/QR Login buttons.
 // Increase this to make the buttons bigger on larger devices.
-const MAIN_BUTTON_SCALE = 0.6;
+const HOME_BUTTON_SCALE = 0.6;
 
 
 
-// --- Main Screen --- //
-export default class MainScreen extends Component {
+// --- Home Screen --- //
+export default class HomeScreen extends Component {
     // --- Instance Variables --- //
     // Has the user recently authenticated?
     HasRecentlyAuthenticated = false;
@@ -91,26 +91,27 @@ export default class MainScreen extends Component {
         let TouchableRounded = Global.TouchableRounded;
         return (
             <View style={{flex: 1}}>
+                <StatusBar barStyle="light-content"/>
+
                 {/* Title */}
                 <View style={Global.Styles.header}>
                     <Text style={styles.headerText} adjustsFontSizeToFit={true}>ICPSR</Text>
                 </View>
 
                 <ScrollView style={Global.Styles.background}>
-                    <StatusBar barStyle="light-content"/>
-                    {/* Main Buttons */}
+                    {/* Home Buttons */}
                     <FadeInView>
-                        <View style={styles.mainButtonContainer}>
-                            <TouchableRounded onPress={this.goToQRScreen_Activation} style={styles.mainButton} activeOpacity={Global.BUTTON_ACTIVE_OPACITY} underlayColor="white">
+                        <View style={styles.homeButtonContainer}>
+                            <TouchableRounded onPress={this.goToQRScreen_Activation} style={styles.homeButton} activeOpacity={Global.BUTTON_ACTIVE_OPACITY} underlayColor="white">
                                 <View style={{ alignItems: "center", justifyContent: "center" }}>
                                     <Image source={require("../assets/key.png")} style={styles.icon}/>
-                                    <Text style={[Global.Styles.boldText, { fontSize: moderateScale(20, MAIN_BUTTON_SCALE) }]}>Link Account</Text>
+                                    <Text style={[Global.Styles.boldText, { fontSize: moderateScale(20, HOME_BUTTON_SCALE) }]}>Link Account</Text>
                                 </View>
                             </TouchableRounded>
-                            <TouchableRounded onPress={this.attemptFingerprintAuthentication} style={styles.mainButton} activeOpacity={Global.BUTTON_ACTIVE_OPACITY} underlayColor="white">
+                            <TouchableRounded onPress={this.attemptFingerprintAuthentication} style={styles.homeButton} activeOpacity={Global.BUTTON_ACTIVE_OPACITY} underlayColor="white">
                                 <View style={{ alignItems: "center", justifyContent: "center" }}>
                                     <Image source={require("../assets/qr.png")} style={styles.icon}/>
-                                    <Text style={[Global.Styles.boldText, { fontSize: moderateScale(20, MAIN_BUTTON_SCALE) }]}>QR Login</Text>
+                                    <Text style={[Global.Styles.boldText, { fontSize: moderateScale(20, HOME_BUTTON_SCALE) }]}>QR Login</Text>
                                 </View>
                             </TouchableRounded>
                         </View>
@@ -129,7 +130,7 @@ export default class MainScreen extends Component {
     };
 }
 
-// --- Main Page Styles --- //
+// --- Home Page Styles --- //
 export const styles = StyleSheet.create({
     headerText: {
         fontFamily: "Behatrice-Regular",
@@ -138,19 +139,19 @@ export const styles = StyleSheet.create({
         fontWeight: 'bold',
         color: Global.TextColor,
     },
-    mainButtonContainer: {
+    homeButtonContainer: {
         marginTop: moderateScale(370, 0.4),
         flexDirection: "row",
         justifyContent: "space-around"
     },
-    mainButton: {
+    homeButton: {
         backgroundColor: Global.ForegroundColor,
-        width: moderateScale(150, MAIN_BUTTON_SCALE),
-        height: moderateScale(150, MAIN_BUTTON_SCALE),
+        width: moderateScale(150, HOME_BUTTON_SCALE),
+        height: moderateScale(150, HOME_BUTTON_SCALE),
         borderRadius: moderateScale(30),
     },
     icon: {
-        width: moderateScale(100, MAIN_BUTTON_SCALE),
-        height: moderateScale(100, MAIN_BUTTON_SCALE)
+        width: moderateScale(100, HOME_BUTTON_SCALE),
+        height: moderateScale(100, HOME_BUTTON_SCALE)
     },
 });

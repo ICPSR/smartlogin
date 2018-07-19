@@ -5,7 +5,7 @@ import { createStackNavigator } from "react-navigation";
 
 // Screens
 import IntroScreen from "./screens/IntroScreen.js";
-import MainScreen from "./screens/MainScreen.js";
+import HomeScreen from "./screens/HomeScreen.js";
 import QRScreen from "./screens/QRScreen.js";
 import OTPScreen from "./screens/OTPScreen.js";
 
@@ -62,7 +62,7 @@ export default class App extends Component {
         const stackPromise = new Promise(async (resolve, reject) => {
             const screens = {
                 Intro: IntroScreen,
-                Main: MainScreen,
+                Home: HomeScreen,
                 QR: QRScreen,
                 OTP: OTPScreen,
             }
@@ -71,7 +71,7 @@ export default class App extends Component {
                 if(isLinked === null){
                     RootStack = createStackNavigator(screens, { initialRouteName: "Intro" });
                 } else {
-                    RootStack = createStackNavigator(screens, { initialRouteName: "Main" });
+                    RootStack = createStackNavigator(screens, { initialRouteName: "Home" });
                 }
                 resolve();
             } catch(error) {

@@ -63,7 +63,7 @@ export default class QRScreen extends Component{
         }
     }
 
-    // Goes back to the main screen.
+    // Goes back to the home screen.
     onBack = () => {
         this.props.navigation.goBack();
     }

@@ -35,7 +35,7 @@ export default class OTPScreen extends Component {
 
     // Called when the user successfully entered the OTP to the website
     onVerified = async () => {
-        // Mark this device as one with a linked account, used to start app on main screen instead.
+        // Mark this device as one with a linked account, used to start app on home screen instead.
         try{
             await AsyncStorage.setItem("@AccountLinked", "true");
         } catch(error) {
@@ -44,12 +44,12 @@ export default class OTPScreen extends Component {
         this.setState({currentState: OTPScreen.StateEnum.Verified});
     }
 
-    // Called after the user presses the MoveToMain button
+    // Called after the user presses the Finished button
     onDone = () => {
         // Recreate navigation stack.
         const reset = StackActions.reset({
             index: 0,
-            actions: [NavigationActions.navigate({ routeName: "Main" })]
+            actions: [NavigationActions.navigate({ routeName: "Home" })]
         });
         this.props.navigation.dispatch(reset);
     }
@@ -92,7 +92,7 @@ export default class OTPScreen extends Component {
                                 <Text style={[Global.Styles.boldText, {fontSize: moderateScale(18), color: Global.HighlightColor_1}]}>
                                     QR Login
                                 </Text>
-                                {" on the main app screen and scan the code on the MyData login page."}
+                                {" on the home screen and scan the code on the MyData login page."}
                             </Text>
                         </FadeInView>
                         <FadeInView duration="500" delay="2000" style={{marginTop: moderateScale(50)}}>

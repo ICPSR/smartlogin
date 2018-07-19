@@ -11,7 +11,7 @@ import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
 export const BUTTON_ACTIVE_OPACITY = 0.6;
 
 // Turns on and off certain components used for debugging only.
-export const DEBUG_COMPONENTS = false;
+export const DEBUG_COMPONENTS = true;
 
 // Components //
 // A rounded button component that automatically chooses between TouchableOpacity for iOS and TouchableNativeFeedback for Android
