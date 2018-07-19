@@ -152,7 +152,7 @@ export default class QRScreen extends Component{
                         <Text style={[Global.Styles.text, { fontSize: moderateScale(13) } ]}>Please give the app permissions to use the camera.</Text>
                     </View>
                     {/* Back Button */}
-                    <Touchable style={styles.backButton} onPress={this.onBack} activeOpacity={Global.BUTTON_ACTIVE_OPACITY} underlayColor="white">
+                    <Touchable style={styles.backButton} onPress={this.onBack} activeOpacity={Global.BUTTON_ACTIVE_OPACITY} underlayColor="white" foreground={Touchable.Ripple("#fff", true)}>
                         <Text style={Global.Styles.text}>Back</Text>
                     </Touchable>
                 </View>
@@ -172,15 +172,20 @@ export default class QRScreen extends Component{
                     {/* Camera */}
                     <Camera style={{ flex: 1 }} type={this.state.type} barCodeTypes={[Camera.Constants.BarCodeType.qr]} onBarCodeRead={this.onQRRead}/>
 
+                    {/* QR Border */}
+                    <View style={{position: "absolute", alignSelf: "center", marginTop: verticalScale(250)}}>
+                        <Image source={require("../assets/qr_border.png")} style={{width: moderateScale(175), height: moderateScale(175)}}/>
+                    </View>
+
                     {/* Back Button */}
-                    <Touchable style={styles.backButton} onPress={this.onBack} activeOpacity={Global.BUTTON_ACTIVE_OPACITY} underlayColor="white">
+                    <Touchable style={styles.backButton} onPress={this.onBack} activeOpacity={Global.BUTTON_ACTIVE_OPACITY} underlayColor="white" foreground={Touchable.Ripple("#fff", true)}>
                         <Text style={Global.Styles.text}>Back</Text>
                     </Touchable>
 
-                    {/* QR Border */}
-                    <View style={{position: "absolute", alignSelf: "center", marginTop: "65%"}}>
-                        <Image source={require("../assets/qr_border.png")} style={{width: scale(175), height: scale(175)}}/>
-                    </View>
+                    {/* DEBUG ONLY: Skip */}
+                    <Touchable style={[styles.backButton, { marginLeft: scale(210) }]} onPress={this.onContinue} activeOpacity={Global.BUTTON_ACTIVE_OPACITY} underlayColor="white" foreground={Touchable.Ripple("#fff", true)}>
+                        <Text style={Global.Styles.text}>DEBUG: Skip</Text>
+                    </Touchable>
 
                     {/* Dropdown Alerts */}
                     <DropdownAlert ref={ref => (this.dropdown = ref)}/>

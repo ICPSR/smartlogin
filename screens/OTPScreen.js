@@ -70,7 +70,9 @@ export default class OTPScreen extends Component {
                         <Text style={Global.Styles.text}>{"To verify it's really you, please enter the code below into the ICPSR website:"}</Text>
                         <Text style={[Global.Styles.text, {fontSize: moderateScale(25), marginTop: moderateScale(100)}]}>{this.OTP}</Text>
 
-                        <Button onPress={this.onVerified} style={{marginTop: moderateScale(50)}} text="DEBUG: Skip"/>
+                        <View style={{marginTop: moderateScale(50)}}>
+                            <Button onPress={this.onVerified} text="DEBUG: Skip"/>
+                        </View>
                     </View>
                 : false }
                 {/* Verified */}
@@ -87,8 +89,8 @@ export default class OTPScreen extends Component {
                                 To login using SmartLogin, simply select QR Scan on the main app screen and scan the code on the MyData login page.
                             </Text>
                         </FadeInView>
-                        <FadeInView duration="500" delay="2000">
-                            <Button onPress={this.onDone} style={{marginTop: moderateScale(50)}} text="Finished"/>
+                        <FadeInView duration="500" delay="2000" style={{marginTop: moderateScale(50)}}>
+                            <Button onPress={this.onDone} text="Finished"/>
                         </FadeInView>
                     </View>
                 : false }

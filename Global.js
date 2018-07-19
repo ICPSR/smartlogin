@@ -20,7 +20,6 @@ export const COLOR_OFFWHITE = "#d0d7d8";
 // Requires there to be only a single child.
 export class TouchableRounded extends Component {
     render() {
-        let radius = StyleSheet.flatten(this.props.style).borderRadius;
         if(Platform.OS === "ios"){
             return (
                 <Touchable {...this.props}>
@@ -28,6 +27,7 @@ export class TouchableRounded extends Component {
                 </Touchable>
             );
         } else {
+            let radius = StyleSheet.flatten(this.props.style).borderRadius;
             return (
                 <View style={{ borderRadius: radius, overflow: 'hidden' }}>
                     <Touchable {...this.props} foreground={Touchable.Ripple("#fff", true)}>
@@ -123,10 +123,10 @@ export const Styles = StyleSheet.create({
     },
     button: {
         backgroundColor: "teal",
-        width: moderateScale(200, 0.2),
+        minWidth: moderateScale(200, 0.2),
         height: moderateScale(60, 0.2),
         alignItems: "center",
         justifyContent: "center",
-        borderRadius: scale(30),
+        borderRadius: moderateScale(30, 0.2),
     },
 });

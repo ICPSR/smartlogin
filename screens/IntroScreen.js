@@ -53,8 +53,8 @@ export default class IntroScreen extends Component {
                                 <Text style={[Global.Styles.boldText, {fontSize: moderateScale(25)}]}>ICPSR SmartLogin</Text>
                             </FadeInView>
 
-                            <FadeInView duration="1000" delay="3000">
-                                <Button onPress={this.onNext} style={{marginTop: moderateScale(200)}} text="Continue"/>
+                            <FadeInView duration="1000" delay="3000" style={{marginTop: moderateScale(200)}}>
+                                <Button onPress={this.onNext} text="Continue"/>
                             </FadeInView>
                         </View>
                     </FadeInView>
@@ -68,7 +68,9 @@ export default class IntroScreen extends Component {
                             <Text style={[Global.Styles.text, {marginTop: moderateScale(165)}]}>A QR code should be displayed.</Text>
                             <Text style={Global.Styles.text}>Please scan this code</Text>
 
-                            <Button onPress={this.onNext} style={{marginTop: moderateScale(50)}} text="QR Scan"/>
+                            <View style={{ marginTop: moderateScale(50) }}>
+                                <Button onPress={this.onNext} text="QR Scan"/>
+                            </View>
                         </View>
 
                         {backButton ?
