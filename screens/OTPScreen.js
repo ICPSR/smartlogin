@@ -27,7 +27,11 @@ export default class OTPScreen extends Component {
 
     // --- OnComponentMount --- //
     onComponentMount(){
-        // TODO: Need to know how to generate this code.
+        let response = navigation.getParam("response", null);
+        if(response === null) console.log("No Response Recieved");
+
+        // TODO: Get code from response.
+        OTP = response.ok;
 
 
         // TODO: Make a GET fetch request right here, and have the server respond when the user enters the code???

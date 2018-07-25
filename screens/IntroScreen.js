@@ -27,13 +27,54 @@ export default class IntroScreen extends Component {
         if(this.state.currentState === IntroScreen.StateEnum.First){
             this.setState({currentState: IntroScreen.StateEnum.Second});
         } else if(this.state.currentState === IntroScreen.StateEnum.Second){
-            this.props.navigation.navigate("QR", { title: "Scan QR from the activation page", success: "Successfully read.", screenToGoTo: "OTP", URL: "" });
+            this.props.navigation.navigate("QR", { title: "Scan QR from the activation page", qrCallback: this.onQRRead });
         }
     }
 
+    // Goes back a screen.
     onBack = () => {
         this.props.navigation.goBack();
     }
+
+    // Callback for the QR screen when a code has been read
+    onQRRead = async (code) => {
+        // TODO: This should handle some different stuff.
+
+        if(isUUID(code.data, UUID_VERSION)){
+            try{
+                let URL = "http://192.168.145.106:8080/pcms/mydata/smartlogin/authorize/";
+                console.log("Sending user info to: " + URL + userID + "/" + code.data);
+                let response = await Global.fetchWithTimeout(URL + userID + "/" + code.data, {
+                    method: "POST",
+                    headers:{
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        sessionID: code.data,
+                        userId: userID
+                    }),
+                });
+                console.log("Response Recieved:");
+                console.log(response);
+                // On Success
+                if(response.ok){
+                    this.dropdown.alertWithType("success", "Success!", "Successfully read.");
+                    await Global.delay(2000);
+                    this.props.navigation.navigate("OTP", { response: response });
+                } else {
+                    throw new Error("Network error: Status - " + response.status);
+                }
+            } catch(error) {
+                this.dropdown.alertWithType("error", "Try Again - Network Error", "Something went wrong! Please check your internet connection and try again.");
+                console.log("Network Error Message: " + error);
+                await Global.delay(2000);
+            }
+        } else {
+            this.dropdown.alertWithType("error", "Try Again - Bad QR Code", "The QR code read was not from the ICPSR website's activation page.");
+            await Global.delay(2000);
+        }
+    }
+
 
     // --- Render --- //
     render() {

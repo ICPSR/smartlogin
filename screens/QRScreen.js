@@ -18,13 +18,6 @@ export default class QRScreen extends Component{
     // The text on the header.
     title = "";
 
-    // The screen to navigate to after reading the QR screen.
-    // Calls navigation.goBack() if this is the empty string.
-    screenToGoTo = "";
-
-    // The URL pattern used.
-    URL = "";
-
     // Are we in the middle of processing a QR scan?
     isProcessingQR = false;
 
@@ -43,9 +36,6 @@ export default class QRScreen extends Component{
     async componentDidMount(){
         // Get nagivation params
         title = this.props.navigation.getParam("title", "TITLE MISSING");
-        success = this.props.navigation.getParam("success", "SUCCESS MESSAGE MISSING");
-        screenToGoTo = this.props.navigation.getParam("screenToGoTo", "SCREEN MISSING");
-        URL = this.props.navigation.getParam("URL", "URL MISSING");
 
         // Get camera permissions
         const { status } = await Expo.Permissions.askAsync(Expo.Permissions.CAMERA);
@@ -54,10 +44,10 @@ export default class QRScreen extends Component{
 
 
     // --- Callbacks --- //
-    // Continues to the next screen, or goes back.
-    onContinue = () => {
-        if(screenToGoTo !== ""){
-            this.props.navigation.navigate(screenToGoTo);
+    // Continues to the next screen, or goes back. Used only for the Debug Skip button.
+    DEBUGONLY_onContinue = () => {
+        if(title === "Scan QR from the activation page"){
+            this.props.navigation.navigate("OTP", { response: null });
         } else {
             this.onBack();
         }
@@ -75,53 +65,14 @@ export default class QRScreen extends Component{
             return;
         }
         this.isProcessingQR = true;
-
-        // Networking
         console.log("---------------");
         console.log("QR Scanned:");
         console.log(code.data);
         console.log("---------------");
-
-        // Make a POST request to the url if it's valid
-        if(isUUID(code.data, UUID_VERSION)){
-            try{
-                console.log("Sending user info to: " + URL + userID + "/" + code.data);
-
-                let response = await Global.fetchWithTimeout(URL + userID + "/" + code.data, {
-                    method: "POST",
-                    headers:{
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({
-                        sessionID: code.data,
-                        userId: userID
-                    }),
-                });
-
-                console.log("Response Recieved:");
-                console.log(response);
-
-                // On Success
-                if(response.ok){
-                    this.dropdown.alertWithType("success", "Success!", success);
-                    await Global.delay(3000);
-                    this.onContinue();
-                    this.isProcessingQR = false;
-                } else {
-                    throw new Error("Network error: Status - " + response.status);
-                }
-            } catch(error) {
-                this.dropdown.alertWithType("error", "Try Again - Network Error", "Something went wrong! Please check your internet connection and try again.");
-                console.log("Network Error Message: " + error);
-                await Global.delay(2000);
-                this.isProcessingQR = false;
-            }
-        } else {
-            // Try again on failure.
-            this.dropdown.alertWithType("error", "Try Again - Bad QR Code", "The QR code read was not from the ICPSR website's login page.");
-            await Global.delay(2000);
-            this.isProcessingQR = false;
-        }
+        // Callback
+        let qrCallback = this.props.navigation.getParam("qrCallback", null);
+        await qrCallback(code);
+        this.isProcessingQR = false;
     }
 
 
@@ -173,7 +124,7 @@ export default class QRScreen extends Component{
 
                     {/* DEBUG ONLY: Skip */}
                     { Global.DEBUG_COMPONENTS ?
-                        <Touchable style={[styles.backButton, { marginLeft: scale(210) }]} onPress={this.onContinue} activeOpacity={Global.BUTTON_ACTIVE_OPACITY} underlayColor="white" foreground={Touchable.Ripple("#fff", true)}>
+                        <Touchable style={[styles.backButton, { marginLeft: scale(210) }]} onPress={this.DEBUGONLY_onContinue} activeOpacity={Global.BUTTON_ACTIVE_OPACITY} underlayColor="white" foreground={Touchable.Ripple("#fff", true)}>
                             <Text style={Global.Styles.text}>DEBUG: Skip</Text>
                         </Touchable>
                     : null }
