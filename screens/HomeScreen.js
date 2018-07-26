@@ -172,7 +172,7 @@ export default class HomeScreen extends Component {
 // --- Home Page Styles --- //
 export const styles = StyleSheet.create({
     headerText: {
-        fontFamily: "Behatrice-Regular",
+        fontFamily: "BEHATRICE",
         fontSize: moderateScale(80),
         paddingLeft: 10,
         fontWeight: 'bold',

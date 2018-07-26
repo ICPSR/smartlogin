@@ -47,7 +47,7 @@ export default class App extends Component {
     loadResources = async () => {
         // Load fonts
         const fontPromise = Expo.Font.loadAsync({
-            'Behatrice-Regular': require('./assets/fonts/Behatrice-Regular.ttf'),
+            'BEHATRICE': require('./assets/fonts/BEHATRICE.ttf'),
         });
 
         // Load images
