@@ -5,12 +5,8 @@ import { StackNavigator } from "react-navigation";
 import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
 import DropdownAlert from 'react-native-dropdownalert';
 import Touchable from 'react-native-platform-touchable';
-import isUUID from "validator/lib/isUUID";
 import * as Global from "../Global.js";
 
-// - Constants - //
-// UUID version used by ICPSR website
-const UUID_VERSION = 4;
 
 // --- QR Screen --- //
 export default class QRScreen extends Component{
@@ -71,7 +67,7 @@ export default class QRScreen extends Component{
         console.log("---------------");
         // Callback
         let qrCallback = this.props.navigation.getParam("qrCallback", null);
-        await qrCallback(code);
+        await qrCallback(this, code);
         this.isProcessingQR = false;
     }
 

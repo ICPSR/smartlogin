@@ -3,6 +3,7 @@ import React, { Component } from "react";
 import { Alert, Image, Platform, ScrollView, StyleSheet, Text, TextInput, View, StatusBar } from "react-native";
 import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
 import DropdownAlert from 'react-native-dropdownalert';
+import isUUID from "validator/lib/isUUID";
 import { FadeInView } from "../Animations.js";
 import * as Global from "../Global.js";
 
@@ -14,6 +15,8 @@ const REAUTH_TIMER = 120 * 1000;
 // Increase this to make the buttons bigger on larger devices.
 const HOME_BUTTON_SCALE = 0.6;
 
+// UUID version used by ICPSR website
+const UUID_VERSION = 4;
 
 
 // --- Home Screen --- //
@@ -64,38 +67,38 @@ export default class HomeScreen extends Component {
     }
 
     // Callback for the QR screen when a code has been read
-    onQRRead = async (code) => {
+    async onQRRead(caller, code){
         if(isUUID(code.data, UUID_VERSION)){
             try{
-                let URL = "http://192.168.145.106:8080/pcms/mydata/smartlogin/authorize/";
-                console.log("Sending user info to: " + URL + userID + "/" + code.data);
-                let response = await Global.fetchWithTimeout(URL + userID + "/" + code.data, {
+                let URL = "http://192.168.145.132:8080/pcms/mydata/smartlogin/authorize/";
+                caller.dropdown.alertWithType("info", "Sending", "Sending request...");
+                console.log("Sending user info to: " + URL + "example@umich.edu" + "/" + code.data);
+                let response = await fetch(URL + "example@umich.edu" + "/" + code.data, {
                     method: "POST",
                     headers:{
                         "Content-Type": "application/json",
                     },
                     body: JSON.stringify({
                         sessionID: code.data,
-                        userId: userID
+                        userId: "example@umich.edu"
                     }),
                 });
                 console.log("Response Recieved:");
                 console.log(response);
                 // On Success
                 if(response.ok){
-                    this.dropdown.alertWithType("success", "Success!", "Successfully logged in!");
+                    caller.dropdown.alertWithType("success", "Success!", "Successfully logged in!");
                     await Global.delay(3000);
-                    this.props.navigation.goBack();
+                    caller.props.navigation.goBack();
                 } else {
                     throw new Error("Network error: Status - " + response.status);
                 }
             } catch(error) {
-                this.dropdown.alertWithType("error", "Try Again - Network Error", "Something went wrong! Please check your internet connection and try again.");
-                console.log("Network Error Message: " + error);
+                caller.dropdown.alertWithType("error", "Error!", error.message);
                 await Global.delay(2000);
             }
         } else {
-            this.dropdown.alertWithType("error", "Try Again - Bad QR Code", "The QR code read was not from the ICPSR website's login page.");
+            caller.dropdown.alertWithType("error", "Try Again - Bad QR Code", "The QR code read was not from the ICPSR website's login page.");
             await Global.delay(2000);
         }
     }
