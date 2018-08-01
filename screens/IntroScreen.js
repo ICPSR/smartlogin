@@ -40,7 +40,42 @@ export default class IntroScreen extends Component {
     // Callback for the QR screen when a code has been read
     async onQRRead(caller, code){
         // TODO: This should handle some different stuff.
+        if(isUUID(code.data, Global.UUID_VERSION)){
+            try{
+                let URL = "http://192.168.145.132:8080/passport/mydata/smartlogin/activation/activate/" + code.data;
+                caller.dropdown.alertWithType("info", "Sending", "Sending request...");
+                console.log("Sending user info to: " + URL);
+                let response = await fetch(URL, {
+                    method: "POST",
+                    headers:{
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        sessionID: code.data,
+                        userId: "example@umich.edu"
+                    }),
+                });
+                console.log("Response Recieved:");
+                console.log(response);
+                // On Success
+                if(response.ok){
+                    response.body
 
+                    
+                    caller.dropdown.alertWithType("success", "Success!", "Successfully connected!");
+                    await Global.delay(3000);
+                    caller.props.navigation.navigate("OTP", { response: null });
+                } else {
+                    throw new Error("Network error: Status - " + response.status);
+                }
+            } catch(error) {
+                caller.dropdown.alertWithType("error", "Error!", error.message);
+                await Global.delay(2000);
+            }
+        } else {
+            caller.dropdown.alertWithType("error", "Try Again - Bad QR Code", "The QR code read was not from the ICPSR website's login page.");
+            await Global.delay(2000);
+        }
     }
 
 

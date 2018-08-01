@@ -2,6 +2,7 @@ import Expo, { AppLoading } from "expo";
 import React, { Component } from "react";
 import { AsyncStorage, Dimensions, Platform, View } from "react-native";
 import { createStackNavigator } from "react-navigation";
+import * as Global from "./Global.js";
 
 // Screens
 import IntroScreen from "./screens/IntroScreen.js";
@@ -67,6 +68,9 @@ export default class App extends Component {
                 OTP: OTPScreen,
             }
             try {
+                if(Global.DEBUG_FORCE_NO_ACCOUNT){
+                    await AsyncStorage.removeItem("@AccountLinked");
+                }
                 const isLinked = await AsyncStorage.getItem("@AccountLinked");
                 if(isLinked === null){
                     RootStack = createStackNavigator(screens, { initialRouteName: "Intro" });

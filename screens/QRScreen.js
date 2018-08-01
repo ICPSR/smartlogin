@@ -49,6 +49,12 @@ export default class QRScreen extends Component{
         }
     }
 
+    // Manually enters the QR code stored in Global.js
+    DEBUGONLY_onManualQR = () => {
+        let code = { data: Global.DEBUG_QR_UUID };
+        this.onQRRead(code);
+    }
+
     // Goes back to the home screen.
     onBack = () => {
         this.props.navigation.goBack();
@@ -118,10 +124,15 @@ export default class QRScreen extends Component{
                         <Text style={Global.Styles.text}>Back</Text>
                     </Touchable>
 
-                    {/* DEBUG ONLY: Skip */}
+                    {/* DEBUG ONLY: Skip and Manual QR entering */}
                     { Global.DEBUG_COMPONENTS ?
                         <Touchable style={[styles.backButton, { marginLeft: scale(210) }]} onPress={this.DEBUGONLY_onContinue} activeOpacity={Global.BUTTON_ACTIVE_OPACITY} underlayColor="white" foreground={Touchable.Ripple("#fff", true)}>
                             <Text style={Global.Styles.text}>DEBUG: Skip</Text>
+                        </Touchable>
+                    : null }
+                    { Global.DEBUG_COMPONENTS ?
+                        <Touchable style={[styles.backButton, { marginLeft: scale(160), marginTop: verticalScale(550) }]} onPress={this.DEBUGONLY_onManualQR} activeOpacity={Global.BUTTON_ACTIVE_OPACITY} underlayColor="white" foreground={Touchable.Ripple("#fff", true)}>
+                            <Text style={Global.Styles.text}>DEBUG: Manual QR</Text>
                         </Touchable>
                     : null }
 

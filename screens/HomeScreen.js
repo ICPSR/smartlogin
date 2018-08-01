@@ -15,9 +15,6 @@ const REAUTH_TIMER = 120 * 1000;
 // Increase this to make the buttons bigger on larger devices.
 const HOME_BUTTON_SCALE = 0.6;
 
-// UUID version used by ICPSR website
-const UUID_VERSION = 4;
-
 
 // --- Home Screen --- //
 export default class HomeScreen extends Component {
@@ -30,7 +27,7 @@ export default class HomeScreen extends Component {
     // Attempts to authenticate the user's fingerprint.
     attemptFingerprintAuthentication = async () => {
         // Allow user to bypass this if they recently authenticated.
-        if(this.HasRecentlyAuthenticated){
+        if(this.HasRecentlyAuthenticated || Global.DEBUG_SKIP_FINGERPRINT_AUTH){
             this.goToQRScreen_Login();
             return;
         }
@@ -68,12 +65,12 @@ export default class HomeScreen extends Component {
 
     // Callback for the QR screen when a code has been read
     async onQRRead(caller, code){
-        if(isUUID(code.data, UUID_VERSION)){
+        if(isUUID(code.data, Global.UUID_VERSION)){
             try{
-                let URL = "http://192.168.145.132:8080/pcms/mydata/smartlogin/authorize/";
+                let URL = "http://192.168.145.132:8080/passport/mydata/smartlogin/authorize/" + "example@umich.edu" + "/" + code.data;
                 caller.dropdown.alertWithType("info", "Sending", "Sending request...");
-                console.log("Sending user info to: " + URL + "example@umich.edu" + "/" + code.data);
-                let response = await fetch(URL + "example@umich.edu" + "/" + code.data, {
+                console.log("Sending user info to: " + URL);
+                let response = await fetch(URL, {
                     method: "POST",
                     headers:{
                         "Content-Type": "application/json",

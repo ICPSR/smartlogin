@@ -10,8 +10,22 @@ import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
 // Opacity of buttons when they're pressed down.
 export const BUTTON_ACTIVE_OPACITY = 0.6;
 
-// Turns on and off certain components used for debugging only.
+// UUID version used by ICPSR website
+const UUID_VERSION = 4;
+
+// Debug Only buttons used for development.
+// Turns on and off certain buttons/components.
 export const DEBUG_COMPONENTS = true;
+
+// Skips fingerprint authentication.
+export const DEBUG_SKIP_FINGERPRINT_AUTH = true;
+
+// Sets the @AccountLinked variable to false on startup.
+export const DEBUG_FORCE_NO_ACCOUNT = true;
+
+// Allows you to send a UUID manually as if you read a QR code.
+// Only works when you press the Debug: Manual QR in the QR screen.
+export const DEBUG_QR_UUID = "832e1a5c-11ea-4938-becd-6d129d65a926";
 
 // Components //
 // A rounded button component that automatically chooses between TouchableOpacity for iOS and TouchableNativeFeedback for Android
