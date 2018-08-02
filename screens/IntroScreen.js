@@ -1,6 +1,6 @@
 import Expo from "expo";
 import React, { Component } from "react";
-import { View, StyleSheet, StatusBar, Text } from "react-native";
+import { View, Platform, StyleSheet, StatusBar, Text } from "react-native";
 import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
 import { StackNavigator } from "react-navigation";
 import DropdownAlert from 'react-native-dropdownalert';
@@ -52,19 +52,23 @@ export default class IntroScreen extends Component {
                     },
                     body: JSON.stringify({
                         sessionID: code.data,
-                        userId: "example@umich.edu"
+                        os: Platform.OS,
+                        version: Platform.Version
                     }),
                 });
                 console.log("Response Recieved:");
                 console.log(response);
                 // On Success
                 if(response.ok){
-                    response.body
-
-                    
+                    // Extract key and place in secure storage.
+                    let respText = await response.text();
+                    let respJSON = JSON.parse(respText);
+                    console.log(respJSON);
+                    //await Expo.SecureStore.setItemAsync("Key", respJSON.key, { keychainAccessible: Expo.SecureStore.WHEN_UNLOCKED_THIS_DEVICE_ONLY });
+                    // Display success message and continue.
                     caller.dropdown.alertWithType("success", "Success!", "Successfully connected!");
                     await Global.delay(3000);
-                    caller.props.navigation.navigate("OTP", { response: null });
+                    caller.props.navigation.navigate("OTP", { code: respJSON.confirmCode });
                 } else {
                     throw new Error("Network error: Status - " + response.status);
                 }

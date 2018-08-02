@@ -1,6 +1,6 @@
 import Expo from "expo";
 import React, { Component } from "react";
-import { Alert, AsyncStorage, View, StyleSheet, StatusBar, Text } from "react-native";
+import { Alert, AsyncStorage, Platform, View, StyleSheet, StatusBar, Text } from "react-native";
 import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
 import DropdownAlert from 'react-native-dropdownalert';
 import { StackActions, NavigationActions } from 'react-navigation';
@@ -11,9 +11,6 @@ import * as Global from "../Global.js";
 
 // --- OTP Screen --- //
 export default class OTPScreen extends Component {
-    // The OTP to display.
-    OTP = "XXX-XXX";
-
     // Enum used for handling state
     static StateEnum = Object.freeze({ Verifying: {}, Verified: {} })
 
@@ -25,16 +22,10 @@ export default class OTPScreen extends Component {
         }
     }
 
-    // --- OnComponentMount --- //
-    onComponentMount(){
-        let response = navigation.getParam("response", null);
-        if(response === null) console.log("No Response Recieved");
-
-        // TODO: Get code from response.
-        OTP = response.ok;
-
-
+    // --- componentDidMount --- //
+    componentDidMount(){
         // TODO: Make a GET fetch request right here, and have the server respond when the user enters the code???
+
 
     }
 
@@ -73,6 +64,7 @@ export default class OTPScreen extends Component {
     // --- Render --- //
     render() {
         let Button = Global.Button;
+        let OTP = this.props.navigation.getParam("code", "XXXXXX");
 
         return (
             <View style={Global.Styles.background}>
@@ -83,7 +75,7 @@ export default class OTPScreen extends Component {
                         <Text style={Global.Styles.boldText}>One Last Step...</Text>
 
                         <Text style={Global.Styles.text}>{"To verify it's really you, please enter the code below into the ICPSR website:"}</Text>
-                        <Text style={[Global.Styles.text, {fontSize: moderateScale(25), marginTop: moderateScale(100)}]}>{this.OTP}</Text>
+                        <Text style={[Global.Styles.text, styles.otpTextAddition]}>{OTP}</Text>
 
                         <Touchable onPress={this.onCancel} style={{ marginTop: moderateScale(100) }} activeOpacity={Global.BUTTON_ACTIVE_OPACITY} underlayColor="white">
                             <Text style={Global.Styles.underlineText}>Cancel</Text>
@@ -141,5 +133,17 @@ export const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "center",
         borderRadius: scale(30),
+    },
+    otpTextAddition: {
+        ...Platform.select({
+            ios: {
+                fontFamily: "Times New Roman",
+            },
+            android: {
+                fontFamily: "serif",
+            },
+        }),
+        fontSize: moderateScale(25),
+        marginTop: moderateScale(100),
     },
 });
