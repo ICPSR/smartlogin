@@ -106,7 +106,7 @@ export default class OTPScreen extends Component {
                                 {" on the home screen and scan the code on the MyData login page."}
                             </Text>
                         </FadeInView>
-                        <FadeInView duration="500" delay="2000" style={{marginTop: moderateScale(50)}}>
+                        <FadeInView duration="500" delay="2000" style={{marginTop: moderateScale(175)}}>
                             <Button onPress={this.onDone} text="Finished"/>
                         </FadeInView>
                     </View>

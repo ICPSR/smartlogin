@@ -57,7 +57,7 @@ export class TouchableRounded extends Component {
 export class Button extends Component {
     render() {
         return(
-            <TouchableRounded onPress={this.props.onPress} style={[Styles.button, this.props.style]} activeOpacity={BUTTON_ACTIVE_OPACITY} underlayColor="white">
+            <TouchableRounded activeOpacity={BUTTON_ACTIVE_OPACITY} underlayColor="white" style={Styles.button} {...this.props}>
                 <Text style={[Styles.boldText, {fontSize: moderateScale(20, .2)}]}>{this.props.text}</Text>
             </TouchableRounded>
         );

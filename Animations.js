@@ -8,6 +8,7 @@ export class FadeInView extends Component {
         super(props);
         this.state = {
             fadeAnim: new Animated.Value(0),  // Initial value for opacity: 0
+            finished: false
         }
     }
 
@@ -16,13 +17,31 @@ export class FadeInView extends Component {
         if(this.props.delay !== null){
             await Global.delay(parseInt(this.props.delay));
         }
-        Animated.timing(this.state.fadeAnim, { toValue: 1, duration: dur, }).start();
+        Animated.timing(this.state.fadeAnim, { toValue: 1, duration: dur, }).start( (finished) => {
+            this.setState(() => {
+                return { finished: true };
+            });
+        });
+    }
+
+    // Recursively applies a prop to all children.
+    addPropRecursive = (children, prop) => {
+        return React.Children.map(children, child => {
+            if (React.isValidElement(child) && child.props) {
+                let childProps = prop;
+                childProps.children = this.addPropRecursive(child.props.children, prop);
+                return React.cloneElement(child, childProps);
+            }
+            return child;
+        });
     }
 
     render() {
+        // While the animation is playing, disable all buttons.
+        const children = this.addPropRecursive(this.props.children, { disabled: !this.state.finished });
         return (
             <Animated.View style={{...this.props.style, opacity: this.state.fadeAnim }}>
-                {this.props.children}
+                {children}
             </Animated.View>
         );
     }

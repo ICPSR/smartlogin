@@ -109,7 +109,7 @@ export default class IntroScreen extends Component {
                 : null }
                 {/* Second State */}
                 { this.state.currentState === IntroScreen.StateEnum.Second ?
-                    <FadeInView duration="1000">
+                    <FadeInView duration="1000" style={{flex: 1}}>
                         <View style={{ alignItems: "center", justifyContent: "center", marginTop: moderateScale(60) }}>
                             <Text style={Global.Styles.text}>To add this device to an account, login to your ICPSR account on your computer and click:</Text>
                             <Text style={[Global.Styles.underlineText, { color: Global.HighlightColor_2 }]}>Register a Device for SmartLogin</Text>
@@ -121,7 +121,7 @@ export default class IntroScreen extends Component {
                             </View>
                         </View>
 
-                        { backButton ?
+                        { backButton !== "false" ?
                             <Touchable onPress={this.onBack} style={{ position: "absolute", marginTop: verticalScale(620), marginLeft: moderateScale(15) }} activeOpacity={Global.BUTTON_ACTIVE_OPACITY} underlayColor="white">
                                 <Text style={Global.Styles.underlineText}>Back</Text>
                             </Touchable>
