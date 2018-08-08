@@ -110,22 +110,24 @@ export default class IntroScreen extends Component {
                 {/* Second State */}
                 { this.state.currentState === IntroScreen.StateEnum.Second ?
                     <FadeInView duration="1000" style={{flex: 1}}>
-                        <View style={{ alignItems: "center", justifyContent: "center", marginTop: moderateScale(60) }}>
-                            <Text style={Global.Styles.text}>To add this device to an account, login to your ICPSR account on your computer and click:</Text>
-                            <Text style={[Global.Styles.underlineText, { color: Global.HighlightColor_2 }]}>Register a Device for SmartLogin</Text>
-                            <Text style={[Global.Styles.text, {marginTop: moderateScale(175)}]}>A QR code should be displayed.</Text>
-                            <Text style={Global.Styles.text}>Please scan this code.</Text>
+                        <View>
+                            <View style={{ alignItems: "center", justifyContent: "center", marginTop: moderateScale(60) }}>
+                                <Text style={Global.Styles.text}>To add this device to an account, login to your ICPSR account on your computer and click:</Text>
+                                <Text style={[Global.Styles.underlineText, { color: Global.HighlightColor_2 }]}>Register a Device for SmartLogin</Text>
+                                <Text style={[Global.Styles.text, {marginTop: moderateScale(175)}]}>A QR code should be displayed.</Text>
+                                <Text style={Global.Styles.text}>Please scan this code.</Text>
 
-                            <View style={{ marginTop: moderateScale(40) }}>
-                                <Button onPress={this.onNext} text="QR Scan"/>
+                                <View style={{ marginTop: moderateScale(40) }}>
+                                    <Button onPress={this.onNext} text="QR Scan"/>
+                                </View>
                             </View>
-                        </View>
 
-                        { backButton !== "false" ?
-                            <Touchable onPress={this.onBack} style={{ position: "absolute", marginTop: verticalScale(620), marginLeft: moderateScale(15) }} activeOpacity={Global.BUTTON_ACTIVE_OPACITY} underlayColor="white">
-                                <Text style={Global.Styles.underlineText}>Back</Text>
-                            </Touchable>
-                        : null }
+                            { backButton !== "false" ?
+                                <Touchable onPress={this.onBack} style={{ position: "absolute", marginTop: verticalScale(620), marginLeft: moderateScale(15) }} activeOpacity={Global.BUTTON_ACTIVE_OPACITY} underlayColor="white">
+                                    <Text style={Global.Styles.underlineText}>Back</Text>
+                                </Touchable>
+                            : null }
+                        </View>
                     </FadeInView>
                 : null }
 

@@ -1,8 +1,10 @@
 import React, { Component } from "react";
 import { Animated, View, Easing } from 'react-native';
+import Touchable from 'react-native-platform-touchable';
 import * as Global from "./Global.js";
 
 // Based off example code, from: https://facebook.github.io/react-native/docs/animations.html
+// TODO: Weird Caviet - Can only have 1 child component ONLY if there is a Touchable/TouchableRounded/Button inside of it. Maybe fix this in the future.
 export class FadeInView extends Component {
     constructor(props){
         super(props);
@@ -25,12 +27,17 @@ export class FadeInView extends Component {
     }
 
     // Recursively applies a prop to all children.
-    addPropRecursive = (children, prop) => {
+    addPropToButtonsRecursive = (children, prop) => {
         return React.Children.map(children, child => {
-            if (React.isValidElement(child) && child.props) {
+            let isButton = React.isValidElement(child) &&
+                (child.type === Global.TouchableRounded ||
+                 child.type === Global.Button ||
+                 child.type === Touchable);
+            if (isButton && child.props) {
                 let childProps = prop;
-                childProps.children = this.addPropRecursive(child.props.children, prop);
-                return React.cloneElement(child, childProps);
+                childProps.children = this.addPropToButtonsRecursive(child.props.children, prop);
+                let newChild = React.cloneElement(child, childProps);
+                return newChild;
             }
             return child;
         });
@@ -38,7 +45,7 @@ export class FadeInView extends Component {
 
     render() {
         // While the animation is playing, disable all buttons.
-        const children = this.addPropRecursive(this.props.children, { disabled: !this.state.finished });
+        const children = this.addPropToButtonsRecursive(this.props.children, { disabled: !this.state.finished });
         return (
             <Animated.View style={{...this.props.style, opacity: this.state.fadeAnim }}>
                 {children}

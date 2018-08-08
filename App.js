@@ -53,6 +53,7 @@ export default class App extends Component {
 
         // Load images
         const images = [
+            require("./assets/icpsr-logo.png"),
             require("./assets/key.png"),
             require("./assets/qr.png"),
             require("./assets/qr_border.png")

@@ -131,7 +131,7 @@ export default class HomeScreen extends Component {
 
                 {/* Title */}
                 <View style={Global.Styles.header}>
-                    <Text style={styles.headerText} adjustsFontSizeToFit={true}>ICPSR</Text>
+                    <Image source={require("../assets/icpsr-logo.png")} style={styles.logo}/>
                 </View>
 
                 <ScrollView style={Global.Styles.background}>
@@ -168,12 +168,11 @@ export default class HomeScreen extends Component {
 
 // --- Home Page Styles --- //
 export const styles = StyleSheet.create({
-    headerText: {
-        fontFamily: "BEHATRICE",
-        fontSize: moderateScale(80),
-        paddingLeft: 10,
-        fontWeight: 'bold',
-        color: Global.TextColor,
+    logo: {
+        width: moderateScale(200),
+        height: moderateScale(50),
+        margin: 15,
+        resizeMode: "contain",
     },
     homeButtonContainer: {
         marginTop: moderateScale(370, 0.4),
