@@ -115,7 +115,7 @@ export default class HomeScreen extends Component {
 
     // Navigates to the QR screen.
     goToQRScreen_Activation = () => {
-        this.props.navigation.navigate("Intro", { state: "Second", backButton: true });
+        this.props.navigation.navigate("Intro", { state: "Third", backButton: true });
     }
     goToQRScreen_Login = () => {
         this.props.navigation.navigate("QR", { title: "Scan QR from the ICPSR login page.", qrCallback: this.onQRRead });

@@ -21,7 +21,7 @@ export const DEBUG_COMPONENTS = true;
 export const DEBUG_SKIP_FINGERPRINT_AUTH = true;
 
 // Sets the @AccountLinked variable to false on startup.
-export const DEBUG_FORCE_NO_ACCOUNT = false;
+export const DEBUG_FORCE_NO_ACCOUNT = true;
 
 // Allows you to send a UUID manually as if you read a QR code.
 // Only works when you press the Debug: Manual QR in the QR screen.
