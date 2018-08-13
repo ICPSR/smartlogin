@@ -105,11 +105,9 @@ export default class IntroScreen extends Component {
                             <Text style={[Global.Styles.boldText, {fontSize: moderateScale(16)}]}>for ICPSR</Text>
                         </FadeInView>
                         <FadeInView duration="1000" delay="3000" style={{ alignItems: "center", justifyContent: "center", marginTop: moderateScale(200) }}>
-                            <View>
-                                <Touchable onPress={this.onNext} activeOpacity={Global.BUTTON_ACTIVE_OPACITY} underlayColor="white">
-                                    <Text style={styles.nextText}>Continue</Text>
-                                </Touchable>
-                            </View>
+                            <Touchable onPress={this.onNext} activeOpacity={Global.BUTTON_ACTIVE_OPACITY} underlayColor="white">
+                                <Text style={styles.nextText}>Continue</Text>
+                            </Touchable>
                         </FadeInView>
                     </View>
                 : null }
@@ -128,25 +126,22 @@ export default class IntroScreen extends Component {
                 {/* Third State */}
                 { this.state.currentState === IntroScreen.StateEnum.Third ?
                     <FadeInView duration="1000" style={{flex: 1}}>
-                        <View>
-                            <View style={{ alignItems: "center", justifyContent: "center", marginTop: moderateScale(60) }}>
-                                <Text style={Global.Styles.text}>To add this device to an account, login to your ICPSR account on your computer and click the link:</Text>
-                                <Text style={Global.Styles.underlineText}>Register a Device for SmartLogin</Text>
-                                <Text style={[Global.Styles.text, { marginTop: moderateScale(175) }]}>A QR code should be displayed.</Text>
-                                <Text style={Global.Styles.text}>Please scan this code.</Text>
-                                <View style={{ marginTop: moderateScale(40) }}>
-                                    <Button onPress={this.onNext} text="QR Scan"/>
-                                </View>
+                        <View style={{ alignItems: "center", justifyContent: "center", marginTop: moderateScale(60) }}>
+                            <Text style={Global.Styles.text}>To add this device to an account, login to your ICPSR account on your computer and click the link:</Text>
+                            <Text style={Global.Styles.underlineText}>Register a Device for SmartLogin</Text>
+                            <Text style={[Global.Styles.text, { marginTop: moderateScale(175) }]}>A QR code should be displayed.</Text>
+                            <Text style={Global.Styles.text}>Please scan this code.</Text>
+                            <View style={{ marginTop: moderateScale(40) }}>
+                                <Button onPress={this.onNext} text="QR Scan"/>
                             </View>
-                            { backButton !== "false" ?
-                                <Touchable onPress={this.onBack} style={{ position: "absolute", marginTop: verticalScale(620), marginLeft: moderateScale(15) }} activeOpacity={Global.BUTTON_ACTIVE_OPACITY} underlayColor="white">
-                                    <Text style={styles.nextText}>Back</Text>
-                                </Touchable>
-                            : null }
                         </View>
+                        { backButton !== "false" ?
+                            <Touchable onPress={this.onBack} style={{ position: "absolute", marginTop: verticalScale(620), marginLeft: moderateScale(15) }} activeOpacity={Global.BUTTON_ACTIVE_OPACITY} underlayColor="white">
+                                <Text style={styles.nextText}>Back</Text>
+                            </Touchable>
+                        : null }
                     </FadeInView>
                 : null }
-
             </View>
         );
     }

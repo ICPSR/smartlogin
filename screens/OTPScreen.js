@@ -111,7 +111,6 @@ export default class OTPScreen extends Component {
                         </FadeInView>
                     </View>
                 : null }
-
             </View>
         );
     }
