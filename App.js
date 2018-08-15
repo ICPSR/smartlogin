@@ -2,6 +2,7 @@ import Expo, { AppLoading } from "expo";
 import React, { Component } from "react";
 import { AsyncStorage, Dimensions, Platform, View } from "react-native";
 import { createStackNavigator } from "react-navigation";
+import SockJS from "sockjs-client"
 import * as Global from "./Global.js";
 
 // Screens
@@ -13,6 +14,9 @@ import OTPScreen from "./screens/OTPScreen.js";
 
 // --- App Export --- //
 export default class App extends Component {
+    // Modules
+    Stomp = require('@stomp/stompjs');
+
     // --- Constructor --- //
     constructor(props){
         super(props);
@@ -33,6 +37,31 @@ export default class App extends Component {
 
         // Lock the screen to portrait mode
         Expo.ScreenOrientation.allow(Expo.ScreenOrientation.Orientation.PORTRAIT);
+
+
+        const URL = "http://141.211.88.103:8080/passport/ws-activate";
+        let socket = new SockJS(URL);
+        let client = Stomp.over(socket);
+        let ret = client.connect("user", "pass", function(frame){
+            // On Success
+            console.log("Connection Successful");
+            // Subscribe
+            let subscription = client.subscribe("/topic/greeting", function(message){
+                let messageJSON = JSON.parse(message.body);
+                console.log("Message Recieved: " + messageJSON.value);
+            });
+            // Send message
+            client.send("/app/greeting", {}, JSON.stringify({
+                "sender" : "Phoneboy",
+                "message" : "Hi I'm a phone"
+            }));
+        }, function(frame){
+            // On Failure
+            console.log("Connection Failed");
+        });
+
+        await Global.delay(3000);
+        //client.disconnect(() => { console.log("Disconnected"); });
     }
 
     // --- Render --- //
