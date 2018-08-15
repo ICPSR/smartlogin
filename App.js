@@ -25,7 +25,7 @@ export default class App extends Component {
         console.log("Device Name: " + Expo.Constants.deviceName);
         console.log("Platform: " + Platform.OS);
         console.log("Version: " + Platform.Version);
-        let {height, width} = Dimensions.get("window");
+        let { height, width } = Dimensions.get("window");
         console.log("Dimensions: " + height + " x " + width);
         console.log("Year Class: " + Expo.Constants.deviceYearClass);
         console.log("Device ID: " + Expo.Constants.deviceId);

@@ -77,7 +77,7 @@ export default class OTPScreen extends Component {
                         <Text style={Global.Styles.text}>{"To verify it's really you, please enter the code below into the ICPSR website:"}</Text>
                         <Text style={[Global.Styles.text, styles.otpTextAddition]}>{OTP}</Text>
 
-                        <Touchable onPress={this.onCancel} style={{ marginTop: moderateScale(100), color: Global.HighlightColor_1 }} activeOpacity={Global.BUTTON_ACTIVE_OPACITY} underlayColor="white">
+                        <Touchable onPress={this.onCancel} style={{ marginTop: moderateScale(100) }} activeOpacity={Global.BUTTON_ACTIVE_OPACITY} underlayColor="white">
                             <Text style={Global.Styles.underlineText}>Cancel</Text>
                         </Touchable>
 

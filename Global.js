@@ -13,6 +13,9 @@ export const BUTTON_ACTIVE_OPACITY = 0.6;
 // UUID version used by ICPSR website
 const UUID_VERSION = 4;
 
+// The URI stub used to access the site.
+const URL_STUB = "http://141.211.88.103:8080/passport";
+
 // Debug Only buttons used for development.
 // Turns on and off certain buttons/components.
 export const DEBUG_COMPONENTS = true;
@@ -21,7 +24,7 @@ export const DEBUG_COMPONENTS = true;
 export const DEBUG_SKIP_FINGERPRINT_AUTH = true;
 
 // Sets the @AccountLinked variable to false on startup.
-export const DEBUG_FORCE_NO_ACCOUNT = true;
+export const DEBUG_FORCE_NO_ACCOUNT = false;
 
 // Allows you to send a UUID manually as if you read a QR code.
 // Only works when you press the Debug: Manual QR in the QR screen.

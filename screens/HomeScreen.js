@@ -67,7 +67,7 @@ export default class HomeScreen extends Component {
     async onQRRead(caller, code){
         if(isUUID(code.data, Global.UUID_VERSION)){
             try{
-                let URL = "http://192.168.145.132:8080/passport/mydata/smartlogin/authorize/" + "example@umich.edu" + "/" + code.data;
+                let URL = Global.URL_STUB + "/mydata/smartlogin/authorize/" + "example@umich.edu" + "/" + code.data;
                 caller.dropdown.alertWithType("info", "Sending", "Sending request...");
                 console.log("Sending user info to: " + URL);
                 let response = await fetch(URL, {
