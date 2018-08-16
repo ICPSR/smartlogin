@@ -67,7 +67,7 @@ export default class HomeScreen extends Component {
     async onQRRead(caller, code){
         if(isUUID(code.data, Global.UUID_VERSION)){
             try{
-                let URL = Global.URL_STUB + "/mydata/smartlogin/authorize/" + "example@umich.edu" + "/" + code.data;
+                let URL = Global.URL_STUB + "/mydata/smartlogin/authorize/" + "example@umich.edu" + "/devicePOST";
                 caller.dropdown.alertWithType("info", "Sending", "Sending request...");
                 console.log("Sending user info to: " + URL);
                 let response = await fetch(URL, {
@@ -141,13 +141,13 @@ export default class HomeScreen extends Component {
                             <TouchableRounded onPress={this.goToQRScreen_Activation} style={styles.homeButton} activeOpacity={Global.BUTTON_ACTIVE_OPACITY} underlayColor="white">
                                 <View style={{ alignItems: "center", justifyContent: "center" }}>
                                     <Image source={require("../assets/key.png")} style={styles.icon}/>
-                                    <Text style={[Global.Styles.boldText, { fontSize: moderateScale(20, HOME_BUTTON_SCALE) }]}>Link Account</Text>
+                                    <Text style={[Global.Styles.boldText, { fontSize: moderateScale(17, HOME_BUTTON_SCALE) }]}>Re-link Account</Text>
                                 </View>
                             </TouchableRounded>
                             <TouchableRounded onPress={this.attemptFingerprintAuthentication} style={styles.homeButton} activeOpacity={Global.BUTTON_ACTIVE_OPACITY} underlayColor="white">
                                 <View style={{ alignItems: "center", justifyContent: "center" }}>
                                     <Image source={require("../assets/qr.png")} style={styles.icon}/>
-                                    <Text style={[Global.Styles.boldText, { fontSize: moderateScale(20, HOME_BUTTON_SCALE) }]}>QR Login</Text>
+                                    <Text style={[Global.Styles.boldText, { fontSize: moderateScale(17, HOME_BUTTON_SCALE) }]}>QR Login</Text>
                                 </View>
                             </TouchableRounded>
                         </View>

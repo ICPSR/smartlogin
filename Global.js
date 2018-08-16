@@ -28,7 +28,7 @@ export const DEBUG_FORCE_NO_ACCOUNT = false;
 
 // Allows you to send a UUID manually as if you read a QR code.
 // Only works when you press the Debug: Manual QR in the QR screen.
-export const DEBUG_QR_UUID = "832e1a5c-11ea-4938-becd-6d129d65a926";
+export const DEBUG_QR_UUID = "ce0594b8-8c2c-459a-ba31-09395d806474";
 
 // Components //
 // A rounded button component that automatically chooses between TouchableOpacity for iOS and TouchableNativeFeedback for Android

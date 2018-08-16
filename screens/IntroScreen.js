@@ -44,7 +44,7 @@ export default class IntroScreen extends Component {
         // TODO: This should handle some different stuff.
         if(isUUID(code.data, Global.UUID_VERSION)){
             try{
-                let URL = Global.URL_STUB + "/mydata/smartlogin/activation/activate/" + code.data;
+                let URL = Global.URL_STUB + "/mydata/smartlogin/activation/activate/devicePOST";
                 caller.dropdown.alertWithType("info", "Sending", "Sending request...");
                 console.log("Sending user info to: " + URL);
                 let response = await fetch(URL, {
