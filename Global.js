@@ -14,7 +14,7 @@ export const BUTTON_ACTIVE_OPACITY = 0.6;
 const UUID_VERSION = 4;
 
 // The URI stub used to access the site.
-const URL_STUB = "http://141.211.88.103:8080/passport";
+export const URL_STUB = "http://141.211.88.103:8080/passport";
 
 // Debug Only buttons used for development.
 // Turns on and off certain buttons/components.

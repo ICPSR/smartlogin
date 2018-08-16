@@ -38,7 +38,7 @@ export default class App extends Component {
         // Lock the screen to portrait mode
         Expo.ScreenOrientation.allow(Expo.ScreenOrientation.Orientation.PORTRAIT);
 
-
+        /*
         const URL = "http://141.211.88.103:8080/passport/ws-activate";
         let socket = new SockJS(URL);
         let client = Stomp.over(socket);
@@ -62,6 +62,7 @@ export default class App extends Component {
 
         await Global.delay(3000);
         //client.disconnect(() => { console.log("Disconnected"); });
+        */
     }
 
     // --- Render --- //
