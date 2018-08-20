@@ -44,7 +44,7 @@ export default class IntroScreen extends Component {
         // TODO: This should handle some different stuff.
         if(isUUID(code.data, Global.UUID_VERSION)){
             try{
-                let URL = Global.URL_STUB + "/mydata/smartlogin/activation/activate/devicePOST";
+                let URL = Global.URL_STUB + "/mydata/smartlogin/activation/activate/device-post";
                 caller.dropdown.alertWithType("info", "Sending", "Sending request...");
                 console.log("Sending user info to: " + URL);
                 let response = await fetch(URL, {
@@ -66,7 +66,7 @@ export default class IntroScreen extends Component {
                     let respText = await response.text();
                     let respJSON = JSON.parse(respText);
                     console.log(respJSON);
-                    //await Expo.SecureStore.setItemAsync("Key", respJSON.key, { keychainAccessible: Expo.SecureStore.WHEN_UNLOCKED_THIS_DEVICE_ONLY });
+                    await Expo.SecureStore.setItemAsync("Key", respJSON.key, { keychainAccessible: Expo.SecureStore.WHEN_UNLOCKED_THIS_DEVICE_ONLY });
                     // Display success message and continue.
                     caller.dropdown.alertWithType("success", "Success!", "Successfully connected!");
                     await Global.delay(3000);

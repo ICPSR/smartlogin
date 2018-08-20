@@ -22,13 +22,6 @@ export default class OTPScreen extends Component {
         }
     }
 
-    // --- componentDidMount --- //
-    componentDidMount(){
-        // TODO: Make a GET fetch request right here, and have the server respond when the user enters the code???
-
-
-    }
-
     // Called when the user successfully entered the OTP to the website
     onVerified = async () => {
         // Mark this device as one with a linked account, used to start app on home screen instead.
@@ -77,15 +70,15 @@ export default class OTPScreen extends Component {
                         <Text style={Global.Styles.text}>{"To verify it's really you, please enter the code below into the ICPSR website:"}</Text>
                         <Text style={[Global.Styles.text, styles.otpTextAddition]}>{OTP}</Text>
 
-                        <Touchable onPress={this.onCancel} style={{ marginTop: moderateScale(100) }} activeOpacity={Global.BUTTON_ACTIVE_OPACITY} underlayColor="white">
+                        <Touchable onPress={this.onCancel} style={{ marginTop: moderateScale(80) }} activeOpacity={Global.BUTTON_ACTIVE_OPACITY} underlayColor="white">
                             <Text style={Global.Styles.underlineText}>Cancel</Text>
                         </Touchable>
 
-                        { Global.DEBUG_COMPONENTS ?
-                            <View style={{marginTop: moderateScale(40)}}>
-                                <Button onPress={this.onVerified} text="DEBUG: Skip"/>
-                            </View>
-                        : null }
+                        <Text style={[Global.Styles.text, { marginTop: moderateScale(30) }]}>Once you're done, hit Continue.</Text>
+
+                        <View style={{marginTop: moderateScale(30)}}>
+                            <Button onPress={this.onVerified} text="Continue"/>
+                        </View>
                     </View>
                 : null }
                 {/* Verified */}
@@ -143,6 +136,6 @@ export const styles = StyleSheet.create({
             },
         }),
         fontSize: moderateScale(25),
-        marginTop: moderateScale(100),
+        marginTop: moderateScale(80),
     },
 });

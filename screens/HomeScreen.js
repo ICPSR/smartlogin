@@ -67,7 +67,8 @@ export default class HomeScreen extends Component {
     async onQRRead(caller, code){
         if(isUUID(code.data, Global.UUID_VERSION)){
             try{
-                let URL = Global.URL_STUB + "/mydata/smartlogin/authorize/" + "example@umich.edu" + "/devicePOST";
+                let URL = Global.URL_STUB + "/mydata/smartlogin/authorize/device-post";
+                let key = await Expo.SecureStore.getItemAsync("Key");
                 caller.dropdown.alertWithType("info", "Sending", "Sending request...");
                 console.log("Sending user info to: " + URL);
                 let response = await fetch(URL, {
@@ -77,8 +78,8 @@ export default class HomeScreen extends Component {
                     },
                     body: JSON.stringify({
                         sessionID: code.data,
-                        userId: "example@umich.edu"
-                    }),
+                        key: key
+                    })
                 });
                 console.log("Response Recieved:");
                 console.log(response);
