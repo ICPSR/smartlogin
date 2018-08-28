@@ -64,7 +64,7 @@ export default class OTPScreen extends Component {
                 <StatusBar barStyle="light-content"/>
                 {/* Verifying */}
                 { this.state.currentState === OTPScreen.StateEnum.Verifying ?
-                    <View style={{ alignItems: "center", justifyContent: "center", marginTop: moderateScale(80) }}>
+                    <View style={{ alignItems: "center", justifyContent: "center", marginTop: moderateScale(70) }}>
                         <Text style={Global.Styles.boldText}>One Last Step...</Text>
 
                         <Text style={Global.Styles.text}>{"To verify it's really you, please enter the code below into the ICPSR website:"}</Text>

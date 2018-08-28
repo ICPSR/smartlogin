@@ -55,7 +55,7 @@ export default class IntroScreen extends Component {
                     body: JSON.stringify({
                         sessionID: code.data,
                         os: Platform.OS,
-                        version: Platform.Version
+                        version: Platform.Version.toString(),
                     }),
                 });
                 console.log("Response Recieved:");

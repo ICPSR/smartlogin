@@ -18,17 +18,17 @@ export const URL_STUB = "http://141.211.88.103:8080/passport";
 
 // Debug Only buttons used for development.
 // Turns on and off certain buttons/components.
-export const DEBUG_COMPONENTS = true;
+export const DEBUG_COMPONENTS = false;
 
 // Skips fingerprint authentication.
-export const DEBUG_SKIP_FINGERPRINT_AUTH = true;
+export const DEBUG_SKIP_FINGERPRINT_AUTH = false;
 
 // Sets the @AccountLinked variable to false on startup.
 export const DEBUG_FORCE_NO_ACCOUNT = false;
 
 // Allows you to send a UUID manually as if you read a QR code.
 // Only works when you press the Debug: Manual QR in the QR screen.
-export const DEBUG_QR_UUID = "ce0594b8-8c2c-459a-ba31-09395d806474";
+export const DEBUG_QR_UUID = "7c502d9f-ecc3-44cd-b2be-3a73550a14ac";
 
 // Components //
 // A rounded button component that automatically chooses between TouchableOpacity for iOS and TouchableNativeFeedback for Android
